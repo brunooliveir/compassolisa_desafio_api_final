@@ -1,4 +1,5 @@
 const CarRepository = require('../repository/CarRepository')
+const Car = require('../schema/CarSchema')
 
 class CarService {
     async create(payload) {
@@ -8,6 +9,10 @@ class CarService {
         } catch (error) {
             return error
         }
+    }
+
+    async listAll() {
+        return CarRepository.listAll()
     }
 }
 
