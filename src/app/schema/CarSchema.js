@@ -1,34 +1,40 @@
 const mongoose = require('mongoose')
+const autoIncrement = require('mongoose-auto-increment')
 
 const carSchema = mongoose.Schema({
     modelo: {
         type: String,
-        require: true
+        required: true,
+        unique: true
     },
     cor: {
         type: String,
-        require: true
+        required: true
     },
     ano: {
         type: Number,
-        require: true
+        required: true
     },
     acessorios: {
         type: Array,
-        require: true,
+        required: true,
         of: {
             descricao: {
                 type: String,
-                require: true
+                required: true
             }
         }
     },
     quantidadePassageiros: {
         type: Number,
-        require: true
+        required: true
     }
 })
 
-const Car = mongoose.model('car', carSchema)
+autoIncrement.initialize(mongoose.connection)
+carSchema.plugin(autoIncrement.plugin, '_id')
+
+
+const Car = mongoose.model('veiculos', carSchema)
 
 module.exports = Car

@@ -1,9 +1,8 @@
 const mongoose = require('mongoose')
 
-// const optionsSchema = {
-//     carCreateIndex = true,
-//     carFindAndModify: false
-// }
+const optionsSchema = {
+    autoIndex: true
+}
 
 
 class Database {
@@ -12,7 +11,7 @@ class Database {
     }
 
     connect() {
-        return mongoose.connect('mongodb://localhost:27017/autoRental')
+        return mongoose.connect('mongodb://localhost:27017/compassolisa', optionsSchema)
     }
 }
 
