@@ -32,7 +32,7 @@ const carSchema = mongoose.Schema({
 })
 
 autoIncrement.initialize(mongoose.connection)
-carSchema.plugin(autoIncrement.plugin, '_id')
+carSchema.plugin(autoIncrement.plugin, 'idCar')
 
 
 const Car = mongoose.model('veiculos', carSchema)

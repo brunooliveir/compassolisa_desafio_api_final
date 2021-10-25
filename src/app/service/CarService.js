@@ -3,10 +3,12 @@ const CarRepository = require('../repository/CarRepository')
 class CarService {
     async create(payload) {
         try {
-            const result = await CarRepository.create(payload)
-            return result
+            const veiculo = await CarRepository.create(payload)
+            const STATUS_SUCCESS = 201
+            return { statusCode: STATUS_SUCCESS, veiculo: veiculo }
         } catch (error) {
-            return error
+            const STATUS_FAIL = 400
+            return { statusCode: STATUS_FAIL, veiculo: error }
         }
     }
 
@@ -61,17 +63,31 @@ class CarService {
 
     async checkVeiculoUpdate(id, body, checkedVeiculoId) {
         try {
-            const STATUS_SUCCESS = 201
+
             if (checkedVeiculoId["statusCode"] == 404) {
                 throw new Error('car id not found')
             }
+
+        } catch (Error) {
+            const STATUS_FAIL = 404
+            return { statusCode: STATUS_FAIL, veiculo: { Error: 'car id not found' } }
+        }
+
+
+        try {
+            const STATUS_SUCCESS = 201
             const veiculo = await CarRepository.findOneById(id)
+            Object.keys(body).forEach(element => {
+                if (veiculo[element] == undefined) {
+                    throw new Error('parameter not found')
+                }
+            });
             Object.assign(veiculo, body)
             veiculo.save()
             return { statusCode: STATUS_SUCCESS, veiculo: { veiculo } }
         } catch (Error) {
             const STATUS_FAIL = 404
-            return { statusCode: STATUS_FAIL, veiculo: { Error: 'car id not found' } }
+            return { statusCode: STATUS_FAIL, veiculo: { Error: 'parameter not found' } }
         }
     }
 

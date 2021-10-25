@@ -2,8 +2,8 @@ const CarService = require('../service/CarService')
 
 class CarController {
     async create(req, res) {
-        const veiculos = await CarService.create(req.body)
-        return res.status(201).json({ veiculos })
+        const result = await CarService.create(req.body)
+        return res.status(result["statusCode"]).send(result["veiculo"])
     }
 
     async findOneById(req, res) {
