@@ -14,25 +14,25 @@ class CarController {
     }
 
     async findOneById(req, res) {
-        if (JSON.stringify(await CarService.findOneById(req.params.id)) == 'null')
-            return res.status(400).send(
-                'Error: car id not found'
-            )
-        const veiculo = await CarService.findOneById(req.params.id)
-        return res.status(200).send(
-            JSON.stringify(veiculo)
-        )
+        const id = req.params.id
+        const result = await CarService.checkVeiculoId(id)
+        return res.status(result[0]).send(result[1])
     }
 
     async deleteOne(req, res) {
-        if (JSON.stringify(await CarService.findOneById(req.params.id)) == 'null')
-            return res.status(400).send(
-                'Error: car id not found'
-            )
-        await CarService.deleteOne(req.params.id)
-        return res.status(204).end()
+        const id = req.params.id
+        const checkedVeiculoId = await CarService.checkVeiculoId(id)
+        const result = await CarService.checkVeiculoDelete(id, checkedVeiculoId)
+        return res.status(result[0]).send(result[1])
     }
 
+    async updateById(req, res) {
+        const id = req.params.id
+        const body = req.body
+        const checkedVeiculoId = await CarService.checkVeiculoId(id)
+        const result = await CarService.checkVeiculoUpdate(id, body, checkedVeiculoId)
+        return res.status(result[0]).send(result[1])
+    }
 
 }
 
