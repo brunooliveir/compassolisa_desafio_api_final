@@ -9,6 +9,13 @@ class CarRepository {
     async listAll() {
         return CarSchema.find()
     }
+    async deleteOne(id) {
+        return CarSchema.deleteOne({ _id: id })
+    }
+
+    async findOneById(id) {
+        return CarSchema.findById({ _id: id })
+    }
 
 
 }

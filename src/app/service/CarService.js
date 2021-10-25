@@ -1,5 +1,4 @@
 const CarRepository = require('../repository/CarRepository')
-const Car = require('../schema/CarSchema')
 
 class CarService {
     async create(payload) {
@@ -14,6 +13,15 @@ class CarService {
     async listAll() {
         return CarRepository.listAll()
     }
+
+    async findOneById(id) {
+        return CarRepository.findOneById(id)
+    }
+
+    async deleteOne(id) {
+        return CarRepository.deleteOne(id)
+    }
+
 }
 
 module.exports = new CarService()
