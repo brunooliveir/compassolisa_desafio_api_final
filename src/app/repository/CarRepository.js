@@ -6,17 +6,17 @@ class CarRepository {
         return CarSchema.create(payload)
     }
 
-    async listAll() {
-        return CarSchema.find()
-    }
-    async deleteOne(id) {
-        return CarSchema.deleteOne({ _id: id })
+    async findByQuery(query, limit, offset, offsets) {
+        return CarSchema.find(query).limit(limit).sort('_id').skip(offset + offsets)
     }
 
     async findOneById(id) {
         return CarSchema.findById({ _id: id })
     }
 
+    async deleteOne(id) {
+        return CarSchema.deleteOne({ _id: id })
+    }
 
 }
 

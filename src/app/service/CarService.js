@@ -10,10 +10,6 @@ class CarService {
         }
     }
 
-    async listAll() {
-        return CarRepository.listAll()
-    }
-
     async checkVeiculoId(id) {
         try {
             const veiculo = await CarRepository.findOneById(id)
@@ -21,39 +17,61 @@ class CarService {
             if (veiculo == null) {
                 throw new Error('car id not found')
             }
-            return [STATUS_SUCCESS, veiculo]
+            return { statusCode: STATUS_SUCCESS, veiculo: veiculo }
 
         } catch (Error) {
             const STATUS_FAIL = 404
-            return [STATUS_FAIL, { Error: 'car id not found' }]
+
+            return { statusCode: STATUS_FAIL, veiculo: { Error: 'car id not found' } }
+
+        }
+    }
+
+    async checkQuery(query) {
+        try {
+            const LIMIT = 100
+            const OFFSET = 0
+            const OFFSETS = 0
+            const veiculos = await CarRepository.findByQuery(query, LIMIT, OFFSET, OFFSETS)
+            const STATUS_SUCCESS = 200
+            if (veiculos.length == 0) {
+                throw new Error('the car with these parameters was not found')
+            }
+            return { statusCode: STATUS_SUCCESS, veiculos: veiculos, total: veiculos.length, limit: LIMIT, offset: OFFSET, offsets: OFFSETS }
+        } catch (Error) {
+            const STATUS_FAIL = 404
+            return { statusCode: STATUS_FAIL, veiculos: { Error: 'the car with these parameters was not found' } }
+
         }
     }
 
     async checkVeiculoDelete(id, checkedVeiculoId) {
         try {
             const STATUS_SUCCESS = 204
-            if (checkedVeiculoId[0] == 404) {
+            if (checkedVeiculoId["statusCode"] == 404) {
                 throw new Error('car id not found')
             }
             await CarRepository.deleteOne(id)
-            return [STATUS_SUCCESS, ]
+            return { statusCode: STATUS_SUCCESS, }
         } catch (Error) {
-            return [checkedVeiculoId[0], { Error: 'car id not found' }]
+            const STATUS_FAIL = 404
+            return { statusCode: STATUS_FAIL, veiculo: { Error: 'car id not found' } }
         }
     }
 
     async checkVeiculoUpdate(id, body, checkedVeiculoId) {
         try {
             const STATUS_SUCCESS = 201
-            if (checkedVeiculoId[0] == 404) {
+            if (checkedVeiculoId["statusCode"] == 404) {
                 throw new Error('car id not found')
             }
             const veiculo = await CarRepository.findOneById(id)
             Object.assign(veiculo, body)
             veiculo.save()
-            return [STATUS_SUCCESS, { veiculo: veiculo }]
+            return { statusCode: STATUS_SUCCESS, veiculo: { veiculo } }
         } catch (Error) {
-            return [checkedVeiculoId[0], { Error: 'car id not found' }]
+            const STATUS_FAIL = 404
+            return { statusCode: STATUS_FAIL, veiculo: { Error: 'car id not found' } }
         }
     }
 
