@@ -57,38 +57,42 @@ module.exports = async(req, res, next) => {
             return true;
         }
 
-        const strCPF = await schema.validate(req.body).value.cpf.replace(".", "").replace(".", "").replace("-", "")
 
-        const today = new Date()
-        const date_of_birth = new Date(await schema.validate(req.body).value.data_nascimento)
-        var age
+        try {
+            var strCpfBrute = await schema.validate(req.body).value.cpf
+            if (strCpfBrute != undefined) {
+                var strCPF = await strCpfBrute.replace(".", "").replace(".", "").replace("-", "")
+                if (!checkCPF(strCPF)) {
+                    throw new error('invalid CPF')
+                }
+            }
+        } catch (error) {
+            return res.status(400).json({ error: 'invalid CPF' })
+        }
 
-        if (today.getMonth() >= date_of_birth.getMonth()) {
-            if (today.getDate() >= (date_of_birth.getDate() + 1)) {
-                age = today.getFullYear() - (date_of_birth.getFullYear() + 1)
+        try {
+            const today = new Date()
+            const date_of_birth = new Date(await schema.validate(req.body).value.data_nascimento)
+            var age
+
+            if (today.getMonth() >= date_of_birth.getMonth()) {
+                if (today.getDate() >= (date_of_birth.getDate() + 1)) {
+                    age = today.getFullYear() - (date_of_birth.getFullYear() + 1)
+                } else {
+                    age = today.getFullYear() - (date_of_birth.getFullYear())
+                }
+
             } else {
                 age = today.getFullYear() - (date_of_birth.getFullYear())
             }
 
-        } else {
-            age = today.getFullYear() - (date_of_birth.getFullYear())
-        }
-
-        try {
-            if (!checkCPF(strCPF)) {
-                throw new Error('invalid CPF')
-            }
-        } catch (Error) {
-            return res.status(400).json({ Error: 'invalid CPF' })
-        }
-
-        try {
             if (age < LIMIT_MINIMUM_AGE) {
-                throw new Error('age under 18 years')
+                throw new error('age under 18 years')
             }
-        } catch (Error) {
-            return res.status(400).json({ Error: 'age under 18 years' })
+        } catch (error) {
+            return res.status(400).json({ error: 'age under 18 years' })
         }
+
 
         const { error } = await schema.validate(req.body, { abortEarl: true })
         if (error) throw error

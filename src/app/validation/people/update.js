@@ -53,17 +53,16 @@ module.exports = async(req, res, next) => {
         }
 
 
-
         try {
             var strCpfBrute = await schema.validate(req.body).value.cpf
             if (strCpfBrute != undefined) {
                 var strCPF = await strCpfBrute.replace(".", "").replace(".", "").replace("-", "")
                 if (!checkCPF(strCPF)) {
-                    throw new Error('invalid CPF')
+                    throw new error('invalid CPF')
                 }
             }
-        } catch (Error) {
-            return res.status(400).json({ Error: 'invalid CPF' })
+        } catch (error) {
+            return res.status(400).json({ error: 'invalid CPF' })
         }
 
         try {
@@ -83,10 +82,10 @@ module.exports = async(req, res, next) => {
             }
 
             if (age < LIMIT_MINIMUM_AGE) {
-                throw new Error('age under 18 years')
+                throw new error('age under 18 years')
             }
-        } catch (Error) {
-            return res.status(400).json({ Error: 'age under 18 years' })
+        } catch (error) {
+            return res.status(400).json({ error: 'age under 18 years' })
         }
 
 
