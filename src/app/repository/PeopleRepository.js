@@ -10,6 +10,10 @@ class PeopleRepository {
         return PeopleSchema.find(query).limit(limit).sort('_id').skip(offset + offsets)
     }
 
+    async findByQuery(query) {
+        return PeopleSchema.find(query)
+    }
+
     async findOneById(id) {
         return PeopleSchema.findById({ _id: id })
     }

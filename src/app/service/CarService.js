@@ -1,4 +1,5 @@
 const CarRepository = require('../repository/CarRepository')
+const jwt = require('jsonwebtoken')
 
 class CarService {
     async create(payload) {
@@ -61,7 +62,7 @@ class CarService {
         }
     }
 
-    async checkVeiculoUpdate(id, body, checkedVeiculoId) {
+    async checkVeiculoUpdate(id, payload, checkedVeiculoId) {
         try {
 
             if (checkedVeiculoId["statusCode"] == 404) {
@@ -77,12 +78,12 @@ class CarService {
         try {
             const STATUS_SUCCESS = 201
             const veiculo = await CarRepository.findOneById(id)
-            Object.keys(body).forEach(element => {
+            Object.keys(payload).forEach(element => {
                 if (veiculo[element] == undefined) {
                     throw new Error('parameter not found')
                 }
-            });
-            Object.assign(veiculo, body)
+            })
+            Object.assign(veiculo, payload)
             veiculo.save()
             return { statusCode: STATUS_SUCCESS, veiculo: { veiculo } }
         } catch (Error) {

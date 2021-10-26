@@ -6,6 +6,11 @@ class PeopleController {
         return res.status(result["statusCode"]).send(result["pessoa"])
     }
 
+    async authenticate(req, res) {
+        const result = await PeopleService.authenticate(req.body)
+        return res.status(result["statusCode"]).send(result["pessoa"])
+    }
+
     async findOneById(req, res) {
         const id = req.params.id
         const result = await PeopleService.checkPessoaId(id)
@@ -32,8 +37,6 @@ class PeopleController {
         const result = await PeopleService.checkPessoaUpdate(id, body, checkedPessoaId)
         return res.status(result["statusCode"]).send(result["pessoa"])
     }
-
-
 }
 
 module.exports = new PeopleController()

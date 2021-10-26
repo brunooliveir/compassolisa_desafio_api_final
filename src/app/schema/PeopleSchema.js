@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const autoIncrement = require('mongoose-auto-increment')
+const crypto = require('crypto')
 
 const peopleSchema = mongoose.Schema({
     nome: {
@@ -18,11 +19,17 @@ const peopleSchema = mongoose.Schema({
     email: {
         type: String,
         required: true,
+        lowercase: true,
         unique: true
     },
     senha: {
         type: String,
-        required: true
+        select: false,
+        required: true,
+        set: value => crypto
+            .createHash('md5')
+            .update(value)
+            .digest('hex')
     },
     habilitado: {
         type: String,

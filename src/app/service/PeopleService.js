@@ -1,9 +1,11 @@
-const PeopleRepository = require('../repository/PeopleRepository.js')
+const PeopleRepository = require('../repository/PeopleRepository')
+const Jwt = require('../authentication/jwt')
 
 class PeopleService {
     async create(payload) {
         try {
-            const pessoa = await PeopleRepository.create(payload)
+            const result = await PeopleRepository.create(payload)
+            const { senha, ...pessoa } = result.toObject()
             const STATUS_SUCCESS = 201
             return { statusCode: STATUS_SUCCESS, pessoa: pessoa }
         } catch (error) {
@@ -11,6 +13,25 @@ class PeopleService {
             return { statusCode: STATUS_FAIL, pessoa: { error } }
         }
     }
+
+    async authenticate(payload) {
+        try {
+            const finded = await PeopleRepository.findByQuery(payload)
+            if (finded.length == 0) {
+                throw new Error('the people with these parameters was not found')
+            }
+            const result = await PeopleRepository.create(finded[0])
+            const STATUS_SUCCESS = 201
+            const token = await Jwt.sign({ email: result["email"] })
+            const pessoa = { token: token, email: result["email"], habilitado: result["habilitado"] }
+            return { statusCode: STATUS_SUCCESS, pessoa: pessoa }
+
+        } catch (Error) {
+            const STATUS_FAIL = 400
+            return { statusCode: STATUS_FAIL, pessoa: { Error: 'the people with these parameters was not found' } }
+        }
+    }
+
 
     async checkPessoaId(id) {
         try {
@@ -61,7 +82,7 @@ class PeopleService {
         }
     }
 
-    async checkPessoaUpdate(id, body, checkedPessoaId) {
+    async checkPessoaUpdate(id, payload, checkedPessoaId) {
         try {
 
             if (checkedPessoaId["statusCode"] == 404) {
@@ -75,12 +96,12 @@ class PeopleService {
         try {
             const STATUS_SUCCESS = 201
             const pessoa = await PeopleRepository.findOneById(id)
-            Object.keys(body).forEach(element => {
+            Object.keys(payload).forEach(element => {
                 if (pessoa[element] == undefined) {
                     throw new Error('parameter not found')
                 }
-            });
-            Object.assign(pessoa, body)
+            })
+            Object.assign(pessoa, payload)
             pessoa.save()
             return { statusCode: STATUS_SUCCESS, pessoa: { pessoa } }
         } catch (Error) {
