@@ -6,7 +6,7 @@ module.exports = async(req, res, next) => {
             id: Joi.number().min(0).required()
         })
 
-        const { error } = id.validate(req.params, { abortEarl: true })
+        const { error } = id.validate(req.params, { abortEarly: false })
         if (error) throw error
         return next()
     } catch (error) {
