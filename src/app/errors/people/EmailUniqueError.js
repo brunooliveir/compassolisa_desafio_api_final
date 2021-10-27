@@ -3,7 +3,7 @@ class EmailUniqueError extends Error {
         const message = 'Error: invalid Email, Email already registered'
         super(message)
         this.name = 'EmailUniqueError'
-        this.idError = 4
+        this.idError = 1
     }
 
 }

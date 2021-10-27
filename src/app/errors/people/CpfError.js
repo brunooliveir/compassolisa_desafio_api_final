@@ -3,7 +3,7 @@ class CpfError extends Error {
         const message = 'Error: invalid CPF'
         super(message)
         this.name = 'CpfError'
-        this.idError = 1
+        this.idError = 2
     }
 
 }

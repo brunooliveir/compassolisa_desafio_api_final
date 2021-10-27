@@ -11,7 +11,7 @@ class AuthenticateService {
         }
         const result = await PeopleRepository.create(finded[0])
         const STATUS_SUCCESS = 201
-        const token = await Jwt.sign({ email: result["email"] })
+        const token = await Jwt.sign({ email: result["email"], habilitado: result["habilitado"] })
         const pessoa = { token: token, email: result["email"], habilitado: result["habilitado"] }
         return { statusCode: STATUS_SUCCESS, pessoa: pessoa }
 

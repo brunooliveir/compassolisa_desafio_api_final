@@ -3,7 +3,7 @@ class PeopleParameterNotFound extends Error {
         const message = 'Error: the people with these parameters was not found'
         super(message)
         this.name = 'PeopleParameterNotFound'
-        this.idError = 0
+        this.idError = 5
     }
 
 }

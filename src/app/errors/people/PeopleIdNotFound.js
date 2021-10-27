@@ -3,7 +3,7 @@ class PeopleIdNotFound extends Error {
         const message = 'Error: people id not found'
         super(message)
         this.name = 'PeopleIdNotFound'
-        this.idError = 1
+        this.idError = 6
     }
 }
 

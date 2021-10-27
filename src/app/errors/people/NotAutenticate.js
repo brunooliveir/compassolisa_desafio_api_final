@@ -3,7 +3,7 @@ class NotAutenticate extends Error {
         const message = 'Error: invalid email or password'
         super(message)
         this.name = 'NotAutenticate'
-        this.idError = 0
+        this.idError = 4
     }
 
 }

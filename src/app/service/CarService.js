@@ -1,5 +1,7 @@
 const CarRepository = require('../repository/CarRepository')
-const jwt = require('jsonwebtoken')
+const CarParameterNotFound = require('../errors/car/CarParameterNotFound')
+const CarIdNotFound = require('../errors/car/CarIdNotFound')
+const ModeloUniqueError = require('../errors/car/ModeloUniqueError')
 
 class CarService {
     async create(payload) {
@@ -8,88 +10,71 @@ class CarService {
             const STATUS_SUCCESS = 201
             return { statusCode: STATUS_SUCCESS, veiculo: veiculo }
         } catch (error) {
-            const STATUS_FAIL = 400
-            return { statusCode: STATUS_FAIL, veiculo: error }
+            if (Object.keys(error.keyValue)[0] == 'modelo') {
+                throw new ModeloUniqueError()
+            }
         }
     }
 
     async checkVeiculoId(id) {
-        try {
-            const veiculo = await CarRepository.findOneById(id)
-            const STATUS_SUCCESS = 200
-            if (veiculo == null) {
-                throw new Error('car id not found')
-            }
-            return { statusCode: STATUS_SUCCESS, veiculo: veiculo }
-
-        } catch (Error) {
-            const STATUS_FAIL = 404
-
-            return { statusCode: STATUS_FAIL, veiculo: { Error: 'car id not found' } }
-
+        const veiculo = await CarRepository.findOneById(id)
+        const STATUS_SUCCESS = 200
+        if (veiculo == null) {
+            throw new CarIdNotFound()
         }
+        return { statusCode: STATUS_SUCCESS, veiculo: veiculo }
     }
 
     async checkQuery(query) {
-        try {
-            const LIMIT = 100
-            const OFFSET = 0
-            const OFFSETS = 0
-            const veiculos = await CarRepository.findByQuery(query, LIMIT, OFFSET, OFFSETS)
-            const STATUS_SUCCESS = 200
-            if (veiculos.length == 0) {
-                throw new Error('the car with these parameters was not found')
+        const LIMIT = 100
+        const OFFSET = 0
+        const OFFSETS = 0
+        Object.keys(query).forEach(element => {
+            console.log(element)
+            if (element == 'descricao') {
+                const newKeyValue = { 'acessorios.descricao': query["descricao"] }
+                delete query["descricao"]
+                Object.assign(query, newKeyValue)
             }
-            return { statusCode: STATUS_SUCCESS, veiculos: veiculos, total: veiculos.length, limit: LIMIT, offset: OFFSET, offsets: OFFSETS }
-        } catch (Error) {
-            const STATUS_FAIL = 404
-            return { statusCode: STATUS_FAIL, veiculos: { Error: 'the car with these parameters was not found' } }
-
+        })
+        const veiculos = await CarRepository.findByQuery(query, LIMIT, OFFSET, OFFSETS)
+        const STATUS_SUCCESS = 200
+        if (veiculos.length == 0) {
+            throw new CarParameterNotFound()
         }
+        return { statusCode: STATUS_SUCCESS, veiculos: veiculos, total: veiculos.length, limit: LIMIT, offset: OFFSET, offsets: OFFSETS }
     }
 
     async checkVeiculoDelete(id, checkedVeiculoId) {
-        try {
-            const STATUS_SUCCESS = 204
-            if (checkedVeiculoId["statusCode"] == 404) {
-                throw new Error('car id not found')
-            }
-            await CarRepository.deleteOne(id)
-            return { statusCode: STATUS_SUCCESS, }
-        } catch (Error) {
-            const STATUS_FAIL = 404
-            return { statusCode: STATUS_FAIL, veiculo: { Error: 'car id not found' } }
+        const STATUS_SUCCESS = 204
+        if (checkedVeiculoId["statusCode"] == 404) {
+            throw new CarIdNotFound()
         }
+        await CarRepository.deleteOne(id)
+        return { statusCode: STATUS_SUCCESS, }
     }
 
     async checkVeiculoUpdate(id, payload, checkedVeiculoId) {
-        try {
-
-            if (checkedVeiculoId["statusCode"] == 404) {
-                throw new Error('car id not found')
+        if (checkedVeiculoId["statusCode"] == 404) {
+            throw new CarIdNotFound()
+        }
+        const STATUS_SUCCESS = 201
+        const veiculo = await CarRepository.findOneById(id)
+        Object.keys(payload).forEach(element => {
+            if (veiculo[element] == undefined) {
+                throw new CarParameterNotFound()
             }
-
-        } catch (Error) {
-            const STATUS_FAIL = 404
-            return { statusCode: STATUS_FAIL, veiculo: { Error: 'car id not found' } }
+        })
+        if (payload.modelo != undefined) {
+            var AnyModelo = { modelo: payload.modelo }
+            var ModeloNotUnique = await CarRepository.findByQuery(AnyModelo)
+            if (ModeloNotUnique[0] != undefined) {
+                throw new ModeloUniqueError()
+            }
         }
-
-
-        try {
-            const STATUS_SUCCESS = 201
-            const veiculo = await CarRepository.findOneById(id)
-            Object.keys(payload).forEach(element => {
-                if (veiculo[element] == undefined) {
-                    throw new Error('parameter not found')
-                }
-            })
-            Object.assign(veiculo, payload)
-            veiculo.save()
-            return { statusCode: STATUS_SUCCESS, veiculo: { veiculo } }
-        } catch (Error) {
-            const STATUS_FAIL = 404
-            return { statusCode: STATUS_FAIL, veiculo: { Error: 'parameter not found' } }
-        }
+        Object.assign(veiculo, payload)
+        veiculo.save()
+        return { statusCode: STATUS_SUCCESS, veiculo: { veiculo } }
     }
 
 }
