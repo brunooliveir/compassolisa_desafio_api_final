@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const autoIncrement = require('mongoose-auto-increment')
 const crypto = require('crypto')
+const moment = require('moment')
 
 const peopleSchema = mongoose.Schema({
     nome: {
@@ -14,7 +15,8 @@ const peopleSchema = mongoose.Schema({
     },
     data_nascimento: {
         type: Date,
-        required: true
+        required: true,
+        transform: (val) => moment(val).format("DD/MM/YYYY")
     },
     email: {
         type: String,

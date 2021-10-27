@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require('joi').extend(require('@joi/date'))
 const CpfError = require('../../errors/people/CpfError')
 const IdadeError = require('../../errors/people/IdadeError')
 
@@ -20,7 +20,8 @@ module.exports = async(req, res, next) => {
                 .min(LIMIT_MINIMUM_NOME_STRING_LENGHT)
                 .max(LIMIT_MAXIMUM_NOME_STRING_LENGHT),
             cpf: Joi.string(),
-            data_nascimento: Joi.date(),
+            data_nascimento: Joi.date()
+                .format('DD/MM/YYYY'),
             email: Joi.string()
                 .email()
                 .min(LIMIT_MINIMUM_EMAIL_STRING_LENGHT)

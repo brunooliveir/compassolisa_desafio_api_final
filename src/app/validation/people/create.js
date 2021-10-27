@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require('joi').extend(require('@joi/date'))
 const CpfError = require('../../errors/people/CpfError')
 const IdadeError = require('../../errors/people/IdadeError')
 
@@ -23,6 +23,7 @@ module.exports = async(req, res, next) => {
             cpf: Joi.string()
                 .required(),
             data_nascimento: Joi.date()
+                .format('DD/MM/YYYY')
                 .required(),
             email: Joi.string()
                 .email()

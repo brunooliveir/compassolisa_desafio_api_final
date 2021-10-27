@@ -6,7 +6,9 @@ const CpfUniqueError = require('../errors/people/CpfUniqueError')
 
 class PeopleService {
     async create(payload) {
+        const data_nascimentoSplited = payload["data_nascimento"].split('/', )
         try {
+            payload["data_nascimento"] = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
             const result = await PeopleRepository.create(payload)
             const { senha, ...pessoa } = result.toObject()
             const STATUS_SUCCESS = 201
@@ -63,6 +65,10 @@ class PeopleService {
                 throw new PeopleParameterNotFound()
             }
         })
+        if (payload.data_nascimento != undefined) {
+            const data_nascimentoSplited = payload.data_nascimento.split('/', )
+            payload.data_nascimento = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
+        }
 
         if (payload.email != undefined) {
             var AnyEmail = { email: payload.email }
