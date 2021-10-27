@@ -105,7 +105,7 @@ Comando para iniciar a API: **npm start**
 | :-------- | :------- | :------------------------- |
 | `nome ` | `string` | **Required**. |                
 | `cpf`  | `string` | **Required, Unique**. |
-| `data_nascimento` | `date` | **Required** |                
+| `data_nascimento` | `date` | 'DD/MM/YYYY' **Required** |                
 | `email` | `string` |  **Required, Unique** |
 | `senha` | `string` | **Required** |
 | `habilitado` | `enum[string]` | [sim, não] **Required** |
@@ -151,7 +151,7 @@ Comando para iniciar a API: **npm start**
 | :-------- | :------- | :------------------------- |
 | `nome ` | `string` | **Required**. |                
 | `cpf`  | `string` | **Required, Unique**. |
-| `data_nascimento` | `date` | **Required** |                
+| `data_nascimento` | `date` | 'DD/MM/YYYY' **Required** |                
 | `email` | `string` |  **Required, Unique** |
 | `senha` | `string` | **Required** |
 | `habilitado` | `enum[string]` | [sim, não] **Required** |
