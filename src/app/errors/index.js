@@ -1,13 +1,12 @@
-const NotFound = require('./NotFound')
+const PeopleParameterNotFound = require('./PeopleParameterNotFound')
 const NotAutenticate = require('./NotAutenticate')
+const PeopleIdNotFound = require('./PeopleIdNotFound')
 
 
-module.exports = async(req, res, error) => {
-
-    console.log('a')
+module.exports = async(error, req, res, next) => {
     var statusCode = 500
 
-    if (error instanceof NotFound) {
+    if (error instanceof PeopleParameterNotFound || error instanceof PeopleIdNotFound) {
         statusCode = 404
     }
 
@@ -15,12 +14,7 @@ module.exports = async(req, res, error) => {
         statusCode = 400
     }
 
-
-
-
-
-    result = { statusCode: statusCode, pessoa: JSON.stringify(error.message) }
-    res.status(result["statusCode"]).send(result["pessoa"])
+    res.status(statusCode).send(JSON.stringify({ message: error.message, Error_Id: error.idError }))
 
 
 }
