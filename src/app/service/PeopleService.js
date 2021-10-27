@@ -1,9 +1,8 @@
 const PeopleRepository = require('../repository/PeopleRepository')
-const PeopleParameterNotFound = require('../errors/PeopleParameterNotFound')
-const PeopleIdNotFound = require('../errors/PeopleIdNotFound')
-
-
-const Jwt = require('../authentication/jwt')
+const PeopleParameterNotFound = require('../errors/people/PeopleParameterNotFound')
+const PeopleIdNotFound = require('../errors/people/PeopleIdNotFound')
+const EmailUniqueError = require('../errors/people/EmailUniqueError')
+const CpfUniqueError = require('../errors/people/CpfUniqueError')
 
 class PeopleService {
     async create(payload) {
@@ -13,8 +12,12 @@ class PeopleService {
             const STATUS_SUCCESS = 201
             return { statusCode: STATUS_SUCCESS, pessoa: pessoa }
         } catch (error) {
-            const STATUS_FAIL = 400
-            return { statusCode: STATUS_FAIL, pessoa: { error } }
+            if (Object.keys(error.keyValue)[0] == 'cpf') {
+                throw new CpfUniqueError()
+            }
+            if (Object.keys(error.keyValue)[0] == 'email') {
+                throw new EmailUniqueError()
+            }
         }
     }
 
@@ -60,6 +63,22 @@ class PeopleService {
                 throw new PeopleParameterNotFound()
             }
         })
+
+        if (payload.email != undefined) {
+            var AnyEmail = { email: payload.email }
+            var EmailNotUnique = await PeopleRepository.findByQuery(AnyEmail)
+            if (EmailNotUnique[0] != undefined) {
+                throw new EmailUniqueError()
+            }
+        }
+        if (payload.cpf != undefined) {
+            var AnyCpf = { cpf: payload.cpf }
+            var CpfNotUnique = await PeopleRepository.findByQuery(AnyCpf)
+            if (CpfNotUnique[0] != undefined) {
+                throw new CpfUniqueError()
+            }
+        }
+
         Object.assign(pessoa, payload)
         pessoa.save()
         return { statusCode: STATUS_SUCCESS, pessoa: { pessoa } }

@@ -1,6 +1,7 @@
 class PeopleParameterNotFound extends Error {
     constructor() {
-        super('Error: the people with these parameters was not found')
+        const message = 'Error: the people with these parameters was not found'
+        super(message)
         this.name = 'PeopleParameterNotFound'
         this.idError = 0
     }

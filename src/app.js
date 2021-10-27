@@ -1,6 +1,6 @@
 const express = require('express')
 const router = require('./routes')
-const errors = require('./app/errors/index')
+const PoplesErrors = require('./app/errors/people/index')
 require('./infra/database/mongo')
 
 class App {
@@ -13,7 +13,7 @@ class App {
 
     middlewares() {
         this.server.use(express.json())
-        this.server.use(errors)
+        this.server.use(PoplesErrors)
     }
 
     routes() {

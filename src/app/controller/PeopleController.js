@@ -1,9 +1,13 @@
 const PeopleService = require('../service/PeopleService')
 
 class PeopleController {
-    async create(req, res) {
-        const result = await PeopleService.create(req.body)
-        return res.status(result["statusCode"]).send(result["pessoa"])
+    async create(req, res, next) {
+        try {
+            const result = await PeopleService.create(req.body)
+            return res.status(result["statusCode"]).send(result["pessoa"])
+        } catch (Error) {
+            return next(Error)
+        }
     }
 
     async findOneById(req, res, next) {
@@ -12,7 +16,7 @@ class PeopleController {
             const result = await PeopleService.checkPessoaId(id)
             return res.status(result["statusCode"]).send(result["pessoa"])
         } catch (Error) {
-            next(Error)
+            return next(Error)
         }
 
     }
@@ -23,7 +27,7 @@ class PeopleController {
             const result = await PeopleService.checkQuery(query)
             return res.status(result["statusCode"]).send({ pessoas: result["pessoas"], total: result["total"], limit: result["limit"], offset: result["offset"], offsets: result["offsets"] })
         } catch (Error) {
-            next(Error)
+            return next(Error)
         }
     }
 
@@ -34,7 +38,7 @@ class PeopleController {
             const result = await PeopleService.checkPessoaDelete(id, checkedPessoaId)
             return res.status(result["statusCode"]).send(result["pessoa"])
         } catch (Error) {
-            next(Error)
+            return next(Error)
         }
 
     }
@@ -47,7 +51,7 @@ class PeopleController {
             const result = await PeopleService.checkPessoaUpdate(id, body, checkedPessoaId)
             return res.status(result["statusCode"]).send(result["pessoa"])
         } catch (Error) {
-            next(Error)
+            return next(Error)
         }
     }
 }
