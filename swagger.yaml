@@ -1,0 +1,520 @@
+openapi: 3.0.1
+info:
+  title: API Autolocadora Compassolisa
+  description: 'API de controle dos veiculos e usuários da Autolocadora Compassolisa.'
+  version: 1.0.0
+  contact:
+    name: Bruno de Oliveira
+externalDocs:
+  description: Repositório do projeto
+  url: https://github.com/brunooliveir/compassolisa_desafio_api_final_pt1
+servers:
+- url: http://localhost:3000/api/v1
+  description: Servidor da aplicação
+- url: http://127.0.0.1:3000/api/v1
+  description: Servidor da aplicação
+  
+tags:
+- name: "Veiculos"
+  description: Rotas dos Veiculos
+- name: "Usuários"
+  description: Rotas dos Usuários
+- name: "Autenticação"
+  description: Autenticação do Usuários
+
+
+paths:
+  /car/:
+    post:
+      tags:
+      - "Veiculos"
+      summary: Cadastra veiculo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                modelo:
+                  type: string
+                cor:
+                  type: string
+                ano:
+                  type: number
+                acessorios:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      descricao:
+                        type: string
+                quantidadePassageiros:
+                  type: number
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: number
+                  modelo:
+                    type: string
+                  cor:
+                    type: string
+                  ano:
+                    type: number
+                  acessorios:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        descricao:
+                          type: string
+                  quantidadePassageiros:
+                    type: number
+  
+  
+    get:
+      tags:
+      - "Veiculos"
+      parameters:
+      - name: modelo
+        in: query
+        description: Modelo do veiculo
+        schema:
+          type: string
+      
+      - name: cor
+        in: query
+        description: Cor do veiculo
+        schema:
+          type: string
+          
+      - name: ano
+        in: query
+        description: Ano do veiculo
+        schema:
+          type: string
+          
+      - name: descricao
+        in: query
+        description: Acessórios do veiculo
+        schema:
+          type: string
+  
+      - name: quantidadePassageiros
+        in: query
+        description: Quantidade de passageiros
+        schema:
+          type: string
+    
+      summary: Consulta todos os veiculos, ou veiculos por parametros
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  veiculos:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: number
+                        modelo:
+                          type: string
+                        cor:
+                          type: string
+                        ano:
+                          type: number
+                        acessorios:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              descricao:
+                                type: string
+                        quantidadePassageiros:
+                          type: number
+                          
+
+  /car/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: number
+      required: true
+    get:
+      tags:
+      - "Veiculos"
+      summary: Consulta todos os veiculos
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: number
+                  modelo:
+                    type: string
+                  cor:
+                    type: string
+                  ano:
+                    type: number
+                  acessorios:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        descricao:
+                          type: string
+                  quantidadePassageiros:
+                    type: number
+        404:
+          description: Not found
+
+    put:
+      tags:
+      - "Veiculos"
+      summary: Altera as propriedades de um veiculo, encontrado por Id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                modelo:
+                  type: string
+                cor:
+                  type: string
+                ano:
+                  type: number
+                acessorios:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      descricao:
+                        type: string
+                quantidadePassageiros:
+                  type: number
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: number
+                  modelo:
+                    type: string
+                  cor:
+                    type: string
+                  ano:
+                    type: number
+                  acessorios:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        descricao:
+                          type: string
+                  quantidadePassageiros:
+                    type: number
+        404:
+          description: Not found
+        400:
+          description: Bad request
+
+    delete:
+      tags:
+      - "Veiculos"
+      summary: Deleta um veiculo, encontrado por Id
+      responses:
+        204:
+          description: No Content
+        404:
+          description: Not Found
+
+
+
+  /people/:
+    post:
+      tags:
+      - "Usuários"
+      summary: Cadastra usuário
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                  example: "joão ciclano"
+                cpf:
+                  type: string
+                  example: "286.162.557-02"
+                data_nascimento:
+                  type: string
+                  format: date
+                  example: "15/05/2001"
+                email:
+                  type: string
+                  example: "joãociclano@email.com"
+                senha:
+                  type: string
+                  example: "senhaforteConfia"
+                habilitado:
+                  type: string
+                  example: "sim"
+                  enum:
+                  - sim
+                  - não
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nome:
+                    type: string
+                  cpf:
+                    type: string
+                  data_nascimento:
+                    type: string
+                    format: date-time
+                  email:
+                    type: string
+                  habilitado:
+                    type: string
+  
+  
+    get:
+      tags:
+      - "Usuários"
+      parameters:
+      - name: nome
+        in: query
+        description: nome do usuário
+        schema:
+          type: string
+      
+      - name: cpf
+        in: query
+        description: cpf do usuário
+        schema:
+          type: string
+          
+      - name: data_nascimento
+        in: query
+        description: data nascimento do usuário
+        schema:
+          type: string
+          
+      - name: email
+        in: query
+        description: email do usuário
+        schema:
+          type: string
+  
+      - name: habilitado
+        in: query
+        description: usuário habilitado [sim , não]
+        schema:
+          type: string
+    
+      summary: Consulta todos os veiculos, ou veiculos por parametros
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pessoas:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: number
+                        nome:
+                          type: string
+                        cpf:
+                          type: string
+                        data_nascimento:
+                          type: string
+                          format: date
+                        email:
+                          type: string
+                        habilitado:
+                          type: string
+
+
+                          
+
+  /people/{id}:
+    parameters:
+    - name: id
+      in: path
+      schema:
+        type: number
+      required: true
+    get:
+      tags:
+      - "Usuários"
+      summary: Consulta todos os usuarios
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: number
+                  nome:
+                    type: string
+                  cpf:
+                    type: string
+                  data_nascimento:
+                    type: string
+                    format: date
+                  email:
+                    type: string
+                  habilitado:
+                    type: string
+
+        404:
+          description: Not found
+
+    put:
+      tags:
+      - "Usuários"
+      summary: Altera as propriedades de um usuario, encontrado por Id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nome:
+                  type: string
+                  example: "joão ciclano"
+                cpf:
+                  type: string
+                  example: "286.162.557-02"
+                data_nascimento:
+                  type: string
+                  format: date
+                  example: "15/05/2001"
+                email:
+                  type: string
+                  example: "joãociclano@email.com"
+                senha:
+                  type: string
+                  example: "senhaforteConfia"
+                habilitado:
+                  type: string
+                  example: "sim"
+                  enum:
+                  - sim
+                  - não
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: number
+                  nome:
+                    type: string
+                  cpf:
+                    type: string
+                  data_nascimento:
+                    type: string
+                    format: date
+                  email:
+                    type: string
+                  habilitado:
+                    type: string
+
+        404:
+          description: Not found
+        400:
+          description: Bad request
+
+    delete:
+      tags:
+      - "Usuários"
+      summary: Deleta um usuario, encontrado por Id
+      responses:
+        204:
+          description: No Content
+        404:
+          description: Not Found
+
+  /authenticate/:
+    post:
+      tags:
+      - "Autenticação"
+      summary: Autentica o usuário
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "joãociclano@email.com"
+                senha:
+                  type: string
+                  example: "senhaforteConfia"
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  email:
+                    type: string
+                  habilitado:
+                    type: string
+
+        404:
+          description: Not found
+        400:
+          description: Bad request
+
+
+
+  
+  
+  
+  
+  
