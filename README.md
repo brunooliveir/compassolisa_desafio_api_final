@@ -17,6 +17,8 @@ Requisitos: Node.js e MongoDB
 
 Em: **compassolisa_desafio_api_final_pt1/src/config/config.json**
 
+Após clonar o repositório
+
 **configure:** 
 
 ```http
