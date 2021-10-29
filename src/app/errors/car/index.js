@@ -1,6 +1,7 @@
 const CarParameterNotFound = require('./CarParameterNotFound')
 const CarIdNotFound = require('./CarIdNotFound')
 const ModeloUniqueError = require('./ModeloUniqueError')
+const IdFormatError = require('../car/IdFormatError')
 
 module.exports = async(error, req, res, next) => {
     var statusCode = 500
@@ -10,7 +11,7 @@ module.exports = async(error, req, res, next) => {
         statusCode = 404
     }
 
-    if (error instanceof ModeloUniqueError) {
+    if (error instanceof ModeloUniqueError || error instanceof IdFormatError) {
         statusCode = 400
     }
 

@@ -45,7 +45,6 @@ module.exports = async(req, res, next) => {
                 .required()
         })
 
-
         const { error } = await schema.validate(req.body, { abortEarly: false })
         if (error) throw error
         return next()

@@ -5,6 +5,7 @@ const CpfError = require('./CpfError')
 const IdadeError = require('./IdadeError')
 const EmailUniqueError = require('./EmailUniqueError')
 const CpfUniqueError = require('./CpfUniqueError')
+const IdFormatError = require('./IdFormatError')
 
 module.exports = async(error, req, res, next) => {
     var statusCode = 500
@@ -18,7 +19,8 @@ module.exports = async(error, req, res, next) => {
         error instanceof CpfError ||
         error instanceof IdadeError ||
         error instanceof EmailUniqueError ||
-        error instanceof CpfUniqueError
+        error instanceof CpfUniqueError ||
+        error instanceof IdFormatError
     ) {
         statusCode = 400
     }

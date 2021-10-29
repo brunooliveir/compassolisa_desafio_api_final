@@ -14,6 +14,7 @@ class PeopleController {
     async findOneById(req, res, next) {
         try {
             const result = await PeopleService.checkPessoaId(req.params.id)
+            await PeopleService.checkPessoaNull(result)
             return res.status(200).send(result)
         } catch (Error) {
             return next(Error)
@@ -41,7 +42,8 @@ class PeopleController {
 
     async updateById(req, res, next) {
         try {
-            await PeopleService.checkPessoaId(req.params.id)
+            const pessoa = await PeopleService.checkPessoaId(req.params.id)
+            await PeopleService.checkPessoaNull(pessoa)
             await PeopleService.checkIdade(req.body)
             const result = await PeopleService.checkPessoaUpdate(req.params.id, req.body)
             return res.status(201).send(result)

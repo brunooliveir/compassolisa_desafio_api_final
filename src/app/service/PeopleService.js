@@ -5,6 +5,7 @@ const PeopleIdNotFound = require('../errors/people/PeopleIdNotFound')
 const EmailUniqueError = require('../errors/people/EmailUniqueError')
 const CpfUniqueError = require('../errors/people/CpfUniqueError')
 const IdadeError = require('../errors/people/IdadeError')
+const IdFormatError = require('../errors/people/IdFormatError')
 
 class PeopleService {
     async create(payload) {
@@ -35,11 +36,24 @@ class PeopleService {
     }
 
     async checkPessoaId(id) {
-        const pessoa = await PeopleRepository.findOneById(id)
+        try {
+            const pessoa = await PeopleRepository.findOneById(id)
+            if (pessoa == null) {
+                throw new PeopleIdNotFound()
+            }
+            return pessoa
+        } catch (error) {
+            if (error.message.split(" ", )[0] == 'Cast' && error.message.split(" ", )[2] == 'ObjectId')
+                throw new IdFormatError()
+        }
+
+    }
+
+    async checkPessoaNull(payload) {
+        const pessoa = payload
         if (pessoa == null) {
             throw new PeopleIdNotFound()
         }
-        return pessoa
     }
 
     async checkQuery(payload) {

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const autoIncrement = require('mongoose-auto-increment')
 
 const carSchema = mongoose.Schema({
     modelo: {
@@ -35,9 +34,6 @@ const carSchema = mongoose.Schema({
         updatedAt: 'updated_at'
     }
 })
-
-autoIncrement.initialize(mongoose.connection)
-carSchema.plugin(autoIncrement.plugin, 'idCar')
 
 
 const Car = mongoose.model('veiculos', carSchema)

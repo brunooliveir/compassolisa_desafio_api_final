@@ -134,13 +134,6 @@ paths:
         schema:
           type: string
 
-
-
-  
-          
-          
-          
-    
       summary: Consulta todos os veiculos, ou veiculos por parametros
       responses:
         200:
@@ -179,7 +172,7 @@ paths:
     - name: id
       in: path
       schema:
-        type: number
+        type: string
       required: true
     get:
       tags:
@@ -372,7 +365,25 @@ paths:
         description: usuário habilitado [sim , não]
         schema:
           type: string
-    
+
+      - name: limit
+        in: query
+        description: limite de resultados na pagina
+        schema:
+          type: string
+
+      - name: offset
+        in: query
+        description: quantidade de resultados ignorados após o offsets
+        schema:
+          type: string
+
+      - name: offsets
+        in: query
+        description: quantidade de resultados ignorados a partir do primeiro resultado
+        schema:
+          type: string
+
       summary: Consulta todos os veiculos, ou veiculos por parametros
       responses:
         200:
@@ -409,12 +420,12 @@ paths:
     - name: id
       in: path
       schema:
-        type: number
+        type: string
       required: true
     get:
       tags:
       - "Usuários"
-      summary: Consulta todos os usuarios
+      summary: Consulta usuários por Id
       responses:
         200:
           description: Sucesso

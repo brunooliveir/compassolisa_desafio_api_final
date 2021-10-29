@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const autoIncrement = require('mongoose-auto-increment')
 const crypto = require('crypto')
 const moment = require('moment')
 
@@ -44,9 +43,6 @@ const peopleSchema = mongoose.Schema({
         updatedAt: 'updated_at'
     }
 })
-
-autoIncrement.initialize(mongoose.connection)
-peopleSchema.plugin(autoIncrement.plugin, 'idPeople')
 
 
 const People = mongoose.model('pessoas', peopleSchema)

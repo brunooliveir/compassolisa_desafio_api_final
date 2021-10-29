@@ -2,26 +2,37 @@ const CarRepository = require('../repository/CarRepository')
 const CarParameterNotFound = require('../errors/car/CarParameterNotFound')
 const CarIdNotFound = require('../errors/car/CarIdNotFound')
 const ModeloUniqueError = require('../errors/car/ModeloUniqueError')
+const IdFormatError = require('../errors/car/IdFormatError')
 
 class CarService {
     async create(payload) {
+        const AnyModelo = { modelo: payload.modelo }
+        const ModeloNotUnique = await CarRepository.findByQuery(AnyModelo)
+        if (!!ModeloNotUnique[0]) {
+            throw new ModeloUniqueError()
+        }
+        const veiculo = await CarRepository.create(payload)
+        return veiculo
+    }
+
+    async checkVeiculoId(payload) {
         try {
-            const veiculo = await CarRepository.create(payload)
+            const veiculo = await CarRepository.findOneById(payload)
             return veiculo
         } catch (error) {
-            if (Object.keys(error.keyValue)[0] == 'modelo') {
-                throw new ModeloUniqueError()
+            if (error.message.split(" ", )[0] == 'Cast' && error.message.split(" ", )[2] == 'ObjectId') {
+                throw new IdFormatError()
             }
         }
     }
 
-    async checkVeiculoId(payload) {
-        const veiculo = await CarRepository.findOneById(payload)
+    async checkVeiculoNull(payload) {
+        const veiculo = payload
         if (veiculo == null) {
             throw new CarIdNotFound()
         }
-        return veiculo
     }
+
 
     async checkQuery(payload) {
         Object.keys(payload).forEach(element => {

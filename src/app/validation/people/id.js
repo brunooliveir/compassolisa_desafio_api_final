@@ -3,7 +3,7 @@ const Joi = require('joi')
 module.exports = async(req, res, next) => {
     try {
         const id = Joi.object({
-            id: Joi.number().min(0).required()
+            id: Joi.string().required().id()
         })
 
         const { error } = id.validate(req.params, { abortEarly: false })
