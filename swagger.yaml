@@ -64,7 +64,7 @@ paths:
                 type: object
                 properties:
                   _id:
-                    type: number
+                    type: string
                   modelo:
                     type: string
                   cor:
@@ -149,7 +149,7 @@ paths:
                       type: object
                       properties:
                         _id:
-                          type: number
+                          type: string
                         modelo:
                           type: string
                         cor:
@@ -187,7 +187,7 @@ paths:
                 type: object
                 properties:
                   _id:
-                    type: number
+                    type: string
                   modelo:
                     type: string
                   cor:
@@ -245,7 +245,7 @@ paths:
                 type: object
                 properties:
                   _id:
-                    type: number
+                    type: string
                   modelo:
                     type: string
                   cor:
@@ -399,7 +399,7 @@ paths:
                       type: object
                       properties:
                         _id:
-                          type: number
+                          type: string
                         nome:
                           type: string
                         cpf:
@@ -435,7 +435,7 @@ paths:
                 type: object
                 properties:
                   _id:
-                    type: number
+                    type: string
                   nome:
                     type: string
                   cpf:
@@ -492,7 +492,7 @@ paths:
                 type: object
                 properties:
                   _id:
-                    type: number
+                    type: string
                   nome:
                     type: string
                   cpf:
