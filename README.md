@@ -1,7 +1,7 @@
 
 # compassolisa_desafio_api_final_pt1
 
-O desafio consiste em criar uma aplicação API Rest Full de uma Locadora de veículos.
+O desafio consiste em criar uma aplicação API Rest Full de uma Locadora de veículos utilizando o framework express e o banco de dados MongoDB.
 
 
 
