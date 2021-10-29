@@ -17,28 +17,32 @@ module.exports = async(req, res, next) => {
         const schema = Joi.object({
             modelo: Joi.string()
                 .min(LIMIT_MINIMUM_STRING_LENGHT)
-                .max(LIMIT_MAXIMUM_STRING_LENGHT),
+                .max(LIMIT_MAXIMUM_STRING_LENGHT)
+                .required(),
             cor: Joi.string()
                 .min(LIMIT_MINIMUM_STRING_LENGHT)
-                .max(LIMIT_MAXIMUM_STRING_LENGHT),
+                .max(LIMIT_MAXIMUM_STRING_LENGHT)
+                .required(),
             ano: Joi.number()
                 .greater(LIMIT_MINIMUM_CAR_YEAR)
-                .less(LIMIT_MAXIMUM_CAR_YEAR),
+                .less(LIMIT_MAXIMUM_CAR_YEAR)
+                .required(),
             acessorios: Joi.array()
                 .items(
                     Joi.object({
                         descricao: Joi.string()
                             .min(LIMIT_MINIMUM_STRING_LENGHT)
                             .max(LIMIT_MAXIMUM_STRING_LENGHT)
-
+                            .required(),
                     }))
                 .min(LIMIT_MINIMUM_ARRAY_LENGHT)
                 .max(LIMIT_MAXIMUM_ARRAY_LENGHT)
-                .unique(),
+                .unique()
+                .required(),
             quantidadePassageiros: Joi.number()
                 .greater(LIMIT_MINIMUM_PASSENGER_NUMBER)
                 .less(LIMIT_MAXIMUM_PASSENGER_NUMBER)
-
+                .required(),
         })
 
 

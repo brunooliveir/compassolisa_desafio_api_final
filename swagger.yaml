@@ -37,10 +37,13 @@ paths:
               properties:
                 modelo:
                   type: string
+                  example: "GM S10 2.8"
                 cor:
                   type: string
+                  example: "branco"
                 ano:
                   type: number
+                  example: 2000
                 acessorios:
                   type: array
                   items:
@@ -48,8 +51,10 @@ paths:
                     properties:
                       descricao:
                         type: string
+                        example: "Ar-condicionado"
                 quantidadePassageiros:
                   type: number
+                  example: 5
       responses:
         201:
           description: Created
@@ -111,6 +116,31 @@ paths:
         schema:
           type: string
     
+      - name: limit
+        in: query
+        description: limite de resultados na pagina
+        schema:
+          type: string
+
+      - name: offset
+        in: query
+        description: quantidade de resultados ignorados após o offsets
+        schema:
+          type: string
+
+      - name: offsets
+        in: query
+        description: quantidade de resultados ignorados a partir do primeiro resultado
+        schema:
+          type: string
+
+
+
+  
+          
+          
+          
+    
       summary: Consulta todos os veiculos, ou veiculos por parametros
       responses:
         200:
@@ -154,7 +184,7 @@ paths:
     get:
       tags:
       - "Veiculos"
-      summary: Consulta todos os veiculos
+      summary: Consulta veiculo por Id
       responses:
         200:
           description: Sucesso
@@ -195,10 +225,13 @@ paths:
               properties:
                 modelo:
                   type: string
+                  example: "GM S10 2.8"
                 cor:
                   type: string
+                  example: "branco"
                 ano:
                   type: number
+                  example: 2000
                 acessorios:
                   type: array
                   items:
@@ -206,8 +239,10 @@ paths:
                     properties:
                       descricao:
                         type: string
+                        example: "Ar-condicionado"
                 quantidadePassageiros:
                   type: number
+                  example: 5
       responses:
         201:
           description: Created

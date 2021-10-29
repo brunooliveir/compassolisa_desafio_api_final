@@ -6,20 +6,16 @@ class PeopleRepository {
         return PeopleSchema.create(payload)
     }
 
-    async findByQuery(query, limit, offset, offsets) {
-        return PeopleSchema.find(query).limit(limit).sort('_id').skip(offset + offsets)
+    async findByQuery(payload) {
+        return PeopleSchema.find(payload).limit(payload.limit).sort('_id').skip(payload.skip)
     }
 
-    async findByQuery(query) {
-        return PeopleSchema.find(query)
+    async findOneById(payload) {
+        return PeopleSchema.findById({ _id: payload })
     }
 
-    async findOneById(id) {
-        return PeopleSchema.findById({ _id: id })
-    }
-
-    async deleteOne(id) {
-        return PeopleSchema.deleteOne({ _id: id })
+    async deleteOne(payload) {
+        return PeopleSchema.deleteOne({ _id: payload })
     }
 }
 

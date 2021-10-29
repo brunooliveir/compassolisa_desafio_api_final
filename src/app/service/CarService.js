@@ -7,8 +7,7 @@ class CarService {
     async create(payload) {
         try {
             const veiculo = await CarRepository.create(payload)
-            const STATUS_SUCCESS = 201
-            return { statusCode: STATUS_SUCCESS, veiculo: veiculo }
+            return veiculo
         } catch (error) {
             if (Object.keys(error.keyValue)[0] == 'modelo') {
                 throw new ModeloUniqueError()
@@ -18,63 +17,60 @@ class CarService {
 
     async checkVeiculoId(id) {
         const veiculo = await CarRepository.findOneById(id)
-        const STATUS_SUCCESS = 200
         if (veiculo == null) {
             throw new CarIdNotFound()
         }
-        return { statusCode: STATUS_SUCCESS, veiculo: veiculo }
+        return veiculo
     }
 
-    async checkQuery(query) {
-        const LIMIT = 100
-        const OFFSET = 0
-        const OFFSETS = 0
-        Object.keys(query).forEach(element => {
-            console.log(element)
+    async checkQuery(payload) {
+        Object.keys(payload).forEach(element => {
             if (element == 'descricao') {
-                const newKeyValue = { 'acessorios.descricao': query["descricao"] }
-                delete query["descricao"]
-                Object.assign(query, newKeyValue)
+                const newKeyValue = { 'acessorios.descricao': payload["descricao"] }
+                delete payload["descricao"]
+                Object.assign(payload, newKeyValue)
             }
         })
-        const veiculos = await CarRepository.findByQuery(query, LIMIT, OFFSET, OFFSETS)
-        const STATUS_SUCCESS = 200
-        if (veiculos.length == 0) {
+        if (!!payload.limit) {
+            payload.limit = parseInt(payload.limit)
+        }
+        if (!!payload.offset) {
+            payload.offset = parseInt(payload.offset)
+            payload.skip = payload.offset
+        }
+        if (!!payload.offsets) {
+            payload.offsets = parseInt(payload.offsets)
+            if (!!payload.skip) {
+                payload.skip += payload.offsets
+            } else {
+                payload.skip = payload.offsets
+            }
+        }
+
+        const veiculos = await CarRepository.findByQuery(payload)
+        const { limit, offset, offsets, skip, ...veiculosWithOutPagination } = payload
+        const veiculosTotal = (await CarRepository.findByQuery(veiculosWithOutPagination)).length
+        if (veiculosTotal == 0) {
             throw new CarParameterNotFound()
         }
-        return { statusCode: STATUS_SUCCESS, veiculos: veiculos, total: veiculos.length, limit: LIMIT, offset: OFFSET, offsets: OFFSETS }
+        return { veiculos: veiculos, total: veiculosTotal, limit: payload.limit, offset: payload.offset, offsets: payload.offsets }
     }
 
-    async checkVeiculoDelete(id, checkedVeiculoId) {
-        const STATUS_SUCCESS = 204
-        if (checkedVeiculoId["statusCode"] == 404) {
-            throw new CarIdNotFound()
-        }
+    async checkVeiculoDelete(id) {
         await CarRepository.deleteOne(id)
-        return { statusCode: STATUS_SUCCESS, }
+        return
     }
 
-    async checkVeiculoUpdate(id, payload, checkedVeiculoId) {
-        if (checkedVeiculoId["statusCode"] == 404) {
-            throw new CarIdNotFound()
-        }
-        const STATUS_SUCCESS = 201
+    async checkVeiculoUpdate(id, payload) {
         const veiculo = await CarRepository.findOneById(id)
-        Object.keys(payload).forEach(element => {
-            if (veiculo[element] == undefined) {
-                throw new CarParameterNotFound()
-            }
-        })
-        if (payload.modelo != undefined) {
-            var AnyModelo = { modelo: payload.modelo }
-            var ModeloNotUnique = await CarRepository.findByQuery(AnyModelo)
-            if (ModeloNotUnique[0] != undefined) {
-                throw new ModeloUniqueError()
-            }
+        const AnyModelo = { modelo: payload.modelo }
+        const ModeloNotUnique = await CarRepository.findByQuery(AnyModelo)
+        if (!!ModeloNotUnique[0] && id != ModeloNotUnique[0].id) {
+            throw new ModeloUniqueError()
         }
         Object.assign(veiculo, payload)
         veiculo.save()
-        return { statusCode: STATUS_SUCCESS, veiculo: { veiculo } }
+        return veiculo
     }
 
 }

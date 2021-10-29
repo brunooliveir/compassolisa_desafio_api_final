@@ -1,18 +1,19 @@
+const moment = require('moment')
 const PeopleRepository = require('../repository/PeopleRepository')
 const PeopleParameterNotFound = require('../errors/people/PeopleParameterNotFound')
 const PeopleIdNotFound = require('../errors/people/PeopleIdNotFound')
 const EmailUniqueError = require('../errors/people/EmailUniqueError')
 const CpfUniqueError = require('../errors/people/CpfUniqueError')
+const IdadeError = require('../errors/people/IdadeError')
 
 class PeopleService {
     async create(payload) {
-        const data_nascimentoSplited = payload["data_nascimento"].split('/', )
+        const data_nascimentoSplited = payload.data_nascimento.split('/', )
         try {
-            payload["data_nascimento"] = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
+            payload.data_nascimento = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
             const result = await PeopleRepository.create(payload)
             const { senha, ...pessoa } = result.toObject()
-            const STATUS_SUCCESS = 201
-            return { statusCode: STATUS_SUCCESS, pessoa: pessoa }
+            return pessoa
         } catch (error) {
             if (Object.keys(error.keyValue)[0] == 'cpf') {
                 throw new CpfUniqueError()
@@ -23,71 +24,78 @@ class PeopleService {
         }
     }
 
+    async checkIdade(payload) {
+        const MINIMUM_AGE = 18
+        const data_nascimento = moment(payload['data_nascimento'], 'DD/MM/YYYY').format('YYYY/MM/DD')
+        const today = new Date()
+        const age = (moment(today).diff(new Date(data_nascimento), 'years'))
+        if (age < MINIMUM_AGE) {
+            throw new IdadeError()
+        }
+    }
+
     async checkPessoaId(id) {
         const pessoa = await PeopleRepository.findOneById(id)
-        const STATUS_SUCCESS = 200
         if (pessoa == null) {
             throw new PeopleIdNotFound()
         }
-        return { statusCode: STATUS_SUCCESS, pessoa: pessoa }
+        return pessoa
     }
 
-    async checkQuery(query) {
-        const LIMIT = 100
-        const OFFSET = 0
-        const OFFSETS = 0
-        const pessoas = await PeopleRepository.findByQuery(query, LIMIT, OFFSET, OFFSETS)
-        const STATUS_SUCCESS = 200
-        if (pessoas.length == 0) {
+    async checkQuery(payload) {
+        if (!!payload.limit) {
+            payload.limit = parseInt(payload.limit)
+        }
+        if (!!payload.offset) {
+            payload.offset = parseInt(payload.offset)
+            payload.skip = payload.offset
+        }
+        if (!!payload.offsets) {
+            payload.offsets = parseInt(payload.offsets)
+            if (!!payload.skip) {
+                payload.skip += payload.offsets
+            } else {
+                payload.skip = payload.offsets
+            }
+        }
+
+        const pessoas = await PeopleRepository.findByQuery(payload)
+        const { limit, offset, offsets, skip, ...pessoasWithOutPagination } = payload
+        const pessoasTotal = (await PeopleRepository.findByQuery(pessoasWithOutPagination)).length
+        if (pessoasTotal == 0) {
             throw new PeopleParameterNotFound()
         }
-        return { statusCode: STATUS_SUCCESS, pessoas: pessoas, total: pessoas.length, limit: LIMIT, offset: OFFSET, offsets: OFFSETS }
+        return { pessoas: pessoas, total: pessoasTotal, limit: payload.limit, offset: payload.offset, offsets: payload.offsets }
     }
 
-    async checkPessoaDelete(id, checkedPessoaId) {
-        const STATUS_SUCCESS = 204
-        if (checkedPessoaId["statusCode"] == 404) {
-            throw new PeopleIdNotFound()
-        }
+    async checkPessoaDelete(id) {
         await PeopleRepository.deleteOne(id)
-        return { statusCode: STATUS_SUCCESS, }
-
+        return
     }
 
-    async checkPessoaUpdate(id, payload, checkedPessoaId) {
-        if (checkedPessoaId["statusCode"] == 404) {
-            throw new PeopleIdNotFound()
-        }
-        const STATUS_SUCCESS = 201
+    async checkPessoaUpdate(id, payload) {
         const pessoa = await PeopleRepository.findOneById(id)
-        Object.keys(payload).forEach(element => {
-            if (pessoa[element] == undefined) {
-                throw new PeopleParameterNotFound()
-            }
-        })
-        if (payload.data_nascimento != undefined) {
-            const data_nascimentoSplited = payload.data_nascimento.split('/', )
-            payload.data_nascimento = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
-        }
+        const data_nascimentoSplited = payload.data_nascimento.split('/', )
+        payload.data_nascimento = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
 
-        if (payload.email != undefined) {
-            var AnyEmail = { email: payload.email }
-            var EmailNotUnique = await PeopleRepository.findByQuery(AnyEmail)
-            if (EmailNotUnique[0] != undefined) {
+        if (!!payload.email) {
+            const AnyEmail = { email: payload.email }
+            const EmailNotUnique = await PeopleRepository.findByQuery(AnyEmail)
+            if (!!EmailNotUnique[0] && id != EmailNotUnique[0].id) {
                 throw new EmailUniqueError()
             }
         }
-        if (payload.cpf != undefined) {
-            var AnyCpf = { cpf: payload.cpf }
-            var CpfNotUnique = await PeopleRepository.findByQuery(AnyCpf)
-            if (CpfNotUnique[0] != undefined) {
+        if (!!payload.cpf) {
+            const AnyCpf = { cpf: payload.cpf }
+            const CpfNotUnique = await PeopleRepository.findByQuery(AnyCpf)
+            if (!!CpfNotUnique[0] && id != CpfNotUnique[0].id) {
                 throw new CpfUniqueError()
             }
         }
-
         Object.assign(pessoa, payload)
         pessoa.save()
-        return { statusCode: STATUS_SUCCESS, pessoa: { pessoa } }
+        const { senha, ...result } = pessoa.toObject()
+        return result
     }
 }
 

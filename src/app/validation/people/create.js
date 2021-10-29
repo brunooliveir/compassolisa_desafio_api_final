@@ -1,6 +1,5 @@
 const Joi = require('joi').extend(require('@joi/date'))
 const CpfError = require('../../errors/people/CpfError')
-const IdadeError = require('../../errors/people/IdadeError')
 
 const LIMIT_MINIMUM_NOME_STRING_LENGHT = 5
 const LIMIT_MAXIMUM_NOME_STRING_LENGHT = 50
@@ -11,7 +10,6 @@ const LIMIT_MAXIMUM_SENHA_STRING_LENGHT = 50
 const LIMIT_MINIMUM_EMAIL_STRING_LENGHT = 5
 const LIMIT_MAXIMUM_EMAIL_STRING_LENGHT = 50
 
-const LIMIT_MINIMUM_AGE = 18
 
 module.exports = async(req, res, next) => {
     try {
@@ -69,33 +67,9 @@ module.exports = async(req, res, next) => {
                     throw new CpfError()
                 }
             }
-        } catch (CpfError) {
-            return next(CpfError)
+        } catch (error) {
+            return next(error)
         }
-
-        try {
-            const today = new Date()
-            const date_of_birth = new Date(await schema.validate(req.body).value.data_nascimento)
-            var age
-
-            if (today.getMonth() >= date_of_birth.getMonth()) {
-                if (today.getDate() >= (date_of_birth.getDate() + 1)) {
-                    age = today.getFullYear() - (date_of_birth.getFullYear() + 1)
-                } else {
-                    age = today.getFullYear() - (date_of_birth.getFullYear())
-                }
-
-            } else {
-                age = today.getFullYear() - (date_of_birth.getFullYear())
-            }
-
-            if (age < LIMIT_MINIMUM_AGE) {
-                throw new IdadeError()
-            }
-        } catch (IdadeError) {
-            return next(IdadeError)
-        }
-
 
         const { error } = await schema.validate(req.body, { abortEarly: false })
         if (error) throw error
