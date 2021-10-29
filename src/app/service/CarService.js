@@ -33,7 +33,6 @@ class CarService {
         }
     }
 
-
     async checkQuery(payload) {
         Object.keys(payload).forEach(element => {
             if (element == 'descricao') {

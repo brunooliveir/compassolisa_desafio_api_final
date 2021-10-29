@@ -13,8 +13,7 @@ class PeopleService {
         try {
             payload.data_nascimento = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
             const result = await PeopleRepository.create(payload)
-            const { senha, ...pessoa } = result.toObject()
-            return pessoa
+            return result
         } catch (error) {
             if (Object.keys(error.keyValue)[0] == 'cpf') {
                 throw new CpfUniqueError()
@@ -107,8 +106,7 @@ class PeopleService {
         }
         Object.assign(pessoa, payload)
         pessoa.save()
-        const { senha, ...result } = pessoa.toObject()
-        return result
+        return pessoa
     }
 }
 
