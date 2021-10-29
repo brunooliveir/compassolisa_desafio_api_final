@@ -73,12 +73,12 @@ Comando para iniciar a API: **npm start**
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `modelo ` | `string` |  **Unique**. |                
-| `cor`     | `string` | |
-| `ano` | `number` | |                
-| `acessorios` | `Array[descricao]` |  |
-| `[descricao]` | `string` | |
-| `quantidadePassageiros` | `number` | |
+| `modelo ` | `string` |  **Required, Unique**. |                
+| `cor`     | `string` | **Required**|
+| `ano` | `number` |**Required** |                
+| `acessorios` | `Array[descricao]` |  **Required**|
+| `[descricao]` | `string` | **Required**|
+| `quantidadePassageiros` | `number` | **Required**|
 
 
 
