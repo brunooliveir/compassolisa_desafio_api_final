@@ -13,11 +13,9 @@ O desafio consiste em criar uma aplicação API Rest Full de uma Locadora de ve�
 Requisitos: Node.js e MongoDB
 
 
-
+Após clonar o repositório
 
 Em: **compassolisa_desafio_api_final_pt1/src/config/config.json**
-
-Após clonar o repositório
 
 **configure:** 
 
