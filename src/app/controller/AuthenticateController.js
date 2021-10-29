@@ -4,7 +4,7 @@ class AuthenticateController {
     async authenticate(req, res, next) {
         try {
             const result = await AuthenticateService.authenticate(req.body)
-            return res.status(result["statusCode"]).send(result["pessoa"])
+            return res.status(201).send(result)
         } catch (error) {
             return next(error)
         }
