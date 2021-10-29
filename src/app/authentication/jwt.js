@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 class Jwt {
     async sign(payload) {
         const secret = 'dDsInG6cflShbGci0iJIUz6DS245a2sds3DS4FS'
-        return jwt.sign(payload, secret)
+        return jwt.sign(payload, secret, { expiresIn: 86400 })
     }
     async verify(token) {
         const secret = 'dDsInG6cflShbGci0iJIUz6DS245a2sds3DS4FS'

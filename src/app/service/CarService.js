@@ -15,8 +15,8 @@ class CarService {
         }
     }
 
-    async checkVeiculoId(id) {
-        const veiculo = await CarRepository.findOneById(id)
+    async checkVeiculoId(payload) {
+        const veiculo = await CarRepository.findOneById(payload)
         if (veiculo == null) {
             throw new CarIdNotFound()
         }

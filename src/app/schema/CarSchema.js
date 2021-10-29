@@ -29,6 +29,11 @@ const carSchema = mongoose.Schema({
         type: Number,
         required: true
     }
+}, {
+    timestamps: {
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
+    }
 })
 
 autoIncrement.initialize(mongoose.connection)

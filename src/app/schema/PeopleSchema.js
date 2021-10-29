@@ -38,6 +38,11 @@ const peopleSchema = mongoose.Schema({
         enum: ['sim', 'não'],
         required: true
     }
+}, {
+    timestamps: {
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
+    }
 })
 
 autoIncrement.initialize(mongoose.connection)

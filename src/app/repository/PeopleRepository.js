@@ -7,7 +7,9 @@ class PeopleRepository {
     }
 
     async findByQuery(payload) {
-        return PeopleSchema.find(payload).limit(payload.limit).sort('_id').skip(payload.skip)
+        return PeopleSchema.find(payload).limit(payload.limit).sort({
+            created_at: 'asc'
+        }).skip(payload.skip)
     }
 
     async findOneById(payload) {
