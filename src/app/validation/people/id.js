@@ -5,7 +5,6 @@ module.exports = async(req, res, next) => {
         const id = Joi.object({
             id: Joi.string().required().id()
         })
-
         const { error } = id.validate(req.params, { abortEarly: false })
         if (error) throw error
         return next()

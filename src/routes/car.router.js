@@ -7,8 +7,8 @@ const errors = require('../app/errors/car/index')
 module.exports = (server, routes, prefix = '/api/v1/car') => {
     routes.post('/', createValidation, errors, CarController.create, errors)
     routes.get('/', CarController.listQuery, errors)
-    routes.get('/:id', idValidation, CarController.findOneById, errors)
-    routes.put('/:id', idValidation, createValidation, errors, CarController.updateById, errors)
-    routes.delete('/:id', idValidation, CarController.deleteOne, errors)
+    routes.get('/:id', idValidation, errors, CarController.findOneById, errors)
+    routes.put('/:id', idValidation, errors, createValidation, errors, CarController.updateById, errors)
+    routes.delete('/:id', idValidation, errors, CarController.deleteOne, errors)
     server.use(prefix, routes)
 }

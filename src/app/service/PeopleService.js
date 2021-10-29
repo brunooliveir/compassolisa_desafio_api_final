@@ -72,7 +72,6 @@ class PeopleService {
                 payload.skip = payload.offsets
             }
         }
-
         const pessoas = await PeopleRepository.findByQuery(payload)
         const { limit, offset, offsets, skip, ...pessoasWithOutPagination } = payload
         const pessoasTotal = (await PeopleRepository.findByQuery(pessoasWithOutPagination)).length
