@@ -1,3 +1,4 @@
 const app = require('./app')
+const config = require('./config/config.json')
 
-app.listen(process.env.PORT || 3000)
+app.listen(config.database.port || 3000)
