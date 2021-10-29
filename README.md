@@ -8,9 +8,47 @@ O desafio consiste em criar uma aplicação API Rest Full de uma Locadora de ve�
 #Status: Concluído.
 
 
-## Referente a API
+## Como rodar a API
 
-Comando para iniciar a API: **npm start**
+Requisitos: Node.js e MongoDB
+
+
+
+
+Em: **compassolisa_desafio_api_final_pt1/src/config/config.json**
+
+**configure:** 
+
+```http
+{
+    "database": {
+        "port": "3000",
+        "host": "127.0.0.1:27017",
+        "collection": "compassolisa"
+    }
+}
+```
+
+**Nome do banco de dados a seu critério.
+
+Abra a pasta raiz da aplicação (compassolisa_desafio_api_final_pt1), então execute no console os seguintes comandos:
+
+
+**instalação dos modulos:**
+```http
+    npm i
+```
+
+**Executando a API:**
+```http
+    npm run start
+```
+ou
+
+**Executando em modo de desenvolvimento (nodemon):**
+```http
+    npm run dev
+```
 
 
 # Rotas
@@ -22,7 +60,7 @@ Comando para iniciar a API: **npm start**
 
 
 ```http
-  POST | http://localhost:3000/api/v1/car/
+  POST | http://127.0.0.1:3000/api/v1/car/
 ```
 
 | Parameter | Type     | Description                |
@@ -40,7 +78,7 @@ Comando para iniciar a API: **npm start**
 
 
 ```http
-  GET | http://localhost:3000/api/v1/car/
+  GET | http://127.0.0.1:3000/api/v1/car/
 ```
 
 
@@ -48,7 +86,7 @@ Comando para iniciar a API: **npm start**
 
 
 ```http
-  GET | http://localhost:3000/api/v1/car/?paramKey=paramValue
+  GET | http://127.0.0.1:3000/api/v1/car/?paramKey=paramValue
 ```
 
 
@@ -57,7 +95,7 @@ Comando para iniciar a API: **npm start**
 
 
 ```http
-  GET | http://localhost:3000/api/v1/car/:id
+  GET | http://127.0.0.1:3000/api/v1/car/:id
 ```
 
 
@@ -67,7 +105,7 @@ Comando para iniciar a API: **npm start**
 
 
 ```http
-  PUT | http://localhost:3000/api/v1/car/:id
+  PUT | http://127.0.0.1:3000/api/v1/car/:id
 ```
 
 
@@ -87,7 +125,7 @@ Comando para iniciar a API: **npm start**
 
 
 ```http
-  DELETE | http://localhost:3000/api/v1/car/:id
+  DELETE | http://127.0.0.1:3000/api/v1/car/:id
 ```
 
 
@@ -98,7 +136,7 @@ Comando para iniciar a API: **npm start**
 
 
 ```http
-  POST | http://localhost:3000/api/v1/people/
+  POST | http://127.0.0.1:3000/api/v1/people/
 ```
 
 | Parameter | Type     | Description                |
@@ -116,7 +154,7 @@ Comando para iniciar a API: **npm start**
 
 
 ```http
-  GET | http://localhost:3000/api/v1/people/
+  GET | http://127.0.0.1:3000/api/v1/people/
 ```
 
 
@@ -124,7 +162,7 @@ Comando para iniciar a API: **npm start**
 
 
 ```http
-  GET | http://localhost:3000/api/v1/people/?paramKey=paramValue
+  GET | http://127.0.0.1:3000/api/v1/people/?paramKey=paramValue
 ```
 
 
@@ -133,7 +171,7 @@ Comando para iniciar a API: **npm start**
 
 
 ```http
-  GET | http://localhost:3000/api/v1/people/:id
+  GET | http://127.0.0.1:3000/api/v1/people/:id
 ```
 
 
@@ -143,7 +181,7 @@ Comando para iniciar a API: **npm start**
 
 
 ```http
-  PUT | http://localhost:3000/api/v1/people/:id
+  PUT | http://127.0.0.1:3000/api/v1/people/:id
 ```
 
 
@@ -163,7 +201,7 @@ Comando para iniciar a API: **npm start**
 
 
 ```http
-  DELETE | http://localhost:3000/api/v1/people/:id
+  DELETE | http://127.0.0.1:3000/api/v1/people/:id
 ```
 
 
@@ -173,7 +211,7 @@ Comando para iniciar a API: **npm start**
 #### Autentica uma pessoa, gera um token de Autenticação:
 
 ```http
-  POST | http://localhost:3000/api/v1/authenticate/
+  POST | http://127.0.0.1:3000/api/v1/authenticate/
 ```
 
 | Parameter | Type     | Description                |

@@ -9,9 +9,9 @@ externalDocs:
   description: Repositório do projeto
   url: https://github.com/brunooliveir/compassolisa_desafio_api_final_pt1
 servers:
-- url: http://localhost:3000/api/v1
-  description: Servidor da aplicação
 - url: http://127.0.0.1:3000/api/v1
+  description: Servidor da aplicação
+- url: http://localhost:3000/api/v1
   description: Servidor da aplicação
   
 tags:
