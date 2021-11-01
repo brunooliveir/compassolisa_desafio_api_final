@@ -30,6 +30,22 @@ DB_COLLECTION = compassolisa
 
 ```
 
+e
+
+Em: **compassolisa_desafio_api_final_pt1/.env.test**
+
+```http
+
+DB_HOST= 127.0.0.1
+DB_USER=
+DB_PASS=
+DB_NAME= compassolisatest
+DB_PORT= 3000
+DB_COLLECTION = compassolisatest
+
+```
+
+
 **Nome do banco de dados a seu critério.
 
 Abra a pasta raiz da aplicação (compassolisa_desafio_api_final_pt1), então execute no console os seguintes comandos:
