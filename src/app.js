@@ -4,7 +4,7 @@ const cors = require('cors')
 const router = require('./routes')
 const PeopleErrors = require('./app/errors/people/index')
 const CarErrors = require('./app/errors/car/index')
-require('./infra/database/mongo')
+const Database = require('./infra/database/mongo').connect()
 
 class App {
 
