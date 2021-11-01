@@ -71,6 +71,10 @@ class PeopleService {
                 payload.skip = payload.offsets
             }
         }
+        if (!!payload.data_nascimento) {
+            const data_nascimentoSplited = payload.data_nascimento.split('.', )
+            payload.data_nascimento = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
+        }
         const pessoas = await PeopleRepository.findByQuery(payload)
         const { limit, offset, offsets, skip, ...pessoasWithOutPagination } = payload
         const pessoasTotal = (await PeopleRepository.findByQuery(pessoasWithOutPagination)).length
@@ -90,20 +94,18 @@ class PeopleService {
         const data_nascimentoSplited = payload.data_nascimento.split('/', )
         payload.data_nascimento = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
 
-        if (!!payload.email) {
-            const AnyEmail = { email: payload.email }
-            const EmailNotUnique = await PeopleRepository.findByQuery(AnyEmail)
-            if (!!EmailNotUnique[0] && id != EmailNotUnique[0].id) {
-                throw new EmailUniqueError()
-            }
+        const AnyEmail = { email: payload.email }
+        const EmailNotUnique = await PeopleRepository.findByQuery(AnyEmail)
+        if (!!EmailNotUnique[0] && id != EmailNotUnique[0].id) {
+            throw new EmailUniqueError()
         }
-        if (!!payload.cpf) {
-            const AnyCpf = { cpf: payload.cpf }
-            const CpfNotUnique = await PeopleRepository.findByQuery(AnyCpf)
-            if (!!CpfNotUnique[0] && id != CpfNotUnique[0].id) {
-                throw new CpfUniqueError()
-            }
+
+        const AnyCpf = { cpf: payload.cpf }
+        const CpfNotUnique = await PeopleRepository.findByQuery(AnyCpf)
+        if (!!CpfNotUnique[0] && id != CpfNotUnique[0].id) {
+            throw new CpfUniqueError()
         }
+
         Object.assign(pessoa, payload)
         pessoa.save()
         return pessoa
