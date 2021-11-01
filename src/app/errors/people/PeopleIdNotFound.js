@@ -1,8 +1,8 @@
 class PeopleIdNotFound extends Error {
-    constructor() {
-        const message = 'Error: people id not found'
+    constructor(Id) {
+        const message = 'People with id ' + Id + ' not found'
         super(message)
-        this.name = 'PeopleIdNotFound'
+        this.name = 'Not Found'
         this.idError = 6
     }
 }

@@ -6,7 +6,7 @@ class AuthenticateService {
     async authenticate(payload) {
         const finded = await PeopleRepository.findByQuery(payload)
         if (finded.length == 0) {
-            throw new NotAutenticate()
+            throw new NotAutenticate(payload.email)
         }
         const result = await PeopleRepository.create(finded[0])
         const token = await Jwt.sign({ email: result["email"], habilitado: result["habilitado"] })

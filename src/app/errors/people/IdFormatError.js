@@ -1,8 +1,8 @@
 class IdFormatError extends Error {
-    constructor() {
-        const message = 'Error: Format of this parameter ObjectId is not valid'
+    constructor(Id) {
+        const message = 'Format of this ObjectId: ' + Id + ' is not valid'
         super(message)
-        this.name = 'IdFormatError'
+        this.name = 'Bad Request'
         this.idError = 7
     }
 }

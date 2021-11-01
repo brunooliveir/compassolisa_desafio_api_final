@@ -16,10 +16,10 @@ class PeopleService {
             return result
         } catch (error) {
             if (Object.keys(error.keyValue)[0] == 'cpf') {
-                throw new CpfUniqueError()
+                throw new CpfUniqueError(error.keyValue.cpf)
             }
             if (Object.keys(error.keyValue)[0] == 'email') {
-                throw new EmailUniqueError()
+                throw new EmailUniqueError(error.keyValue.email)
             }
         }
     }
@@ -30,7 +30,7 @@ class PeopleService {
         const today = new Date()
         const age = (moment(today).diff(new Date(data_nascimento), 'years'))
         if (age < MINIMUM_AGE) {
-            throw new IdadeError()
+            throw new IdadeError(age)
         }
     }
 
@@ -38,20 +38,20 @@ class PeopleService {
         try {
             const pessoa = await PeopleRepository.findOneById(id)
             if (pessoa == null) {
-                throw new PeopleIdNotFound()
+                throw new PeopleIdNotFound(id)
             }
             return pessoa
         } catch (error) {
             if (error.message.split(" ", )[0] == 'Cast' && error.message.split(" ", )[2] == 'ObjectId')
-                throw new IdFormatError()
+                throw new IdFormatError(id)
         }
 
     }
 
-    async checkPessoaNull(payload) {
+    async checkPessoaNull(payload, id) {
         const pessoa = payload
         if (pessoa == null) {
-            throw new PeopleIdNotFound()
+            throw new PeopleIdNotFound(id)
         }
     }
 
@@ -79,7 +79,7 @@ class PeopleService {
         const { limit, offset, offsets, skip, ...pessoasWithOutPagination } = payload
         const pessoasTotal = (await PeopleRepository.findByQuery(pessoasWithOutPagination)).length
         if (pessoasTotal == 0) {
-            throw new PeopleParameterNotFound()
+            throw new PeopleParameterNotFound(payload)
         }
         return { pessoas: pessoas, total: pessoasTotal, limit: payload.limit, offset: payload.offset, offsets: payload.offsets }
     }
@@ -97,13 +97,13 @@ class PeopleService {
         const AnyEmail = { email: payload.email }
         const EmailNotUnique = await PeopleRepository.findByQuery(AnyEmail)
         if (!!EmailNotUnique[0] && id != EmailNotUnique[0].id) {
-            throw new EmailUniqueError()
+            throw new EmailUniqueError(payload.email)
         }
 
         const AnyCpf = { cpf: payload.cpf }
         const CpfNotUnique = await PeopleRepository.findByQuery(AnyCpf)
         if (!!CpfNotUnique[0] && id != CpfNotUnique[0].id) {
-            throw new CpfUniqueError()
+            throw new CpfUniqueError(payload.cpf)
         }
 
         Object.assign(pessoa, payload)

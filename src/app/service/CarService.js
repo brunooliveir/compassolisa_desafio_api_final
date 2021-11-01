@@ -56,7 +56,6 @@ class CarService {
                 payload.skip = payload.offsets
             }
         }
-
         const veiculos = await CarRepository.findByQuery(payload)
         const { limit, offset, offsets, skip, ...veiculosWithOutPagination } = payload
         const veiculosTotal = (await CarRepository.findByQuery(veiculosWithOutPagination)).length
@@ -82,7 +81,6 @@ class CarService {
         veiculo.save()
         return veiculo
     }
-
 }
 
 module.exports = new CarService()

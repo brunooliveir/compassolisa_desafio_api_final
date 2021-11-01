@@ -1,8 +1,8 @@
 class EmailUniqueError extends Error {
-    constructor() {
-        const message = 'Error: invalid Email, Email already registered'
+    constructor(emailValue) {
+        const message = 'Email ' + emailValue + ' already in use'
         super(message)
-        this.name = 'EmailUniqueError'
+        this.name = 'Conflict'
         this.idError = 1
     }
 

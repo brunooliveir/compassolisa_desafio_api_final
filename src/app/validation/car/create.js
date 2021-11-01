@@ -49,6 +49,15 @@ module.exports = async(req, res, next) => {
         if (error) throw error
         return next()
     } catch (error) {
-        return res.status(400).json(error)
+        const reworkedError = []
+        if (error.details.length > 1) {
+            error.details.forEach(element => {
+                reworkedError[error.details.indexOf(element)] = { description: element.path[0], name: element.message }
+            })
+        } else {
+            return res.status(400).json({ description: error.details[0].path[0], name: error.details[0].message })
+        }
+
+        return res.status(400).json(reworkedError)
     }
 }

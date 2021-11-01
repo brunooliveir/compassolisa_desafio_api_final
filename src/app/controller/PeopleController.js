@@ -14,7 +14,7 @@ class PeopleController {
     async findOneById(req, res, next) {
         try {
             const result = await PeopleService.checkPessoaId(req.params.id)
-            await PeopleService.checkPessoaNull(result)
+            await PeopleService.checkPessoaNull(result, req.params.id)
             return res.status(200).send(result)
         } catch (Error) {
             return next(Error)
@@ -33,7 +33,7 @@ class PeopleController {
     async deleteOne(req, res, next) {
         try {
             const pessoa = await PeopleService.checkPessoaId(req.params.id)
-            await PeopleService.checkPessoaNull(pessoa)
+            await PeopleService.checkPessoaNull(pessoa, req.params.id)
             const result = await PeopleService.checkPessoaDelete(req.params.id)
             return res.status(204).send(result)
         } catch (Error) {
@@ -44,7 +44,7 @@ class PeopleController {
     async updateById(req, res, next) {
         try {
             const pessoa = await PeopleService.checkPessoaId(req.params.id)
-            await PeopleService.checkPessoaNull(pessoa)
+            await PeopleService.checkPessoaNull(pessoa, req.params.id)
             await PeopleService.checkIdade(req.body)
             const result = await PeopleService.checkPessoaUpdate(req.params.id, req.body)
             return res.status(201).send(result)

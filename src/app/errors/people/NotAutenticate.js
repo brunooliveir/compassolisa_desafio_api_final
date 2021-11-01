@@ -1,8 +1,8 @@
 class NotAutenticate extends Error {
-    constructor() {
-        const message = 'Error: email and password not match'
+    constructor(email) {
+        const message = 'Email ' + email + ' and password not match'
         super(message)
-        this.name = 'NotAutenticate'
+        this.name = 'Bad Request'
         this.idError = 4
     }
 

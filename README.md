@@ -5,8 +5,6 @@ O desafio consiste em criar uma aplicação API Rest Full de uma Locadora de ve�
 
 
 
-#Status: Concluído.
-
 
 ## Como rodar a API
 

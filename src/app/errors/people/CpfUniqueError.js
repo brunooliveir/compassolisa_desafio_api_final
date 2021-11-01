@@ -1,8 +1,8 @@
 class CpfUniqueError extends Error {
-    constructor() {
-        const message = 'Error: invalid CPF, CPF already registered'
+    constructor(cpfValue) {
+        const message = 'CPF ' + cpfValue + ' already in use'
         super(message)
-        this.name = 'CpfUniqueError'
+        this.name = 'Conflict'
         this.idError = 0
     }
 
