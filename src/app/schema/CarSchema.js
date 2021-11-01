@@ -37,14 +37,14 @@ const carSchema = mongoose.Schema({
 
 carSchema.methods.toJSON = function() {
     const obj = this.toObject()
-    delete obj.acessorios[0]._id
+    obj.acessorios.forEach(descricao => {
+        delete descricao._id
+    })
     delete obj.created_at
     delete obj.updated_at
     delete obj.__v
     return obj
 }
-
-
 
 const Car = mongoose.model('veiculos', carSchema)
 
