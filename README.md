@@ -15,18 +15,19 @@ Requisitos: Node.js e MongoDB
 
 Após clonar o repositório
 
-Em: **compassolisa_desafio_api_final_pt1/src/config/config.json**
+Em: **compassolisa_desafio_api_final_pt1/.env**
 
 **configure:** 
 
 ```http
-{
-    "database": {
-        "port": "3000",
-        "host": "127.0.0.1:27017",
-        "collection": "compassolisa"
-    }
-}
+
+DB_HOST= 127.0.0.1
+DB_USER=
+DB_PASS=
+DB_NAME= compassolisa
+DB_PORT= 3000
+DB_COLLECTION = compassolisa
+
 ```
 
 **Nome do banco de dados a seu critério.
@@ -50,6 +51,12 @@ ou
     npm run dev
 ```
 
+ou
+
+**Executando os testes (jest):**
+```http
+    npm run test
+```
 
 # Rotas
 
@@ -158,11 +165,12 @@ ou
 ```
 
 
-#### Consulta pessoa por parametros:
+#### Consulta pessoa por parametros: * Obs: ?data_nascimento=DD.MM.YYYY
 
 
 ```http
   GET | http://127.0.0.1:3000/api/v1/people/?paramKey=paramValue
+  
 ```
 
 
