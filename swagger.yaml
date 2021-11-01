@@ -350,7 +350,7 @@ paths:
           
       - name: data_nascimento
         in: query
-        description: data nascimento do usuário
+        description: data nascimento do usuário (DD.MM.YYYY)
         schema:
           type: string
           
