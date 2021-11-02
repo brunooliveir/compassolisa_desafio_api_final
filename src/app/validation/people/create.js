@@ -74,7 +74,8 @@ module.exports = async(req, res, next) => {
         try {
             const strCpfBrute = await schema.validate(req.body).value.cpf
             if (!!strCpfBrute) {
-                checkCPF(strCpfBrute)
+                if (strCpfBrute.length <= 14)
+                    checkCPF(strCpfBrute)
             }
         } catch (error) {
             return next(error)
@@ -87,7 +88,7 @@ module.exports = async(req, res, next) => {
         const reworkedError = []
         if (error.details.length > 1) {
             error.details.forEach(element => {
-                reworkedError[error.details.indexOf(element)] = { description: element.path[0], name: element.message }
+                reworkedError[error.details.indexOf(element)] = { description: error.details.path[0], name: element.message }
             })
         } else {
             return res.status(400).json({ description: error.details[0].path[0], name: error.details[0].message })

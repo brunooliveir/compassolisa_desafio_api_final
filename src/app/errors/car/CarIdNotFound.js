@@ -1,9 +1,8 @@
 class CarIdNotFound extends Error {
-    constructor() {
-        const message = 'Error: car id not found'
+    constructor(Id) {
+        const message = 'Car with id ' + Id + ' not found'
         super(message)
-        this.name = 'CarIdNotFound'
-        this.idError = 1
+        this.name = 'Not Found'
     }
 }
 

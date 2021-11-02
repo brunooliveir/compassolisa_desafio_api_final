@@ -3,7 +3,6 @@ class CpfBadValue extends Error {
         const message = 'Invalid CPF ' + cpfValue
         super(message)
         this.name = 'Bad Request'
-        this.idError = 10
     }
 
 }

@@ -13,7 +13,7 @@ class CarController {
     async findOneById(req, res, next) {
         try {
             const result = await CarService.checkVeiculoId(req.params.id)
-            await CarService.checkVeiculoNull(result)
+            await CarService.checkVeiculoNull(result, req.params.id)
             return res.status(200).send(result)
         } catch (Error) {
             next(Error)
@@ -32,7 +32,7 @@ class CarController {
     async deleteOne(req, res, next) {
         try {
             const veiculo = await CarService.checkVeiculoId(req.params.id)
-            await CarService.checkVeiculoNull(veiculo)
+            await CarService.checkVeiculoNull(veiculo, req.params.id)
             const result = await CarService.checkVeiculoDelete(req.params.id)
             return res.status(204).send(result)
         } catch (Error) {

@@ -15,7 +15,9 @@ module.exports = async(error, req, res, next) => {
         statusCode = 400
     }
 
-    res.status(statusCode).send(JSON.stringify({ message: error.message, Error_Id: error.idError }))
-
+    res.status(statusCode).send({
+        description: error.name,
+        name: error.message
+    })
 
 }

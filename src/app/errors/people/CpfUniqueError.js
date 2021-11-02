@@ -3,7 +3,6 @@ class CpfUniqueError extends Error {
         const message = 'CPF ' + cpfValue + ' already in use'
         super(message)
         this.name = 'Conflict'
-        this.idError = 0
     }
 
 }

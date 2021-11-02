@@ -1,9 +1,8 @@
 class ModeloUniqueError extends Error {
-    constructor() {
-        const message = 'Error: invalid Modelo, Modelo already registered'
+    constructor(modelo) {
+        const message = 'Modelo ' + modelo + ' already in use'
         super(message)
-        this.name = 'ModeloUniqueError'
-        this.idError = 2
+        this.name = 'Conflict'
     }
 
 }

@@ -3,7 +3,6 @@ class EmailUniqueError extends Error {
         const message = 'Email ' + emailValue + ' already in use'
         super(message)
         this.name = 'Conflict'
-        this.idError = 1
     }
 
 }

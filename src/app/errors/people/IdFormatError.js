@@ -3,7 +3,6 @@ class IdFormatError extends Error {
         const message = 'Format of this ObjectId: ' + Id + ' is not valid'
         super(message)
         this.name = 'Bad Request'
-        this.idError = 7
     }
 }
 

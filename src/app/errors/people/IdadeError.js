@@ -3,7 +3,6 @@ class IdadeError extends Error {
         const message = 'Invalid data_nascimento field, age ' + age + ' is not bigger than 18 years'
         super(message)
         this.name = 'Bad Request'
-        this.idError = 3
     }
 
 }

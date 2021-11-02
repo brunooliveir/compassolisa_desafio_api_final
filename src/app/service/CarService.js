@@ -9,7 +9,7 @@ class CarService {
         const AnyModelo = { modelo: payload.modelo }
         const ModeloNotUnique = await CarRepository.findByQuery(AnyModelo)
         if (!!ModeloNotUnique[0]) {
-            throw new ModeloUniqueError()
+            throw new ModeloUniqueError(payload.modelo)
         }
         const veiculo = await CarRepository.create(payload)
         return veiculo
@@ -21,15 +21,15 @@ class CarService {
             return veiculo
         } catch (error) {
             if (error.message.split(" ", )[0] == 'Cast' && error.message.split(" ", )[2] == 'ObjectId') {
-                throw new IdFormatError()
+                throw new IdFormatError(payload)
             }
         }
     }
 
-    async checkVeiculoNull(payload) {
+    async checkVeiculoNull(payload, Id) {
         const veiculo = payload
         if (veiculo == null) {
-            throw new CarIdNotFound()
+            throw new CarIdNotFound(Id)
         }
     }
 
@@ -60,7 +60,7 @@ class CarService {
         const { limit, offset, offsets, skip, ...veiculosWithOutPagination } = payload
         const veiculosTotal = (await CarRepository.findByQuery(veiculosWithOutPagination)).length
         if (veiculosTotal == 0) {
-            throw new CarParameterNotFound()
+            throw new CarParameterNotFound(payload)
         }
         return { veiculos: veiculos, total: veiculosTotal, limit: payload.limit, offset: payload.offset, offsets: payload.offsets }
     }
@@ -75,7 +75,7 @@ class CarService {
         const AnyModelo = { modelo: payload.modelo }
         const ModeloNotUnique = await CarRepository.findByQuery(AnyModelo)
         if (!!ModeloNotUnique[0] && id != ModeloNotUnique[0].id) {
-            throw new ModeloUniqueError()
+            throw new ModeloUniqueError(payload.modelo)
         }
         Object.assign(veiculo, payload)
         veiculo.save()

@@ -3,7 +3,6 @@ class NotAutenticate extends Error {
         const message = 'Email ' + email + ' and password not match'
         super(message)
         this.name = 'Bad Request'
-        this.idError = 4
     }
 
 }
