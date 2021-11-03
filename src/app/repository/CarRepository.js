@@ -16,18 +16,16 @@ class CarRepository {
         return CarSchema.findById({ _id: payload })
     }
 
-    async findOneByAcessorioId(id) { //não esquecer de deletar isso
+    async findOneByAcessorioId(id) {
         return CarSchema.findOne({ 'acessorios._id': id })
     }
 
-    async PushAcessorioById(id, payload) {
-        return CarSchema.findOneAndUpdate({ 'acessorios._id': id }, {
-            $push: { acessorios: payload }
-        })
+    async UpdateAcessorioById(id, payload) {
+        return CarSchema.findOneAndUpdate({ 'acessorios._id': id }, { acessorios: payload }, { returnOriginal: false })
     }
 
     async PullAcessorioById(id, payload) {
-        return CarSchema.findOneAndUpdate({ 'acessorios._id': id }, {
+        return CarSchema.findOneAndUpdate({ 'acessorios._id': id }, { returnOriginal: false }, {
             $pull: { acessorios: payload }
         })
     }

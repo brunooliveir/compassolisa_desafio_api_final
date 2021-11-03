@@ -95,28 +95,35 @@ class CarService {
                 throw new IdFormatError(id_acessorio)
             }
         }
+        let isForUpdate = null
         const veiculoFindedByAcessorioId = await CarRepository.findOneByAcessorioId(id_acessorio)
+        const acessoriosLenght = veiculoFindedByAcessorioId.acessorios.length
         if (veiculoFindedByAcessorioId == null) {
             throw new CarAcessorioIdNotFound(id_acessorio)
         }
         if (veiculo._id != veiculoFindedByAcessorioId.id) {
             throw new CarIdAndAcessorioIdNotMatch(veiculo._id, id_acessorio)
         }
-        const acessoriosLenght = veiculoFindedByAcessorioId.acessorios.length
         veiculoFindedByAcessorioId.acessorios.forEach(element => {
             if (element._id == id_acessorio && element.descricao == payload.descricao) {
                 if (acessoriosLenght == 1) {
                     throw new CarAcessorioWillBecomeEmpty()
                 }
-                CarRepository.PullAcessorioById(id_acessorio, payload)
-                return CarRepository.findOneById(veiculoFindedByAcessorioId._id)
+                isForUpdate = false
             }
             if (element._id != id_acessorio && element.descricao == payload.descricao) {
                 throw new AcessorioUniqueError(element.descricao)
             }
+            if (element._id == id_acessorio && element.descricao != payload.descricao) {
+                isForUpdate = true
+            }
         })
-        CarRepository.PushAcessorioById(id_acessorio, payload)
-        return await CarRepository.findOneById(veiculoFindedByAcessorioId._id)
+        if (isForUpdate) {
+            return await CarRepository.UpdateAcessorioById(id_acessorio, payload)
+        } else {
+            return await CarRepository.PullAcessorioById(id_acessorio, payload)
+        }
+
     }
 }
 

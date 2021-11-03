@@ -86,6 +86,8 @@ it('should reject id, bad argument', async() => {
         _id: '617fc14c0066e3a486717t55' //have 't', invalid Id
     }
 
+
+
     const response = await request(app)
         .get('/api/v1/car/' + veiculoTest._id)
         .send()
@@ -239,7 +241,7 @@ it('should update a car by id', async() => {
         .put('/api/v1/car/' + payload.body._id)
         .send(veiculoTestUpdate)
 
-    expect(response.status).toBe(201)
+    expect(response.status).toBe(200)
     expect(response.body.modelo).toBe(veiculoTestUpdate.modelo)
     expect(response.body.cor).toBe(veiculoTestUpdate.cor)
     expect(response.body.acessorios.descricao).toBe(veiculoTestUpdate.acessorios.descricao)

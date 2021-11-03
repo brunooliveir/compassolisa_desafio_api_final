@@ -259,7 +259,7 @@ it('should update a people by id', async() => {
         .put('/api/v1/people/' + payload.body._id)
         .send(pessoaTestUpdate)
 
-    expect(response.status).toBe(201)
+    expect(response.status).toBe(200)
     expect(response.body.nome).toBe(pessoaTestUpdate.nome)
     expect(response.body.cpf).toBe(pessoaTestUpdate.cpf)
     expect(response.body.data_nascimento).toBe(pessoaTestUpdate.data_nascimento)
