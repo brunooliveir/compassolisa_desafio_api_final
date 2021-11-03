@@ -16,10 +16,12 @@ module.exports = async(req, res, next) => {
     try {
         const schema = Joi.object({
             modelo: Joi.string()
+                .trim()
                 .min(LIMIT_MINIMUM_STRING_LENGHT)
                 .max(LIMIT_MAXIMUM_STRING_LENGHT)
                 .required(),
             cor: Joi.string()
+                .trim()
                 .min(LIMIT_MINIMUM_STRING_LENGHT)
                 .max(LIMIT_MAXIMUM_STRING_LENGHT)
                 .required(),
@@ -31,6 +33,7 @@ module.exports = async(req, res, next) => {
                 .items(
                     Joi.object({
                         descricao: Joi.string()
+                            .trim()
                             .min(LIMIT_MINIMUM_STRING_LENGHT)
                             .max(LIMIT_MAXIMUM_STRING_LENGHT)
                             .required()

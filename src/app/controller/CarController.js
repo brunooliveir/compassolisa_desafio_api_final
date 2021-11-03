@@ -50,6 +50,17 @@ class CarController {
         }
     }
 
+    async updateAcessorioById(req, res, next) {
+        try {
+            const veiculo = await CarService.checkVeiculoId(req.params.id)
+            await CarService.checkVeiculoNull(veiculo, req.params.id)
+            const result = await CarService.checkAcessoriosUpdate(veiculo, req.params.id_acessorio, req.body)
+            return res.status(201).send(result)
+        } catch (Error) {
+            next(Error)
+        }
+    }
+
 }
 
 module.exports = new CarController()

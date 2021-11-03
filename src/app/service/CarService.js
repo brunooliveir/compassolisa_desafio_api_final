@@ -3,6 +3,10 @@ const CarParameterNotFound = require('../errors/car/CarParameterNotFound')
 const CarIdNotFound = require('../errors/car/CarIdNotFound')
 const ModeloUniqueError = require('../errors/car/ModeloUniqueError')
 const IdFormatError = require('../errors/car/IdFormatError')
+const AcessorioUniqueError = require('../errors/car/AcessorioUniqueError')
+const CarAcessorioIdNotFound = require('../errors/car/CarAcessorioIdNotFound')
+const CarAcessorioWillBecomeEmpty = require('../errors/car/CarAcessorioWillBecomeEmpty')
+const CarIdAndAcessorioIdNotMatch = require('../errors/car/CarIdAndAcessorioIdNotMatch')
 
 class CarService {
     async create(payload) {
@@ -80,6 +84,39 @@ class CarService {
         Object.assign(veiculo, payload)
         veiculo.save()
         return veiculo
+    }
+
+
+    async checkAcessoriosUpdate(veiculo, id_acessorio, payload) {
+        try {
+            await CarRepository.findOneByAcessorioId(id_acessorio)
+        } catch (error) {
+            if (error.message.split(" ", )[0] == 'Cast' && error.message.split(" ", )[2] == 'ObjectId') {
+                throw new IdFormatError(id_acessorio)
+            }
+        }
+        const veiculoFindedByAcessorioId = await CarRepository.findOneByAcessorioId(id_acessorio)
+        if (veiculoFindedByAcessorioId == null) {
+            throw new CarAcessorioIdNotFound(id_acessorio)
+        }
+        if (veiculo._id != veiculoFindedByAcessorioId.id) {
+            throw new CarIdAndAcessorioIdNotMatch(veiculo._id, id_acessorio)
+        }
+        const acessoriosLenght = veiculoFindedByAcessorioId.acessorios.length
+        veiculoFindedByAcessorioId.acessorios.forEach(element => {
+            if (element._id == id_acessorio && element.descricao == payload.descricao) {
+                if (acessoriosLenght == 1) {
+                    throw new CarAcessorioWillBecomeEmpty()
+                }
+                CarRepository.PullAcessorioById(id_acessorio, payload)
+                return CarRepository.findOneById(veiculoFindedByAcessorioId._id)
+            }
+            if (element._id != id_acessorio && element.descricao == payload.descricao) {
+                throw new AcessorioUniqueError(element.descricao)
+            }
+        })
+        CarRepository.PushAcessorioById(id_acessorio, payload)
+        return await CarRepository.findOneById(veiculoFindedByAcessorioId._id)
     }
 }
 

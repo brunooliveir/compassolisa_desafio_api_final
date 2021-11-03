@@ -262,7 +262,7 @@
         "summary": "Consulta veiculo por Id",
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Ok",
             "content": {
               "application/json": {
                 "schema": {
@@ -406,6 +406,93 @@
           },
           "404": {
             "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/car/{id_veiculo}/acessorios/{id_acessorios}": {
+      "parameters": [
+        {
+          "name": "id_veiculo",
+          "in": "path",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        },
+        {
+          "name": "id_acessorios",
+          "in": "path",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        }
+      ],
+      "patch": {
+        "tags": [
+          "Veiculos"
+        ],
+        "summary": "Adiciona ou remove acessorio do Veiculo por Id de veiculo e Id de acessorio",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "descricao": {
+                    "type": "string",
+                    "example": "Ar-condicionado"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "modelo": {
+                      "type": "string"
+                    },
+                    "cor": {
+                      "type": "string"
+                    },
+                    "ano": {
+                      "type": "number"
+                    },
+                    "acessorios": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "descricao": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    },
+                    "quantidadePassageiros": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not found"
           }
         }
       }
@@ -619,7 +706,7 @@
         "summary": "Consulta usuários por Id",
         "responses": {
           "200": {
-            "description": "Sucesso",
+            "description": "Ok",
             "content": {
               "application/json": {
                 "schema": {
