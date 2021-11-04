@@ -13,7 +13,6 @@ class CarController {
     async findOneById(req, res, next) {
         try {
             const result = await CarService.checkVeiculoId(req.params.id)
-            await CarService.checkVeiculoNull(result, req.params.id)
             return res.status(200).json(result)
         } catch (Error) {
             next(Error)
@@ -31,8 +30,6 @@ class CarController {
 
     async deleteOne(req, res, next) {
         try {
-            const veiculo = await CarService.checkVeiculoId(req.params.id)
-            await CarService.checkVeiculoNull(veiculo, req.params.id)
             const result = await CarService.checkVeiculoDelete(req.params.id)
             return res.status(204).json(result)
         } catch (Error) {
@@ -42,7 +39,6 @@ class CarController {
 
     async updateById(req, res, next) {
         try {
-            await CarService.checkVeiculoId(req.params.id)
             const result = await CarService.checkVeiculoUpdate(req.params.id, req.body)
             return res.status(200).json(result)
         } catch (Error) {
@@ -53,7 +49,6 @@ class CarController {
     async updateAcessorioById(req, res, next) {
         try {
             const veiculo = await CarService.checkVeiculoId(req.params.id)
-            await CarService.checkVeiculoNull(veiculo, req.params.id)
             const result = await CarService.checkAcessoriosUpdate(veiculo, req.params.id_acessorio, req.body)
             return res.status(200).json(result)
         } catch (Error) {

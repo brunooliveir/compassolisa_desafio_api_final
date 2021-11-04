@@ -1,27 +1,15 @@
 const moment = require('moment')
 const PeopleRepository = require('../repository/PeopleRepository')
 const PeopleParameterNotFound = require('../errors/people/PeopleParameterNotFound')
-const PeopleIdNotFound = require('../errors/people/PeopleIdNotFound')
-const EmailUniqueError = require('../errors/people/EmailUniqueError')
-const CpfUniqueError = require('../errors/people/CpfUniqueError')
 const IdadeError = require('../errors/people/IdadeError')
-const IdFormatError = require('../errors/people/IdFormatError')
+
 
 class PeopleService {
     async create(payload) {
         const data_nascimentoSplited = payload.data_nascimento.split('/', )
-        try {
-            payload.data_nascimento = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
-            const result = await PeopleRepository.create(payload)
-            return result
-        } catch (error) {
-            if (Object.keys(error.keyValue)[0] == 'cpf') {
-                throw new CpfUniqueError(error.keyValue.cpf)
-            }
-            if (Object.keys(error.keyValue)[0] == 'email') {
-                throw new EmailUniqueError(error.keyValue.email)
-            }
-        }
+        payload.data_nascimento = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
+        const result = await PeopleRepository.create(payload)
+        return result
     }
 
     async checkIdade(payload) {
@@ -35,24 +23,8 @@ class PeopleService {
     }
 
     async checkPessoaId(id) {
-        try {
-            const pessoa = await PeopleRepository.findOneById(id)
-            if (pessoa == null) {
-                throw new PeopleIdNotFound(id)
-            }
-            return pessoa
-        } catch (error) {
-            if (error.message.split(" ", )[0] == 'Cast' && error.message.split(" ", )[2] == 'ObjectId')
-                throw new IdFormatError(id)
-        }
-
-    }
-
-    async checkPessoaNull(payload, id) {
-        const pessoa = payload
-        if (pessoa == null) {
-            throw new PeopleIdNotFound(id)
-        }
+        const pessoa = await PeopleRepository.findOneById(id)
+        return pessoa
     }
 
     async checkQuery(payload) {
@@ -90,25 +62,9 @@ class PeopleService {
     }
 
     async checkPessoaUpdate(id, payload) {
-        const pessoa = await PeopleRepository.findOneById(id)
         const data_nascimentoSplited = payload.data_nascimento.split('/', )
         payload.data_nascimento = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
-
-        const AnyEmail = { email: payload.email }
-        const EmailNotUnique = await PeopleRepository.findByQuery(AnyEmail)
-        if (!!EmailNotUnique[0] && id != EmailNotUnique[0].id) {
-            throw new EmailUniqueError(payload.email)
-        }
-
-        const AnyCpf = { cpf: payload.cpf }
-        const CpfNotUnique = await PeopleRepository.findByQuery(AnyCpf)
-        if (!!CpfNotUnique[0] && id != CpfNotUnique[0].id) {
-            throw new CpfUniqueError(payload.cpf)
-        }
-
-        Object.assign(pessoa, payload)
-        pessoa.save()
-        return pessoa
+        return await PeopleRepository.UpdateOneById(id, payload)
     }
 }
 

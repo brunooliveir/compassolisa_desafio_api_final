@@ -10,6 +10,18 @@ const CarIdAndAcessorioIdNotMatch = require('../car/CarIdAndAcessorioIdNotMatch'
 module.exports = async(error, req, res, next) => {
     var statusCode = 500
 
+    if (error.codeName == 'DuplicateKey' && Object.keys(error.keyValue) == 'modelo') {
+        error = new ModeloUniqueError(error.keyValue.modelo)
+    }
+
+    if (error.code == 11000 && Object.keys(error.keyValue) == 'modelo') {
+        error = new ModeloUniqueError(error.keyValue.modelo)
+    }
+
+    if (error.name == 'CastError' && Object.keys(error.value) == '_id') {
+        error = new IdFormatError(error.value._id)
+    }
+
     if (error instanceof CarParameterNotFound ||
         error instanceof CarIdNotFound ||
         error instanceof CarIdAndAcessorioIdNotMatch ||

@@ -42,9 +42,9 @@ module.exports = async(req, res, next) => {
         })
 
         function checkCPF(strCpfBrute) {
-            var strCPF = strCpfBrute.replace(".", "").replace(".", "").replace("-", "")
-            var sum
-            var remainder
+            let strCPF = strCpfBrute.replace(".", "").replace(".", "").replace("-", "")
+            let sum
+            let remainder
             sum = 0
 
             if (strCPF == "00000000000") {

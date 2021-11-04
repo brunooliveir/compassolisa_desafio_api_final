@@ -6,6 +6,10 @@ module.exports = async(req, res, next) => {
             id: Joi.string()
                 .required()
                 .id()
+                .regex(/[0-9A-Fa-f]/),
+            id_acessorio: Joi.string()
+                .required()
+                .id()
                 .regex(/[0-9A-Fa-f]/)
         })
         const { error } = id.validate(req.params, { abortEarly: false })

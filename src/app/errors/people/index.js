@@ -10,6 +10,18 @@ const CpfBadValue = require('./CpfBadValue')
 module.exports = async(error, req, res, next) => {
     var statusCode = 500
 
+    if (error.code == 11000 && Object.keys(error.keyValue) == 'cpf') {
+        error = new CpfUniqueError(error.keyValue.cpf)
+    }
+
+    if (error.code == 11000 && Object.keys(error.keyValue) == 'email') {
+        error = new EmailUniqueError(error.keyValue.email)
+    }
+
+    if (error.name == 'CastError' && Object.keys(error.value) == '_id') {
+        error = new IdFormatError(error.value._id)
+    }
+
     if (error instanceof PeopleParameterNotFound ||
         error instanceof PeopleIdNotFound) {
         statusCode = 404
