@@ -1,5 +1,5 @@
 
-# compassolisa_desafio_api_final_pt1
+# compassolisa_desafio_api_final_pt2
 
 O desafio consiste em criar uma aplicação API Rest Full de uma Locadora de veículos utilizando o framework express e o banco de dados MongoDB.
 
@@ -13,7 +13,7 @@ Requisitos: Node.js e MongoDB
 
 Após clonar o repositório
 
-Em: **compassolisa_desafio_api_final_pt1/.env**
+Em: **compassolisa_desafio_api_final_pt2/.env**
 
 **configure:** 
 
@@ -30,7 +30,7 @@ DB_COLLECTION = compassolisa
 
 e
 
-Em: **compassolisa_desafio_api_final_pt1/.env.test**
+Em: **compassolisa_desafio_api_final_pt2/.env.test**
 
 ```http
 
@@ -46,7 +46,7 @@ DB_COLLECTION = compassolisatest
 
 **Nome do banco de dados a seu critério.
 
-Abra a pasta raiz da aplicação (compassolisa_desafio_api_final_pt1), então execute no console os seguintes comandos:
+Abra a pasta raiz da aplicação (compassolisa_desafio_api_final_pt2), então execute no console os seguintes comandos:
 
 
 **instalação dos modulos:**
