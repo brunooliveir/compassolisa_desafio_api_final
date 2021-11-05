@@ -8,7 +8,7 @@ const CarAcessorioWillBecomeEmpty = require('../car/CarAcessorioWillBecomeEmpty'
 const CarIdAndAcessorioIdNotMatch = require('../car/CarIdAndAcessorioIdNotMatch')
 
 module.exports = async(error, req, res, next) => {
-    var statusCode = 500
+    let statusCode = 500
 
     if (error.codeName == 'DuplicateKey' && Object.keys(error.keyValue) == 'modelo') {
         error = new ModeloUniqueError(error.keyValue.modelo)

@@ -17,8 +17,7 @@ class CarParameterNotFound extends Error {
         }
 
 
-        const message = 'The car with these parameters:{ modelo: ' + parameters.modelo + ', cor: ' +
-            parameters.cor + ', ano: ' + parameters.ano + ', descricao: ' + parameters.descricao + ', quantidadePassageiros: ' + parameters.quantidadePassageiros + '} was not found'
+        const message = `The car with these parameters:{ modelo: ${parameters.modelo}, cor: ${parameters.cor}, ano: ${parameters.ano}, descricao: ${parameters.descricao}, quantidadePassageiros: ${parameters.quantidadePassageiros}} was not found`
         super(message)
         this.name = 'Not Found'
         this.idError = 0

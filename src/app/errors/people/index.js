@@ -8,7 +8,7 @@ const IdFormatError = require('./IdFormatError')
 const CpfBadValue = require('./CpfBadValue')
 
 module.exports = async(error, req, res, next) => {
-    var statusCode = 500
+    let statusCode = 500
 
     if (error.code == 11000 && Object.keys(error.keyValue) == 'cpf') {
         error = new CpfUniqueError(error.keyValue.cpf)

@@ -18,8 +18,8 @@ class CarService {
     async checkQuery(payload) {
         Object.keys(payload).forEach(element => {
             if (element == 'descricao') {
-                const newKeyValue = { 'acessorios.descricao': payload["descricao"] }
-                delete payload["descricao"]
+                const newKeyValue = { 'acessorios.descricao': payload.descricao }
+                delete payload.descricao
                 Object.assign(payload, newKeyValue)
             }
         })
@@ -70,25 +70,23 @@ class CarService {
                 }
                 isForUpdate = false
             }
-            if (element._id != id_acessorio && element.descricao == payload.descricao) {
+            if (element._id != id_acessorio && element.descricao.trim().toLowerCase() == payload.descricao.trim().toLowerCase()) {
                 throw new AcessorioUniqueError(element.descricao)
             }
             if (element._id == id_acessorio && element.descricao != payload.descricao) {
                 isForUpdate = true
             }
         })
-        const newAcessorios = []
-        veiculoFindedByAcessorioId.acessorios.forEach(element => {
-            if (element._id != id_acessorio) {
-                newAcessorios.push(element)
+        veiculoFindedByAcessorioId.acessorios.forEach((element, index) => {
+            if (element._id == id_acessorio && isForUpdate) {
+                element.descricao = payload.descricao
+            }
+            if (element._id == id_acessorio && !isForUpdate) {
+                veiculoFindedByAcessorioId.acessorios[index].remove()
             }
         })
-        if (isForUpdate) {
-            newAcessorios.push(payload)
-            return await CarRepository.UpdateAcessorioById(id_acessorio, newAcessorios)
-        } else {
-            return await CarRepository.UpdateAcessorioById(id_acessorio, newAcessorios)
-        }
+        return await CarRepository.UpdateAcessorioById(id_acessorio, veiculoFindedByAcessorioId.acessorios)
+
     }
 }
 

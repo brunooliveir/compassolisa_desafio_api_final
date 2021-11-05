@@ -1,52 +1,55 @@
 const Joi = require('joi')
 
-const LIMIT_MINIMUM_CAR_YEAR = 1949
-const LIMIT_MAXIMUM_CAR_YEAR = 2023
-
-const LIMIT_MINIMUM_STRING_LENGHT = 2
+const LIMIT_MINIMUM_STRING_LENGHT = 3
 const LIMIT_MAXIMUM_STRING_LENGHT = 150
 
-const LIMIT_MINIMUM_ARRAY_LENGHT = 1
-const LIMIT_MAXIMUM_ARRAY_LENGHT = 50
+const LIMIT_MINIMUM_CEP_LENGHT = 3
+const LIMIT_MAXIMUM_CEP_LENGHT = 150
 
-const LIMIT_MINIMUM_PASSENGER_NUMBER = 0
-const LIMIT_MAXIMUM_PASSENGER_NUMBER = 20
+const LIMIT_MINIMUM_ARRAY_LENGHT = 1
+
+const LIMIT_MINIMUM_ENDERECO_NUMBER = 0
 
 module.exports = async(req, res, next) => {
     try {
         const schema = Joi.object({
-            modelo: Joi.string()
+            nome: Joi.string()
                 .trim()
                 .min(LIMIT_MINIMUM_STRING_LENGHT)
                 .max(LIMIT_MAXIMUM_STRING_LENGHT)
                 .required(),
-            cor: Joi.string()
+            cnpj: Joi.string()
+                .trim()
+                .min(14)
+                .max(18)
+                .required(),
+            atividades: Joi.string()
                 .trim()
                 .min(LIMIT_MINIMUM_STRING_LENGHT)
                 .max(LIMIT_MAXIMUM_STRING_LENGHT)
                 .required(),
-            ano: Joi.number()
-                .greater(LIMIT_MINIMUM_CAR_YEAR)
-                .less(LIMIT_MAXIMUM_CAR_YEAR)
-                .required(),
-            acessorios: Joi.array()
+            endereco: Joi.array()
                 .items(
                     Joi.object({
-                        descricao: Joi.string()
+                        cep: Joi.string()
                             .trim()
-                            .min(LIMIT_MINIMUM_STRING_LENGHT)
-                            .max(LIMIT_MAXIMUM_STRING_LENGHT)
+                            .min(LIMIT_MINIMUM_CEP_LENGHT)
+                            .max(LIMIT_MAXIMUM_CEP_LENGHT)
                             .lowercase()
+                            .required(),
+                        number: Joi.number()
+                            .greater(LIMIT_MINIMUM_ENDERECO_NUMBER)
+                            .required(),
+                        complemento: Joi.string()
+                            .trim()
+                            .max(LIMIT_MAXIMUM_CEP_LENGHT)
+                            .lowercase(),
+                        isFilial: Joi.boolean()
                             .required()
                     }))
                 .min(LIMIT_MINIMUM_ARRAY_LENGHT)
-                .max(LIMIT_MAXIMUM_ARRAY_LENGHT)
                 .unique()
                 .required(),
-            quantidadePassageiros: Joi.number()
-                .greater(LIMIT_MINIMUM_PASSENGER_NUMBER)
-                .less(LIMIT_MAXIMUM_PASSENGER_NUMBER)
-                .required()
         })
 
         const { error } = await schema.validate(req.body, { abortEarly: false })

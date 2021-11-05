@@ -10,6 +10,7 @@ module.exports = async(req, res, next) => {
                 .trim()
                 .min(LIMIT_MINIMUM_STRING_LENGHT)
                 .max(LIMIT_MAXIMUM_STRING_LENGHT)
+                .lowercase()
                 .required()
         })
 

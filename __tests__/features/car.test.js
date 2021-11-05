@@ -287,3 +287,79 @@ it('dont should update a car by id', async() => {
 
     expect(response.status).toBe(400)
 })
+
+it('should update a acessorio of car by id', async() => {
+    const veiculoTestOriginal = {
+        modelo: 'GM S10 2.8',
+        cor: 'verde',
+        ano: 2008,
+        acessorios: [{ descricao: 'Rádio' }, { descricao: 'ABS' }, { descricao: 'Ar-Condicionado' }],
+        quantidadePassageiros: 6
+    }
+
+    const payload = await request(app)
+        .post('/api/v1/car/')
+        .send(veiculoTestOriginal)
+
+
+    const response1 = await request(app)
+        .patch('/api/v1/car/' + payload.body._id + '/acessorios/' + payload.body.acessorios[0]._id)
+        .send({ descricao: 'DVD-player' })
+
+    expect(response1.status).toBe(200)
+    expect(response1.body.acessorios[0].descricao).toBe('DVD-player')
+    expect(response1.body.acessorios[1].descricao).toBe('ABS')
+    expect(response1.body.acessorios[2].descricao).toBe('Ar-Condicionado')
+
+    const response2 = await request(app)
+        .patch('/api/v1/car/' + response1.body._id + '/acessorios/' + response1.body.acessorios[0]._id)
+        .send({ descricao: 'DVD-player' })
+
+    expect(response2.status).toBe(200)
+    expect(response2.body.acessorios[0].descricao).toBe('ABS')
+    expect(response2.body.acessorios[1].descricao).toBe('Ar-Condicionado')
+})
+
+it('dont should update a acessorio of car by id', async() => {
+    const veiculoTestOriginal = {
+        modelo: 'GM S10 2.8',
+        cor: 'verde',
+        ano: 2008,
+        acessorios: [{ descricao: 'Rádio' }, { descricao: 'ABS' }, { descricao: 'Ar-Condicionado' }],
+        quantidadePassageiros: 6
+    }
+
+    const veiculoTestWithAnotherId = {
+        modelo: 'Ford Pinto',
+        cor: 'amarelo',
+        ano: 1970,
+        acessorios: [{ descricao: 'Diskman' }, { descricao: 'ABS' }, { descricao: 'Ar-Condicionado' }],
+        quantidadePassageiros: 4
+    }
+
+    const payload = await request(app)
+        .post('/api/v1/car/')
+        .send(veiculoTestOriginal)
+
+    const payloadWithAnotherId = await request(app)
+        .post('/api/v1/car/')
+        .send(veiculoTestWithAnotherId)
+
+    const response1 = await request(app)
+        .patch('/api/v1/car/' + payloadWithAnotherId.body._id + '/acessorios/' + payload.body.acessorios[0]._id) // id and acessorios[0]._id not match
+        .send({ descricao: 'DVD-player' })
+
+    expect(response1.status).toBe(404) // route not can be /api/v1/car/"id of car x"/acessorios/"id of acessorio of car y"
+
+    const response2 = await request(app)
+        .patch('/api/v1/car/' + payload.body._id + '/acessorios/' + payload.body.acessorios[0]._id) // acessorios[0] = 'Rádio'
+        .send({ descricao: 'ABS' }) // acessorios[1] == 'ABS'
+
+    expect(response2.status).toBe(400) // acessorios not can be ['ABS','ABS','Ar-Condicionado']
+
+    const response3 = await request(app)
+        .patch('/api/v1/car/' + payload.body._id + '/acessorios/' + payload.body.acessorios[0]._id) // acessorios[0] = 'Rádio'
+        .send({ descricao: 'ABS       ' }) // acessorios[1] == 'ABS'
+
+    expect(response3.status).toBe(400) // acessorios not can be ['ABS       ','ABS','Ar-Condicionado']
+})

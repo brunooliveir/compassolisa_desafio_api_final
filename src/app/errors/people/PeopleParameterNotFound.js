@@ -16,8 +16,7 @@ class PeopleParameterNotFound extends Error {
             parameters.habilitado = ''
         }
 
-        const message = 'The people with these parameters:{ nome: ' + parameters.nome + ', cpf: ' +
-            parameters.cpf + ', data_nascimento: ' + parameters.data_nascimento + ', email: ' + parameters.email + ', habilitado: ' + parameters.habilitado + '} was not found'
+        const message = `The people with these parameters:{ nome: ${parameters.nome}, cpf: ${parameters.cpf}, data_nascimento: ${parameters.data_nascimento}, email: ${parameters.email}, habilitado: ${parameters.habilitado}} was not found`
         super(message)
         this.name = 'Not Found'
     }
