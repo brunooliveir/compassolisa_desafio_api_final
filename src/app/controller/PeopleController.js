@@ -6,8 +6,8 @@ class PeopleController {
             await PeopleService.checkIdade(req.body)
             const result = await PeopleService.create(req.body)
             return res.status(201).json(result)
-        } catch (Error) {
-            return next(Error)
+        } catch (error) {
+            return next(error)
         }
     }
 
@@ -15,8 +15,8 @@ class PeopleController {
         try {
             const result = await PeopleService.checkPessoaId(req.params.id)
             return res.status(200).json(result)
-        } catch (Error) {
-            return next(Error)
+        } catch (error) {
+            return next(error)
         }
     }
 
@@ -24,8 +24,8 @@ class PeopleController {
         try {
             const result = await PeopleService.checkQuery(req.query)
             return res.status(200).json({ pessoas: result["pessoas"], total: result["total"], limit: result["limit"], offset: result["offset"], offsets: result["offsets"] })
-        } catch (Error) {
-            return next(Error)
+        } catch (error) {
+            return next(error)
         }
     }
 
@@ -33,8 +33,8 @@ class PeopleController {
         try {
             const result = await PeopleService.checkPessoaDelete(req.params.id)
             return res.status(204).json(result)
-        } catch (Error) {
-            return next(Error)
+        } catch (error) {
+            return next(error)
         }
     }
 
@@ -43,8 +43,8 @@ class PeopleController {
             await PeopleService.checkIdade(req.body)
             const result = await PeopleService.checkPessoaUpdate(req.params.id, req.body)
             return res.status(200).json(result)
-        } catch (Error) {
-            return next(Error)
+        } catch (error) {
+            return next(error)
         }
     }
 }

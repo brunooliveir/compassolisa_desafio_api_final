@@ -8,7 +8,8 @@ const RentalSchema = mongoose.Schema({
     },
     cnpj: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     atividades: {
         type: String,
@@ -58,6 +59,7 @@ const RentalSchema = mongoose.Schema({
         updatedAt: 'updated_at'
     }
 })
+
 
 RentalSchema.methods.toJSON = function() {
     const obj = this.toObject()

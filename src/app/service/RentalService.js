@@ -1,24 +1,46 @@
 const RentalRepository = require('../repository/RentalRepository')
-const CepInvalidError = require('../errors/rental/CepInvalidError')
+const MatrizLargerThanOneError = require('../errors/rental/MatrizLargerThanOneError')
+const RentalParameterNotFound = require('../errors/rental/RentalParameterNotFound')
 
 class RentalService {
-    async create(payload, addresses) {
-        const fullAddresses = []
-        payload.endereco.forEach((endereco, index) => {
-            if (addresses[index].data.erro) {
-                throw new CepInvalidError(addresses[index].config.url.replace('https://viacep.com.br/ws/', '').replace('/json', ''))
+    async create(payload) {
+        let matrizDeclared = 0
+        payload.endereco.forEach(element => {
+            if (!element.isFilial) {
+                matrizDeclared += 1
             }
-            if (endereco.complemento == undefined) {
-                endereco.complemento = addresses[index].data.complemento
-            }
-            fullAddresses.push({ cep: endereco.cep, logradouro: addresses[index].data.logradouro, complemento: endereco.complemento, bairro: addresses[index].data.bairro, number: endereco.number, localidade: addresses[index].data.localidade, uf: addresses[index].data.uf, isFilial: endereco.isFilial })
         })
-        Object.assign(payload, { endereco: fullAddresses })
+        if (matrizDeclared > 1) {
+            throw new MatrizLargerThanOneError(matrizDeclared)
+        }
         const locadora = await RentalRepository.create(payload)
         return locadora
     }
 
+    async checkLocadoraId(payload) {
+        const locadora = await RentalRepository.findOneById(payload)
+        return locadora
+    }
+
     async checkQuery(payload) {
+        Object.keys(payload).forEach(element => {
+            if (element == 'cep' ||
+                element == 'logradouro' ||
+                element == 'bairro' ||
+                element == 'number' ||
+                element == 'localidade' ||
+                element == 'uf' ||
+                element == 'isFilial') {
+                const valueOfElement = payload[element]
+                delete payload[element]
+                element = `endereco.${element}`
+                const newKeyValue = {
+                    [element]: valueOfElement
+                }
+                Object.assign(payload, newKeyValue)
+            }
+        })
+
         if (!!payload.limit) {
             payload.limit = parseInt(payload.limit)
         }
@@ -37,11 +59,32 @@ class RentalService {
         const locadoras = await RentalRepository.findByQuery(payload)
         const { limit, offset, offsets, skip, ...locadorasWithOutPagination } = payload
         const locadorasTotal = (await RentalRepository.findByQuery(locadorasWithOutPagination)).length
-            // if (locadorasTotal == 0) {
-            //     throw new RentalParameterNotFound(payload)
-            // }
+        if (locadorasTotal == 0) {
+            throw new RentalParameterNotFound(payload)
+        }
         return { locadoras: locadoras, total: locadorasTotal, limit: payload.limit, offset: payload.offset, offsets: payload.offsets }
     }
+
+    async checkLocadoraDelete(id) {
+        await RentalRepository.deleteOne(id)
+        return
+    }
+
+    async checkLocadoraUpdate(id, payload) {
+        let matrizDeclared = 0
+        payload.endereco.forEach(element => {
+            if (!element.isFilial) {
+                matrizDeclared += 1
+            }
+        })
+        if (matrizDeclared > 1) {
+            throw new MatrizLargerThanOneError(matrizDeclared)
+        }
+        return await RentalRepository.UpdateOneById(id, payload)
+    }
+
+
+
 }
 
 module.exports = new RentalService()

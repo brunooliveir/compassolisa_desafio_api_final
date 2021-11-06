@@ -21,7 +21,10 @@ class PeopleRepository {
     }
 
     async UpdateOneById(id, payload) {
-        const finded = PeopleSchema.findOneAndUpdate({ _id: id }, payload, { returnOriginal: false })
+        const finded = await PeopleSchema.findOneAndUpdate({ _id: id }, payload, { returnOriginal: false })
+        if (finded == null) {
+            throw new PeopleIdNotFound(id)
+        }
         return finded
     }
 

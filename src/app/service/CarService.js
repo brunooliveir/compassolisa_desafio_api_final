@@ -58,12 +58,12 @@ class CarService {
 
     async checkAcessoriosUpdate(veiculo, id_acessorio, payload) {
         let isForUpdate = null
-        const veiculoFindedByAcessorioId = await CarRepository.findOneByAcessorioId(id_acessorio)
-        const acessoriosLenght = veiculoFindedByAcessorioId.acessorios.length
-        if (veiculo._id != veiculoFindedByAcessorioId.id) {
+        const veiculoFoundByAcessorioId = await CarRepository.findOneByAcessorioId(id_acessorio)
+        const acessoriosLenght = veiculoFoundByAcessorioId.acessorios.length
+        if (veiculo._id != veiculoFoundByAcessorioId.id) {
             throw new CarIdAndAcessorioIdNotMatch(veiculo._id, id_acessorio)
         }
-        veiculoFindedByAcessorioId.acessorios.forEach(element => {
+        veiculoFoundByAcessorioId.acessorios.forEach(element => {
             if (element._id == id_acessorio && element.descricao == payload.descricao) {
                 if (acessoriosLenght == 1) {
                     throw new CarAcessorioWillBecomeEmpty()
@@ -77,15 +77,15 @@ class CarService {
                 isForUpdate = true
             }
         })
-        veiculoFindedByAcessorioId.acessorios.forEach((element, index) => {
+        veiculoFoundByAcessorioId.acessorios.forEach((element, index) => {
             if (element._id == id_acessorio && isForUpdate) {
                 element.descricao = payload.descricao
             }
             if (element._id == id_acessorio && !isForUpdate) {
-                veiculoFindedByAcessorioId.acessorios[index].remove()
+                veiculoFoundByAcessorioId.acessorios[index].remove()
             }
         })
-        return await CarRepository.UpdateAcessorioById(id_acessorio, veiculoFindedByAcessorioId.acessorios)
+        return await CarRepository.UpdateAcessorioById(id_acessorio, veiculoFoundByAcessorioId.acessorios)
 
     }
 }

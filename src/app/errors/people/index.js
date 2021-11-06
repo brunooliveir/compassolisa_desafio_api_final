@@ -18,8 +18,12 @@ module.exports = async(error, req, res, next) => {
         error = new EmailUniqueError(error.keyValue.email)
     }
 
-    if (error.name == 'CastError' && Object.keys(error.value) == '_id') {
-        error = new IdFormatError(error.value._id)
+    if (error.name == 'CastError' && (Object.keys(error.value) == '_id' || error.path == '_id')) {
+        if (error.value._id == undefined) {
+            error = new IdFormatError(error.value)
+        } else {
+            error = new IdFormatError(error.value._id)
+        }
     }
 
     if (error instanceof PeopleParameterNotFound ||

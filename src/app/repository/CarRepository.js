@@ -23,7 +23,10 @@ class CarRepository {
     }
 
     async UpdateOneById(id, payload) {
-        const finded = CarSchema.findOneAndUpdate({ _id: id }, payload, { returnOriginal: false })
+        const finded = await CarSchema.findOneAndUpdate({ _id: id }, payload, { returnOriginal: false })
+        if (finded == null) {
+            throw new CarIdNotFound(id)
+        }
         return finded
     }
 

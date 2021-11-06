@@ -5,8 +5,8 @@ class CarController {
         try {
             const result = await CarService.create(req.body)
             return res.status(201).json(result)
-        } catch (Error) {
-            next(Error)
+        } catch (error) {
+            next(error)
         }
     }
 
@@ -14,8 +14,8 @@ class CarController {
         try {
             const result = await CarService.checkVeiculoId(req.params.id)
             return res.status(200).json(result)
-        } catch (Error) {
-            next(Error)
+        } catch (error) {
+            next(error)
         }
     }
 
@@ -23,8 +23,8 @@ class CarController {
         try {
             const result = await CarService.checkQuery(req.query)
             return res.status(200).json({ veiculos: result["veiculos"], total: result["total"], limit: result["limit"], offset: result["offset"], offsets: result["offsets"] })
-        } catch (Error) {
-            next(Error)
+        } catch (error) {
+            next(error)
         }
     }
 
@@ -32,8 +32,8 @@ class CarController {
         try {
             const result = await CarService.checkVeiculoDelete(req.params.id)
             return res.status(204).json(result)
-        } catch (Error) {
-            next(Error)
+        } catch (error) {
+            next(error)
         }
     }
 
@@ -41,8 +41,8 @@ class CarController {
         try {
             const result = await CarService.checkVeiculoUpdate(req.params.id, req.body)
             return res.status(200).json(result)
-        } catch (Error) {
-            next(Error)
+        } catch (error) {
+            next(error)
         }
     }
 
@@ -51,8 +51,8 @@ class CarController {
             const veiculo = await CarService.checkVeiculoId(req.params.id)
             const result = await CarService.checkAcessoriosUpdate(veiculo, req.params.id_acessorio, req.body)
             return res.status(200).json(result)
-        } catch (Error) {
-            next(Error)
+        } catch (error) {
+            next(error)
         }
     }
 

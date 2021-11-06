@@ -1,18 +1,21 @@
 const RentalService = require('../service/RentalService')
-const axios = require('axios')
 
 class RentalController {
     async create(req, res, next) {
         try {
-            const address = []
-            req.body.endereco.forEach(endereco => {
-                address.push(axios.get('https://viacep.com.br/ws/' + endereco.cep + '/json'))
-            });
-            const addresses = await Promise.all(address)
-            const result = await RentalService.create(req.body, addresses)
+            const result = await RentalService.create(req.body)
             return res.status(201).json(result)
-        } catch (Error) {
-            next(Error)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async findOneById(req, res, next) {
+        try {
+            const result = await RentalService.checkLocadoraId(req.params.id)
+            return res.status(200).json(result)
+        } catch (error) {
+            next(error)
         }
     }
 
@@ -20,10 +23,31 @@ class RentalController {
         try {
             const result = await RentalService.checkQuery(req.query)
             return res.status(200).json({ locadoras: result["locadoras"], total: result["total"], limit: result["limit"], offset: result["offset"], offsets: result["offsets"] })
-        } catch (Error) {
-            next(Error)
+        } catch (error) {
+            next(error)
         }
     }
+
+    async deleteOne(req, res, next) {
+        try {
+            const result = await RentalService.checkLocadoraDelete(req.params.id)
+            return res.status(204).json(result)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    async updateById(req, res, next) {
+        try {
+            const result = await RentalService.checkLocadoraUpdate(req.params.id, req.body)
+            return res.status(200).json(result)
+        } catch (error) {
+            next(error)
+        }
+    }
+
+
+
 
 }
 
