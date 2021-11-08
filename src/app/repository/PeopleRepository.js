@@ -3,11 +3,11 @@ const PeopleIdNotFound = require('../errors/people/PeopleIdNotFound')
 
 class PeopleRepository {
     async create(payload) {
-        return PeopleSchema.create(payload)
+        return await PeopleSchema.create(payload)
     }
 
     async findByQuery(payload) {
-        return PeopleSchema.find(payload).limit(payload.limit).sort({
+        return await PeopleSchema.find(payload).limit(payload.limit).sort({
             created_at: 'asc'
         }).skip(payload.skip)
     }

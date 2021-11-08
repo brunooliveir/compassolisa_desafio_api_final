@@ -1,13 +1,9 @@
 const jwt = require('jsonwebtoken')
+const authConfig = require('../../config/config')
 
 class Jwt {
     async sign(payload) {
-        const secret = 'dDsInG6cflShbGci0iJIUz6DS245a2sds3DS4FS'
-        return jwt.sign(payload, secret, { expiresIn: 86400 })
-    }
-    async verify(token) {
-        const secret = 'dDsInG6cflShbGci0iJIUz6DS245a2sds3DS4FS'
-        return jwt.verify(token, secret)
+        return jwt.sign(payload, authConfig.database.secret, { expiresIn: 86400 })
     }
 }
 

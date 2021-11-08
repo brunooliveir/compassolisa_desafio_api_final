@@ -44,16 +44,6 @@ const peopleSchema = mongoose.Schema({
     }
 })
 
-peopleSchema.methods.toJSON = function() {
-    const obj = this.toObject()
-    delete obj.senha
-    delete obj.created_at
-    delete obj.updated_at
-    delete obj.__v
-    return obj
-}
-
-
 const People = mongoose.model('pessoas', peopleSchema)
 
 module.exports = People

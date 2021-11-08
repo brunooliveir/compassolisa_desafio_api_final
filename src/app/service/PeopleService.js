@@ -44,7 +44,7 @@ class PeopleService {
             }
         }
         if (!!payload.data_nascimento) {
-            const data_nascimentoSplited = payload.data_nascimento.split('.', )
+            const data_nascimentoSplited = payload.data_nascimento.split('/', )
             payload.data_nascimento = data_nascimentoSplited[1] + '/' + data_nascimentoSplited[0] + '/' + data_nascimentoSplited[2]
         }
         const pessoas = await PeopleRepository.findByQuery(payload)

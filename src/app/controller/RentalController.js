@@ -1,10 +1,11 @@
+const { serialize, paginateSerialize } = require('../serialize/rentalSerialize')
 const RentalService = require('../service/RentalService')
 
 class RentalController {
     async create(req, res, next) {
         try {
             const result = await RentalService.create(req.body)
-            return res.status(201).json(result)
+            return res.status(201).json(serialize(result))
         } catch (error) {
             next(error)
         }
@@ -13,7 +14,7 @@ class RentalController {
     async findOneById(req, res, next) {
         try {
             const result = await RentalService.checkLocadoraId(req.params.id)
-            return res.status(200).json(result)
+            return res.status(200).json(serialize(result))
         } catch (error) {
             next(error)
         }
@@ -22,7 +23,7 @@ class RentalController {
     async listQuery(req, res, next) {
         try {
             const result = await RentalService.checkQuery(req.query)
-            return res.status(200).json({ locadoras: result["locadoras"], total: result["total"], limit: result["limit"], offset: result["offset"], offsets: result["offsets"] })
+            return res.status(200).json(paginateSerialize(result))
         } catch (error) {
             next(error)
         }
@@ -40,14 +41,11 @@ class RentalController {
     async updateById(req, res, next) {
         try {
             const result = await RentalService.checkLocadoraUpdate(req.params.id, req.body)
-            return res.status(200).json(result)
+            return res.status(200).json(serialize(result))
         } catch (error) {
             next(error)
         }
     }
-
-
-
 
 }
 

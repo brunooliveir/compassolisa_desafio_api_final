@@ -1,10 +1,11 @@
+const { serialize, paginateSerialize } = require('../serialize/carSerialize')
 const CarService = require('../service/CarService')
 
 class CarController {
     async create(req, res, next) {
         try {
             const result = await CarService.create(req.body)
-            return res.status(201).json(result)
+            return res.status(201).json(serialize(result))
         } catch (error) {
             next(error)
         }
@@ -13,7 +14,7 @@ class CarController {
     async findOneById(req, res, next) {
         try {
             const result = await CarService.checkVeiculoId(req.params.id)
-            return res.status(200).json(result)
+            return res.status(200).json(serialize(result))
         } catch (error) {
             next(error)
         }
@@ -22,7 +23,7 @@ class CarController {
     async listQuery(req, res, next) {
         try {
             const result = await CarService.checkQuery(req.query)
-            return res.status(200).json({ veiculos: result["veiculos"], total: result["total"], limit: result["limit"], offset: result["offset"], offsets: result["offsets"] })
+            return res.status(200).json(paginateSerialize(result))
         } catch (error) {
             next(error)
         }
@@ -40,7 +41,7 @@ class CarController {
     async updateById(req, res, next) {
         try {
             const result = await CarService.checkVeiculoUpdate(req.params.id, req.body)
-            return res.status(200).json(result)
+            return res.status(200).json(serialize(result))
         } catch (error) {
             next(error)
         }
@@ -50,7 +51,7 @@ class CarController {
         try {
             const veiculo = await CarService.checkVeiculoId(req.params.id)
             const result = await CarService.checkAcessoriosUpdate(veiculo, req.params.id_acessorio, req.body)
-            return res.status(200).json(result)
+            return res.status(200).json(serialize(result))
         } catch (error) {
             next(error)
         }

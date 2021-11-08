@@ -1,3 +1,4 @@
+const { serialize, paginateSerialize } = require('../serialize/peopleSerialize')
 const PeopleService = require('../service/PeopleService')
 
 class PeopleController {
@@ -5,7 +6,7 @@ class PeopleController {
         try {
             await PeopleService.checkIdade(req.body)
             const result = await PeopleService.create(req.body)
-            return res.status(201).json(result)
+            return res.status(201).json(serialize(result))
         } catch (error) {
             return next(error)
         }
@@ -14,7 +15,7 @@ class PeopleController {
     async findOneById(req, res, next) {
         try {
             const result = await PeopleService.checkPessoaId(req.params.id)
-            return res.status(200).json(result)
+            return res.status(200).json(serialize(result))
         } catch (error) {
             return next(error)
         }
@@ -23,7 +24,7 @@ class PeopleController {
     async listQuery(req, res, next) {
         try {
             const result = await PeopleService.checkQuery(req.query)
-            return res.status(200).json({ pessoas: result["pessoas"], total: result["total"], limit: result["limit"], offset: result["offset"], offsets: result["offsets"] })
+            return res.status(200).json(paginateSerialize(result))
         } catch (error) {
             return next(error)
         }
@@ -42,7 +43,7 @@ class PeopleController {
         try {
             await PeopleService.checkIdade(req.body)
             const result = await PeopleService.checkPessoaUpdate(req.params.id, req.body)
-            return res.status(200).json(result)
+            return res.status(200).json(serialize(result))
         } catch (error) {
             return next(error)
         }

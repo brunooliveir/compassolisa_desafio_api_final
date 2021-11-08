@@ -60,18 +60,6 @@ const RentalSchema = mongoose.Schema({
     }
 })
 
-
-RentalSchema.methods.toJSON = function() {
-    const obj = this.toObject()
-    obj.endereco.forEach(element => {
-        delete element._id
-    })
-    delete obj.created_at
-    delete obj.updated_at
-    delete obj.__v
-    return obj
-}
-
 const Rental = mongoose.model('locadoras', RentalSchema)
 
 module.exports = Rental

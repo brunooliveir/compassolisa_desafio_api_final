@@ -6,6 +6,10 @@ const AcessorioUniqueError = require('../car/AcessorioUniqueError')
 const CarAcessorioIdNotFound = require('../car/CarAcessorioIdNotFound')
 const CarAcessorioWillBecomeEmpty = require('../car/CarAcessorioWillBecomeEmpty')
 const CarIdAndAcessorioIdNotMatch = require('../car/CarIdAndAcessorioIdNotMatch')
+const NoTokenProvided = require('../car/NoTokenProvided')
+const TokenError = require('../car/TokenError')
+const TokenMalformatted = require('../car/TokenMalformatted')
+const TokenInvalid = require('../car/TokenInvalid')
 
 module.exports = async(error, req, res, next) => {
     let statusCode = 500
@@ -24,6 +28,13 @@ module.exports = async(error, req, res, next) => {
         } else {
             error = new IdFormatError(error.value._id)
         }
+    }
+
+    if (error instanceof NoTokenProvided ||
+        error instanceof TokenError ||
+        error instanceof TokenMalformatted ||
+        error instanceof TokenInvalid) {
+        statusCode = 401
     }
 
     if (error instanceof CarParameterNotFound ||
