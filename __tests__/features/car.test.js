@@ -1,24 +1,30 @@
 const CarSchema = require('../../src/app/schema/CarSchema')
+const PeopleSchema = require('../../src/app/schema/PeopleSchema')
 const request = require('supertest')
 const app = require('../../src/app')
 const Database = require('../../src/infra/database/mongo/index')
+const authToken = require('../../tools/authForTests')
 
 Database.connect()
 
 beforeAll(async() => {
     await CarSchema.deleteMany()
+    await PeopleSchema.deleteMany()
 })
 
 beforeEach(async() => {
     await CarSchema.deleteMany()
+    await PeopleSchema.deleteMany()
 })
 
 afterAll(async() => {
     await CarSchema.deleteMany()
+    await PeopleSchema.deleteMany()
     Database.disconnect()
 })
 
 it('should create a car', async() => {
+    const token = await authToken.getToken()
     const veiculoTest = {
         modelo: 'GM S10 2.8',
         cor: 'branco',
@@ -30,6 +36,8 @@ it('should create a car', async() => {
     const response = await request(app)
         .post('/api/v1/car/')
         .send(veiculoTest)
+        .set('Authorization', `Bearer ${token}`)
+
     expect(response.status).toBe(201)
     expect(response.body.modelo).toBe(veiculoTest.modelo)
     expect(response.body.cor).toBe(veiculoTest.cor)
@@ -38,6 +46,7 @@ it('should create a car', async() => {
 })
 
 it('dont should create a car', async() => {
+    const token = await authToken.getToken()
     const veiculoTest = {
         modelo: 'GM S10 2.8',
         cor: 'branco',
@@ -49,15 +58,18 @@ it('dont should create a car', async() => {
     await request(app)
         .post('/api/v1/car/')
         .send(veiculoTest)
+        .set('Authorization', `Bearer ${token}`)
 
     const response = await request(app)
         .post('/api/v1/car/')
         .send(veiculoTest)
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(400)
 })
 
 it('should get a car by id', async() => {
+    const token = await authToken.getToken()
     const veiculoTest = {
         modelo: 'GM S10 2.8',
         cor: 'branco',
@@ -69,10 +81,12 @@ it('should get a car by id', async() => {
     const payload = await request(app)
         .post('/api/v1/car/')
         .send(veiculoTest)
+        .set('Authorization', `Bearer ${token}`)
 
     const response = await request(app)
         .get('/api/v1/car/' + payload.body._id)
         .send()
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200)
     expect(response.body.modelo).toBe(veiculoTest.modelo)
@@ -82,6 +96,7 @@ it('should get a car by id', async() => {
 })
 
 it('should reject id, bad argument', async() => {
+    const token = await authToken.getToken()
     const veiculoTest = {
         _id: '617fc14c0066e3a486717t55' //have 't', invalid Id
     }
@@ -91,11 +106,13 @@ it('should reject id, bad argument', async() => {
     const response = await request(app)
         .get('/api/v1/car/' + veiculoTest._id)
         .send()
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(400)
 })
 
 it('should reject id, Id not found', async() => {
+    const token = await authToken.getToken()
     const veiculoTest = {
         _id: '617fc14c0066e3a486717d55'
     }
@@ -103,11 +120,13 @@ it('should reject id, Id not found', async() => {
     const response = await request(app)
         .get('/api/v1/car/' + veiculoTest._id)
         .send()
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(404)
 })
 
 it('should get a car by params', async() => {
+    const token = await authToken.getToken()
     const veiculoTest = {
         modelo: 'GM S10 2.8',
         cor: 'branco',
@@ -119,11 +138,13 @@ it('should get a car by params', async() => {
     const payload = await request(app)
         .post('/api/v1/car/')
         .send(veiculoTest)
+        .set('Authorization', `Bearer ${token}`)
 
 
     const responseModelo = await request(app)
         .get('/api/v1/car/' + '?modelo=' + payload.body.modelo)
         .send()
+        .set('Authorization', `Bearer ${token}`)
 
     expect(responseModelo.status).toBe(200)
     expect(responseModelo.body.veiculos[0].modelo).toBe(veiculoTest.modelo)
@@ -134,6 +155,7 @@ it('should get a car by params', async() => {
     const responseCor = await request(app)
         .get('/api/v1/car/' + '?cor=' + payload.body.cor)
         .send()
+        .set('Authorization', `Bearer ${token}`)
 
     expect(responseCor.status).toBe(200)
     expect(responseCor.body.veiculos[0].modelo).toBe(veiculoTest.modelo)
@@ -144,6 +166,7 @@ it('should get a car by params', async() => {
     const responseAno = await request(app)
         .get('/api/v1/car/' + '?ano=' + payload.body.ano)
         .send()
+        .set('Authorization', `Bearer ${token}`)
 
     expect(responseAno.status).toBe(200)
     expect(responseAno.body.veiculos[0].modelo).toBe(veiculoTest.modelo)
@@ -154,6 +177,7 @@ it('should get a car by params', async() => {
     const responseDescricaoPrimeira = await request(app)
         .get('/api/v1/car/' + '?descricao=' + payload.body.acessorios[0].descricao)
         .send()
+        .set('Authorization', `Bearer ${token}`)
 
     expect(responseDescricaoPrimeira.status).toBe(200)
     expect(responseDescricaoPrimeira.body.veiculos[0].modelo).toBe(veiculoTest.modelo)
@@ -164,6 +188,7 @@ it('should get a car by params', async() => {
     const responseDescricaoSegunda = await request(app)
         .get('/api/v1/car/' + '?descricao=' + payload.body.acessorios[1].descricao)
         .send()
+        .set('Authorization', `Bearer ${token}`)
 
     expect(responseDescricaoSegunda.status).toBe(200)
     expect(responseDescricaoSegunda.body.veiculos[0].modelo).toBe(veiculoTest.modelo)
@@ -173,6 +198,7 @@ it('should get a car by params', async() => {
 })
 
 it('should delete a car by id', async() => {
+    const token = await authToken.getToken()
     const veiculoTest = {
         modelo: 'GM S10 2.8',
         cor: 'branco',
@@ -184,15 +210,18 @@ it('should delete a car by id', async() => {
     const payload = await request(app)
         .post('/api/v1/car/')
         .send(veiculoTest)
+        .set('Authorization', `Bearer ${token}`)
 
     const response = await request(app)
         .delete('/api/v1/car/' + payload.body._id)
         .send()
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(204)
 })
 
 it('dont should delete a car by id', async() => {
+    const token = await authToken.getToken()
     const veiculoTest = {
         modelo: 'GM S10 2.8',
         cor: 'branco',
@@ -204,19 +233,23 @@ it('dont should delete a car by id', async() => {
     const payload = await request(app)
         .post('/api/v1/car/')
         .send(veiculoTest)
+        .set('Authorization', `Bearer ${token}`)
 
     await request(app)
         .delete('/api/v1/car/' + payload.body._id)
         .send()
+        .set('Authorization', `Bearer ${token}`)
 
     const response = await request(app)
         .delete('/api/v1/car/' + payload.body._id)
         .send()
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(404)
 })
 
 it('should update a car by id', async() => {
+    const token = await authToken.getToken()
     const veiculoTestOriginal = {
         modelo: 'GM S10 2.8',
         cor: 'branco',
@@ -236,10 +269,12 @@ it('should update a car by id', async() => {
     const payload = await request(app)
         .post('/api/v1/car/')
         .send(veiculoTestOriginal)
+        .set('Authorization', `Bearer ${token}`)
 
     const response = await request(app)
         .put('/api/v1/car/' + payload.body._id)
         .send(veiculoTestUpdate)
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(200)
     expect(response.body.modelo).toBe(veiculoTestUpdate.modelo)
@@ -249,6 +284,7 @@ it('should update a car by id', async() => {
 })
 
 it('dont should update a car by id', async() => {
+    const token = await authToken.getToken()
     const veiculoTestModelUnique = {
         modelo: 'GM S10 2.8',
         cor: 'verde',
@@ -276,19 +312,23 @@ it('dont should update a car by id', async() => {
     await request(app)
         .post('/api/v1/car/')
         .send(veiculoTestModelUnique)
+        .set('Authorization', `Bearer ${token}`)
 
     const payload = await request(app)
         .post('/api/v1/car/')
         .send(veiculoTestOriginal)
+        .set('Authorization', `Bearer ${token}`)
 
     const response = await request(app)
         .put('/api/v1/car/' + payload.body._id)
         .send(veiculoTestUpdate)
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response.status).toBe(400)
 })
 
 it('should update a acessorio of car by id', async() => {
+    const token = await authToken.getToken()
     const veiculoTestOriginal = {
         modelo: 'GM S10 2.8',
         cor: 'verde',
@@ -300,11 +340,13 @@ it('should update a acessorio of car by id', async() => {
     const payload = await request(app)
         .post('/api/v1/car/')
         .send(veiculoTestOriginal)
+        .set('Authorization', `Bearer ${token}`)
 
 
     const response1 = await request(app)
         .patch('/api/v1/car/' + payload.body._id + '/acessorios/' + payload.body.acessorios[0]._id)
         .send({ descricao: 'DVD-player' })
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response1.status).toBe(200)
     expect(response1.body.acessorios[0].descricao).toBe('DVD-player')
@@ -314,6 +356,7 @@ it('should update a acessorio of car by id', async() => {
     const response2 = await request(app)
         .patch('/api/v1/car/' + response1.body._id + '/acessorios/' + response1.body.acessorios[0]._id)
         .send({ descricao: 'DVD-player' })
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response2.status).toBe(200)
     expect(response2.body.acessorios[0].descricao).toBe('ABS')
@@ -321,6 +364,7 @@ it('should update a acessorio of car by id', async() => {
 })
 
 it('dont should update a acessorio of car by id', async() => {
+    const token = await authToken.getToken()
     const veiculoTestOriginal = {
         modelo: 'GM S10 2.8',
         cor: 'verde',
@@ -340,26 +384,31 @@ it('dont should update a acessorio of car by id', async() => {
     const payload = await request(app)
         .post('/api/v1/car/')
         .send(veiculoTestOriginal)
+        .set('Authorization', `Bearer ${token}`)
 
     const payloadWithAnotherId = await request(app)
         .post('/api/v1/car/')
         .send(veiculoTestWithAnotherId)
+        .set('Authorization', `Bearer ${token}`)
 
     const response1 = await request(app)
         .patch('/api/v1/car/' + payloadWithAnotherId.body._id + '/acessorios/' + payload.body.acessorios[0]._id) // id and acessorios[0]._id not match
         .send({ descricao: 'DVD-player' })
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response1.status).toBe(404) // route not can be /api/v1/car/"id of car x"/acessorios/"id of acessorio of car y"
 
     const response2 = await request(app)
         .patch('/api/v1/car/' + payload.body._id + '/acessorios/' + payload.body.acessorios[0]._id) // acessorios[0] = 'Rádio'
         .send({ descricao: 'ABS' }) // acessorios[1] == 'ABS'
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response2.status).toBe(400) // acessorios not can be ['ABS','ABS','Ar-Condicionado']
 
     const response3 = await request(app)
         .patch('/api/v1/car/' + payload.body._id + '/acessorios/' + payload.body.acessorios[0]._id) // acessorios[0] = 'Rádio'
         .send({ descricao: 'ABS       ' }) // acessorios[1] == 'ABS'
+        .set('Authorization', `Bearer ${token}`)
 
     expect(response3.status).toBe(400) // acessorios not can be ['ABS       ','ABS','Ar-Condicionado']
 })

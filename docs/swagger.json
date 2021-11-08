@@ -32,13 +32,31 @@
       "description": "Rotas dos Usuários"
     },
     {
+      "name": "Locadoras",
+      "description": "Rotas das Locadoras"
+    },
+    {
       "name": "Autenticação",
       "description": "Autenticação do Usuários"
     }
   ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
   "paths": {
     "/car/": {
       "post": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "tags": [
           "Veiculos"
         ],
@@ -124,6 +142,11 @@
         }
       },
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "tags": [
           "Veiculos"
         ],
@@ -256,6 +279,11 @@
         }
       ],
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "tags": [
           "Veiculos"
         ],
@@ -305,6 +333,11 @@
         }
       },
       "put": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "tags": [
           "Veiculos"
         ],
@@ -349,8 +382,8 @@
           }
         },
         "responses": {
-          "201": {
-            "description": "Created",
+          "200": {
+            "description": "Ok",
             "content": {
               "application/json": {
                 "schema": {
@@ -396,6 +429,11 @@
         }
       },
       "delete": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "tags": [
           "Veiculos"
         ],
@@ -430,6 +468,11 @@
         }
       ],
       "patch": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "tags": [
           "Veiculos"
         ],
@@ -450,8 +493,8 @@
           }
         },
         "responses": {
-          "201": {
-            "description": "Created",
+          "200": {
+            "description": "Ok",
             "content": {
               "application/json": {
                 "schema": {
@@ -644,7 +687,7 @@
             }
           }
         ],
-        "summary": "Consulta todos os veiculos, ou veiculos por parametros",
+        "summary": "Consulta todos os usuários, ou usuário por parametros",
         "responses": {
           "200": {
             "description": "Ok",
@@ -787,8 +830,8 @@
           }
         },
         "responses": {
-          "201": {
-            "description": "Created",
+          "200": {
+            "description": "Ok",
             "content": {
               "application/json": {
                 "schema": {
@@ -893,6 +936,500 @@
           },
           "404": {
             "description": "Not found"
+          }
+        }
+      }
+    },
+    "/rental/": {
+      "post": {
+        "tags": [
+          "Locadoras"
+        ],
+        "summary": "Cadastra locadora",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string",
+                    "example": "Localiza Rent a Car"
+                  },
+                  "cnpj": {
+                    "type": "string",
+                    "example": "16.670.085/0001-55"
+                  },
+                  "atividades": {
+                    "type": "string",
+                    "example": "Aluguel de Carros E Gestão de Frotas"
+                  },
+                  "endereco": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "cep": {
+                          "type": "string",
+                          "example": "96200-200"
+                        },
+                        "number": {
+                          "type": "string",
+                          "example": "1234"
+                        },
+                        "complemento": {
+                          "type": "string",
+                          "example": "Muro A"
+                        },
+                        "isFilial": {
+                          "type": "boolean",
+                          "example": "true"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nome": {
+                      "type": "string"
+                    },
+                    "cnpj": {
+                      "type": "string"
+                    },
+                    "atividades": {
+                      "type": "string"
+                    },
+                    "endereco": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "cep": {
+                            "type": "string"
+                          },
+                          "logradouro": {
+                            "type": "string"
+                          },
+                          "complemento": {
+                            "type": "string"
+                          },
+                          "bairro": {
+                            "type": "string"
+                          },
+                          "number": {
+                            "type": "string"
+                          },
+                          "localidade": {
+                            "type": "string"
+                          },
+                          "uf": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Locadoras"
+        ],
+        "parameters": [
+          {
+            "name": "nome",
+            "in": "query",
+            "description": "nome da locadora",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cnpj",
+            "in": "query",
+            "description": "cnpj do usuário",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "atividades",
+            "in": "query",
+            "description": "atividades da locadora",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cep",
+            "in": "query",
+            "description": "cep da locadora",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "logradouro",
+            "in": "query",
+            "description": "logradouro da locadora",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "complemento",
+            "in": "query",
+            "description": "complemento da locadora",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bairro",
+            "in": "query",
+            "description": "bairro da locadora",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "description": "numero de endereço da locadora",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "localidade",
+            "in": "query",
+            "description": "cidade da locadora",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "uf",
+            "in": "query",
+            "description": "uf da locadora",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "isFilial",
+            "in": "query",
+            "description": "Se é filial ou matriz da locadora",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "limite de resultados na pagina",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "quantidade de resultados ignorados após o offsets",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offsets",
+            "in": "query",
+            "description": "quantidade de resultados ignorados a partir do primeiro resultado",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "summary": "Consulta as locadoras, ou locadoras por parametros",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "locadoras": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string"
+                          },
+                          "nome": {
+                            "type": "string"
+                          },
+                          "cnpj": {
+                            "type": "string"
+                          },
+                          "atividades": {
+                            "type": "string"
+                          },
+                          "endereco": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "cep": {
+                                  "type": "string"
+                                },
+                                "logradouro": {
+                                  "type": "string"
+                                },
+                                "complemento": {
+                                  "type": "string"
+                                },
+                                "bairro": {
+                                  "type": "string"
+                                },
+                                "number": {
+                                  "type": "string"
+                                },
+                                "localidade": {
+                                  "type": "string"
+                                },
+                                "uf": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rental/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "schema": {
+            "type": "string"
+          },
+          "required": true
+        }
+      ],
+      "get": {
+        "tags": [
+          "Locadoras"
+        ],
+        "summary": "Consulta locadoras por Id",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "nome": {
+                      "type": "string"
+                    },
+                    "cnpj": {
+                      "type": "string"
+                    },
+                    "atividades": {
+                      "type": "string"
+                    },
+                    "endereco": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "cep": {
+                            "type": "string"
+                          },
+                          "logradouro": {
+                            "type": "string"
+                          },
+                          "complemento": {
+                            "type": "string"
+                          },
+                          "bairro": {
+                            "type": "string"
+                          },
+                          "number": {
+                            "type": "string"
+                          },
+                          "localidade": {
+                            "type": "string"
+                          },
+                          "uf": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Locadoras"
+        ],
+        "summary": "Altera as propriedades de uma locadora, encontrada por Id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string",
+                    "example": "Localiza Rent a Car"
+                  },
+                  "cnpj": {
+                    "type": "string",
+                    "example": "16.670.085/0001-55"
+                  },
+                  "atividades": {
+                    "type": "string",
+                    "example": "Aluguel de Carros E Gestão de Frotas"
+                  },
+                  "endereco": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "cep": {
+                          "type": "string",
+                          "example": "96200-200"
+                        },
+                        "number": {
+                          "type": "string",
+                          "example": "1234"
+                        },
+                        "complemento": {
+                          "type": "string",
+                          "example": "Muro A"
+                        },
+                        "isFilial": {
+                          "type": "boolean",
+                          "example": "true"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "string"
+                    },
+                    "nome": {
+                      "type": "string"
+                    },
+                    "cnpj": {
+                      "type": "string"
+                    },
+                    "atividades": {
+                      "type": "string"
+                    },
+                    "endereco": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "cep": {
+                            "type": "string"
+                          },
+                          "logradouro": {
+                            "type": "string"
+                          },
+                          "complemento": {
+                            "type": "string"
+                          },
+                          "bairro": {
+                            "type": "string"
+                          },
+                          "number": {
+                            "type": "string"
+                          },
+                          "localidade": {
+                            "type": "string"
+                          },
+                          "uf": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Locadoras"
+        ],
+        "summary": "Deleta uma locadora, encontrada por Id",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }

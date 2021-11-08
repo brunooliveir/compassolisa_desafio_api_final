@@ -34,9 +34,10 @@ it('should create a people', async() => {
     expect(response.status).toBe(201)
     expect(response.body.nome).toBe(pessoaTest.nome)
     expect(response.body.cpf).toBe(pessoaTest.cpf)
-    expect(response.body.data_nascimento).toBe(pessoaTest.data_nascimento)
+    expect(response.body.data_nascimento.split('T', )[0]).toBe('2001-05-15')
     expect(response.body.senha).toBe(undefined)
     expect(response.body.habilitado).toBe(pessoaTest.habilitado)
+
 })
 
 it('dont should create a people', async() => {
@@ -58,6 +59,7 @@ it('dont should create a people', async() => {
         .send(pessoaTest)
 
     expect(response.status).toBe(400)
+
 })
 
 it('should get a people by id', async() => {
@@ -81,7 +83,7 @@ it('should get a people by id', async() => {
     expect(response.status).toBe(200)
     expect(response.body.nome).toBe(pessoaTest.nome)
     expect(response.body.cpf).toBe(pessoaTest.cpf)
-    expect(response.body.data_nascimento).toBe(pessoaTest.data_nascimento)
+    expect(response.body.data_nascimento.split('T', )[0]).toBe('2001-05-15')
     expect(response.body.senha).toBe(undefined)
     expect(response.body.habilitado).toBe(pessoaTest.habilitado)
 })
@@ -112,10 +114,10 @@ it('should reject id, Id not found', async() => {
 
 it('should get a people by params', async() => {
     const pessoaTest = {
-        nome: "joão ciclano",
+        nome: "joao ciclano",
         cpf: "286.162.557-02",
         data_nascimento: "15/05/2001",
-        email: "joãociclano@email.com",
+        email: "joaociclano@email.com",
         senha: "senhaforteConfia",
         habilitado: "sim"
     }
@@ -132,7 +134,7 @@ it('should get a people by params', async() => {
     expect(responseNome.status).toBe(200)
     expect(responseNome.body.pessoas[0].nome).toBe(pessoaTest.nome)
     expect(responseNome.body.pessoas[0].cpf).toBe(pessoaTest.cpf)
-    expect(responseNome.body.pessoas[0].data_nascimento).toBe(pessoaTest.data_nascimento)
+    expect(responseNome.body.pessoas[0].data_nascimento.split('T', )[0]).toBe('2001-05-15')
     expect(responseNome.body.pessoas[0].email).toBe(pessoaTest.email)
     expect(responseNome.body.pessoas[0].senha).toBe(undefined)
     expect(responseNome.body.pessoas[0].habilitado).toBe(pessoaTest.habilitado)
@@ -144,20 +146,19 @@ it('should get a people by params', async() => {
     expect(responseCpf.status).toBe(200)
     expect(responseCpf.body.pessoas[0].nome).toBe(pessoaTest.nome)
     expect(responseCpf.body.pessoas[0].cpf).toBe(pessoaTest.cpf)
-    expect(responseCpf.body.pessoas[0].data_nascimento).toBe(pessoaTest.data_nascimento)
+    expect(responseCpf.body.pessoas[0].data_nascimento.split('T', )[0]).toBe('2001-05-15')
     expect(responseCpf.body.pessoas[0].email).toBe(pessoaTest.email)
     expect(responseCpf.body.pessoas[0].senha).toBe(undefined)
     expect(responseCpf.body.pessoas[0].habilitado).toBe(pessoaTest.habilitado)
 
-
     const responseData_nascimento = await request(app)
-        .get('/api/v1/people/' + '?data_nascimento=' + payload.body.data_nascimento.replace('/', '.').replace('/', '.'))
+        .get('/api/v1/people/' + '?data_nascimento=' + '15/05/2001')
         .send()
 
     expect(responseData_nascimento.status).toBe(200)
     expect(responseData_nascimento.body.pessoas[0].nome).toBe(pessoaTest.nome)
     expect(responseData_nascimento.body.pessoas[0].cpf).toBe(pessoaTest.cpf)
-    expect(responseData_nascimento.body.pessoas[0].data_nascimento).toBe(pessoaTest.data_nascimento)
+    expect(responseData_nascimento.body.pessoas[0].data_nascimento.split('T', )[0]).toBe('2001-05-15')
     expect(responseData_nascimento.body.pessoas[0].email).toBe(pessoaTest.email)
     expect(responseData_nascimento.body.pessoas[0].senha).toBe(undefined)
     expect(responseData_nascimento.body.pessoas[0].habilitado).toBe(pessoaTest.habilitado)
@@ -169,7 +170,7 @@ it('should get a people by params', async() => {
     expect(responseEmail.status).toBe(200)
     expect(responseEmail.body.pessoas[0].nome).toBe(pessoaTest.nome)
     expect(responseEmail.body.pessoas[0].cpf).toBe(pessoaTest.cpf)
-    expect(responseEmail.body.pessoas[0].data_nascimento).toBe(pessoaTest.data_nascimento)
+    expect(responseEmail.body.pessoas[0].data_nascimento.split('T', )[0]).toBe('2001-05-15')
     expect(responseEmail.body.pessoas[0].email).toBe(pessoaTest.email)
     expect(responseEmail.body.pessoas[0].senha).toBe(undefined)
     expect(responseEmail.body.pessoas[0].habilitado).toBe(pessoaTest.habilitado)
@@ -180,7 +181,7 @@ it('should get a people by params', async() => {
     expect(responseHabilitado.status).toBe(200)
     expect(responseHabilitado.body.pessoas[0].nome).toBe(pessoaTest.nome)
     expect(responseHabilitado.body.pessoas[0].cpf).toBe(pessoaTest.cpf)
-    expect(responseHabilitado.body.pessoas[0].data_nascimento).toBe(pessoaTest.data_nascimento)
+    expect(responseHabilitado.body.pessoas[0].data_nascimento.split('T', )[0]).toBe('2001-05-15')
     expect(responseHabilitado.body.pessoas[0].email).toBe(pessoaTest.email)
     expect(responseHabilitado.body.pessoas[0].senha).toBe(undefined)
     expect(responseHabilitado.body.pessoas[0].habilitado).toBe(pessoaTest.habilitado)
@@ -262,7 +263,7 @@ it('should update a people by id', async() => {
     expect(response.status).toBe(200)
     expect(response.body.nome).toBe(pessoaTestUpdate.nome)
     expect(response.body.cpf).toBe(pessoaTestUpdate.cpf)
-    expect(response.body.data_nascimento).toBe(pessoaTestUpdate.data_nascimento)
+    expect(response.body.data_nascimento.split('T', )[0]).toBe('2001-05-15')
     expect(response.body.email).toBe(pessoaTestUpdate.email)
     expect(response.body.senha).toBe(undefined)
     expect(response.body.habilitado).toBe(pessoaTestUpdate.habilitado)
