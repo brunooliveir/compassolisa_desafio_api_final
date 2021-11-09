@@ -42,9 +42,15 @@ O desafio consiste em criar uma API Rest Full da Locadora de veículos Compassol
 
 ## Como rodar a API
 
-Requisitos: Node.js e MongoDB.
+Requisitos: Node.js e MongoDB instalados, ou docker-compose instalado.
 
-Após clonar o repositório
+Após clonar o repositório, caso for utilizar docker na aplicação:
+
+Execute no console na raiz da aplicação: 
+
+```http
+    docker-compose up -d
+```
 
 Em: **compassolisa_desafio_api_final/.env**
 
@@ -76,7 +82,6 @@ DB_COLLECTION = compassolisatest
 
 ```
 
-
 **Nome do banco de dados a seu critério.
 
 Abra a pasta raiz da aplicação (compassolisa_desafio_api_final), então execute no console os seguintes comandos:
@@ -102,12 +107,117 @@ ou
 
 **Executando os testes (jest):**
 ```http
-    npm run test
+    npm run test /features/people.test.js
+    
+    npm run test /features/car.test.js
+    
+    npm run test /features/rental.test.js
+```
+
+A API também dispõe da rota da interface Swagger:
+
+```http
+http://127.0.0.1:3000/api/v1/api-docs/
 ```
 
 # Rotas
 
+
+## Pessoas
+
+
+#### Cadastra pessoa:
+
+
+```http
+  POST | http://127.0.0.1:3000/api/v1/people/
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `nome ` | `string` | **Required**. |                
+| `cpf`  | `string` | **Required, Unique**. |
+| `data_nascimento` | `date` | 'DD/MM/YYYY' **Required** |                
+| `email` | `string` |  **Required, Unique** |
+| `senha` | `string` | **Required** |
+| `habilitado` | `enum[string]` | [sim, não] **Required** |
+
+
+#### Consulta todas as pessoas:
+
+
+
+```http
+  GET | http://127.0.0.1:3000/api/v1/people/
+```
+
+
+#### Consulta pessoa por parametros:
+
+
+```http
+  GET | http://127.0.0.1:3000/api/v1/people/?paramKey=paramValue
+  
+```
+
+
+#### Consulta um pessoa por Id:
+
+
+
+```http
+  GET | http://127.0.0.1:3000/api/v1/people/:id
+```
+
+
+
+#### Altera as propriedades de uma pessoa, encontrada por Id:
+
+
+
+```http
+  PUT | http://127.0.0.1:3000/api/v1/people/:id
+```
+
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `nome ` | `string` | **Required**. |                
+| `cpf`  | `string` | **Required, Unique**. |
+| `data_nascimento` | `date` | 'DD/MM/YYYY' **Required** |                
+| `email` | `string` |  **Required, Unique** |
+| `senha` | `string` | **Required** |
+| `habilitado` | `enum[string]` | [sim, não] **Required** |
+
+
+
+#### Deleta uma pessoa, encontrado por Id:
+
+
+
+```http
+  DELETE | http://127.0.0.1:3000/api/v1/people/:id
+```
+
+
+## Autenticação
+
+
+#### Autentica uma pessoa, gera um token de Autenticação:
+
+```http
+  POST | http://127.0.0.1:3000/api/v1/authenticate/
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |                            
+| `email` | `string` |  **Required** |
+| `senha` | `string` | **Required** |
+| `habilitado` | `enum[string]` | [sim, não] **Required** |
+
+
 ## Veiculos
+## IMPORTANTE: Todas as rotas de veículos necessitam de token de autenticação.
 
 
 #### Cadastra carro:
@@ -182,98 +292,105 @@ ou
   DELETE | http://127.0.0.1:3000/api/v1/car/:id
 ```
 
+#### Altera um acessório do veiculo, acessorio encontrado por Id e veiculo encontrado por Id:
 
-## Pessoas
-
-
-#### Cadastra pessoa:
 
 
 ```http
-  POST | http://127.0.0.1:3000/api/v1/people/
+  PUT | http://127.0.0.1:3000/api/v1/car/:idVeiculo/acessorios/:idAcessorio
+```
+
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |             
+| `descricao` | `string` |  **Required**|
+
+
+
+## Locadoras
+
+
+#### Cadastra locadora:
+
+
+```http
+  POST | http://127.0.0.1:3000/api/v1/rental/
 ```
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `nome ` | `string` | **Required**. |                
-| `cpf`  | `string` | **Required, Unique**. |
-| `data_nascimento` | `date` | 'DD/MM/YYYY' **Required** |                
-| `email` | `string` |  **Required, Unique** |
-| `senha` | `string` | **Required** |
-| `habilitado` | `enum[string]` | [sim, não] **Required** |
+| `cnpj`  | `string` | **Required, Unique**. |
+| `atividades` | `string` | **Required**. |                
+| `endereco` | `array` |  **Required, Unique** |
+| `endereco.cep` | `string` | **Required** |
+| `endereco.number` | `string` | **Required** |
+| `endereco.complemento` | `string` |  |
+| `endereco.isFilial` | `boolean` | **Required** |
 
 
-#### Consulta todas as pessoas:
+
+#### Consulta todas as locadoras:
 
 
 
 ```http
-  GET | http://127.0.0.1:3000/api/v1/people/
+  GET | http://127.0.0.1:3000/api/v1/rental/
 ```
 
 
-#### Consulta pessoa por parametros: * Obs: ?data_nascimento=DD.MM.YYYY
+#### Consulta locadora por parametros:
 
 
 ```http
-  GET | http://127.0.0.1:3000/api/v1/people/?paramKey=paramValue
+  GET | http://127.0.0.1:3000/api/v1/rental/?paramKey=paramValue
   
 ```
 
 
-#### Consulta um pessoa por Id:
+#### Consulta um locadora por Id:
 
 
 
 ```http
-  GET | http://127.0.0.1:3000/api/v1/people/:id
+  GET | http://127.0.0.1:3000/api/v1/rental/:id
 ```
 
 
 
-#### Altera as propriedades de uma pessoa, encontrada por Id:
+#### Altera as propriedades de uma locadora, encontrada por Id:
 
 
 
 ```http
-  PUT | http://127.0.0.1:3000/api/v1/people/:id
+  PUT | http://127.0.0.1:3000/api/v1/rental/:id
 ```
 
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `nome ` | `string` | **Required**. |                
-| `cpf`  | `string` | **Required, Unique**. |
-| `data_nascimento` | `date` | 'DD/MM/YYYY' **Required** |                
-| `email` | `string` |  **Required, Unique** |
-| `senha` | `string` | **Required** |
-| `habilitado` | `enum[string]` | [sim, não] **Required** |
+| `cnpj`  | `string` | **Required, Unique**. |
+| `atividades` | `string` | **Required**. |                
+| `endereco` | `array` |  **Required, Unique** |
+| `endereco.cep` | `string` | **Required** |
+| `endereco.number` | `string` | **Required** |
+| `endereco.complemento` | `string` |  |
+| `endereco.isFilial` | `boolean` | **Required** |
 
 
 
-#### Deleta uma pessoa, encontrado por Id:
+#### Deleta uma locadora, encontrado por Id:
 
 
 
 ```http
-  DELETE | http://127.0.0.1:3000/api/v1/people/:id
+  DELETE | http://127.0.0.1:3000/api/v1/rental/:id
 ```
 
 
-## Autenticação
 
 
-#### Autentica uma pessoa, gera um token de Autenticação:
-
-```http
-  POST | http://127.0.0.1:3000/api/v1/authenticate/
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |                            
-| `email` | `string` |  **Required** |
-| `senha` | `string` | **Required** |
-| `habilitado` | `enum[string]` | [sim, não] **Required** |
 
 
 
