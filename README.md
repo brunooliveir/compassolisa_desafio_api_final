@@ -114,7 +114,7 @@ ou
     npm run test /features/rental.test.js
 ```
 
-A API também dispõe da rota da interface Swagger:
+A API também dispõe de uma rota com a interface Swagger:
 
 ```http
 http://127.0.0.1:3000/api/v1/api-docs/
