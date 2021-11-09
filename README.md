@@ -26,7 +26,7 @@ O desafio consiste em criar uma API Rest Full da Locadora de veículos Compassol
 <li>swagger-ui-express v4.1.6</li>
 </ul>
 
-**Dev dependências ** 
+**Dev dependências:** 
 <ul>
 <li>eslint v7.32.0,</li>
 <li>eslint-config-airbnb-base v14.2.1,</li>
