@@ -292,7 +292,7 @@ http://127.0.0.1:3000/api/v1/api-docs/
   DELETE | http://127.0.0.1:3000/api/v1/car/:id
 ```
 
-#### Altera um acessório do veiculo, acessorio encontrado por Id e veiculo encontrado por Id:
+#### Altera a descrição de um acessório do veiculo, caso digite a descrição atual, deleta o acessório, acessorio encontrado por Id e veiculo encontrado por Id:
 
 
 
