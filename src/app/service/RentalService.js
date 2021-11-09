@@ -1,5 +1,6 @@
 const RentalRepository = require('../repository/RentalRepository');
 const MatrizLargerThanOneError = require('../errors/rental/MatrizLargerThanOneError');
+const AddressDuplicatedError = require('../errors/rental/AddressDuplicatedError');
 const RentalParameterNotFound = require('../errors/rental/RentalParameterNotFound');
 
 class RentalService {
@@ -12,6 +13,16 @@ class RentalService {
     });
     if (matrizDeclared > 1) {
       throw new MatrizLargerThanOneError(matrizDeclared);
+    }
+    if (payload.endereco.length > 1) {
+      const addresses = [];
+      payload.endereco.forEach((element) => {
+        addresses.push(element.cep.trim().replace('-', '') + element.number.trim().toLowerCase());
+      });
+      const newPayload = addresses.filter((element, index, array) => array.indexOf(element) === index);
+      if (newPayload.length < addresses.length) {
+        throw new AddressDuplicatedError();
+      }
     }
     const locadora = await RentalRepository.create(payload);
     return locadora;
@@ -86,6 +97,16 @@ class RentalService {
     });
     if (matrizDeclared > 1) {
       throw new MatrizLargerThanOneError(matrizDeclared);
+    }
+    if (payload.endereco.length > 1) {
+      const addresses = [];
+      payload.endereco.forEach((element) => {
+        addresses.push(element.cep.trim() + element.number.trim());
+      });
+      const newPayload = addresses.filter((element, index, array) => array.indexOf(element) === index);
+      if (newPayload.length < addresses.length) {
+        throw new AddressDuplicatedError();
+      }
     }
     return RentalRepository.UpdateOneById(id, payload);
   }

@@ -12,6 +12,7 @@ const LIMIT_MAXIMUM_CNPJ_STRING_LENGHT = 18;
 const LIMIT_MINIMUM_ARRAY_LENGHT = 1;
 
 const LIMIT_MINIMUM_ENDERECO_NUMBER = 0;
+const LIMIT_MAXIMUM_ENDERECO_NUMBER = 6;
 
 module.exports = async (req, res, next) => {
   try {
@@ -23,7 +24,12 @@ module.exports = async (req, res, next) => {
         .items(
           Joi.object({
             cep: Joi.string().trim().min(LIMIT_MINIMUM_CEP_LENGHT).max(LIMIT_MAXIMUM_CEP_LENGHT).lowercase().required(),
-            number: Joi.number().greater(LIMIT_MINIMUM_ENDERECO_NUMBER).required(),
+            number: Joi.string()
+              .trim()
+              .min(LIMIT_MINIMUM_ENDERECO_NUMBER)
+              .max(LIMIT_MAXIMUM_ENDERECO_NUMBER)
+              .required()
+              .regex(/[0-9A-Za-z]/),
             complemento: Joi.string().trim().max(LIMIT_MAXIMUM_CEP_LENGHT).lowercase(),
             isFilial: Joi.boolean().required()
           })
