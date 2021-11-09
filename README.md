@@ -1,19 +1,52 @@
 
-# compassolisa_desafio_api_final_pt2
+# compassolisa_desafio_api_final
 
-O desafio consiste em criar uma aplicação API Rest Full de uma Locadora de veículos utilizando o framework express e o banco de dados MongoDB.
+O desafio consiste em criar uma API Rest Full da Locadora de veículos Compassolisa, utilizando NodeJS, framework express e o banco de dados MongoDB.
 
+**Lista de tecnologias:** 
 
+<ul>
+<li>NodeJS v14.16.0</li>
+<li>MongoDB v5.0.3</li>
+<li>Docker v20.10.8</li>
+<li>Swagger v3.0.1</li>
+<ul>
 
+**Dependências:** 
+<ul>
+<li>joi/date v2.1.0</li>
+<li>axios v0.24.0</li>
+<li>cors v2.8.5,</li>
+<li>dotenv v10.0.0,</li>
+<li>express v4.17.1,</li>
+<li>joi v17.4.2,</li>
+<li>jsonwebtoken v8.5.1,</li>
+<li>moment v2.29.1,</li>
+<li>mongoose v6.0.11,</li>
+<li>swagger-ui-express v4.1.6</li>
+<ul>
+
+**Dev dependências v* 
+<ul>
+<li>eslint v7.32.0,</li>
+<li>eslint-config-airbnb-base v14.2.1,</li>
+<li>eslint-config-plugin v1.0.11,</li>
+<li>eslint-config-prettier v8.3.0,</li>
+<li>eslint-plugin-import v2.25.2,</li>
+<li>jest v27.3.1,</li>
+<li>jsonwebtoken v8.5.1,</li>
+<li>nodemon v2.0.13,</li>
+<li>prettier v2.4.1,</li>
+<li>supertest v6.1.6</li>
+<ul></ul>
 
 ## Como rodar a API
 
-Requisitos: Node.js e MongoDB
-
+Requisitos: Node.js e MongoDB.
 
 Após clonar o repositório
 
-Em: **compassolisa_desafio_api_final_pt2/.env**
+Em: **compassolisa_desafio_api_final/.env**
 
 **configure:** 
 
@@ -30,7 +63,7 @@ DB_COLLECTION = compassolisa
 
 e
 
-Em: **compassolisa_desafio_api_final_pt2/.env.test**
+Em: **compassolisa_desafio_api_final/.env.test**
 
 ```http
 
@@ -46,7 +79,7 @@ DB_COLLECTION = compassolisatest
 
 **Nome do banco de dados a seu critério.
 
-Abra a pasta raiz da aplicação (compassolisa_desafio_api_final_pt2), então execute no console os seguintes comandos:
+Abra a pasta raiz da aplicação (compassolisa_desafio_api_final), então execute no console os seguintes comandos:
 
 
 **instalação dos modulos:**
