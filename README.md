@@ -10,7 +10,7 @@ O desafio consiste em criar uma API Rest Full da Locadora de veículos Compassol
 <li>MongoDB v5.0.3</li>
 <li>Docker v20.10.8</li>
 <li>Swagger v3.0.1</li>
-<ul>
+</ul>
 
 **Dependências:** 
 <ul>
@@ -24,7 +24,7 @@ O desafio consiste em criar uma API Rest Full da Locadora de veículos Compassol
 <li>moment v2.29.1,</li>
 <li>mongoose v6.0.11,</li>
 <li>swagger-ui-express v4.1.6</li>
-<ul>
+</ul>
 
 **Dev dependências v* 
 <ul>
@@ -38,7 +38,7 @@ O desafio consiste em criar uma API Rest Full da Locadora de veículos Compassol
 <li>nodemon v2.0.13,</li>
 <li>prettier v2.4.1,</li>
 <li>supertest v6.1.6</li>
-<ul></ul>
+</ul>
 
 ## Como rodar a API
 
