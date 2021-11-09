@@ -4,6 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "lint": "npx eslint . --fix",
         "test": "jest",
         "start": "node src/server.js",
         "dev": "nodemon src/server.js"
@@ -20,8 +21,14 @@
     },
     "homepage": "https://github.com/brunooliveir/desafio_api_final_pt1#readme",
     "devDependencies": {
+        "eslint": "7.32.0",
+        "eslint-config-airbnb-base": "14.2.1",
+        "eslint-config-plugin": "1.0.11",
+        "eslint-config-prettier": "8.3.0",
+        "eslint-plugin-import": "2.25.2",
         "jest": "27.3.1",
         "nodemon": "2.0.13",
+        "prettier": "2.4.1",
         "supertest": "6.1.6"
     },
     "dependencies": {

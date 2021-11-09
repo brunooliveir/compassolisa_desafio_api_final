@@ -1,17 +1,17 @@
-const { Router } = require('express')
-const car = require('../routes/car.router')
-const people = require('../routes/people.router')
-const authenticate = require('../routes/authenticate.router')
-const apidocs = require('../routes/api-docs.router')
-const rental = require('../routes/rental.router')
+const { Router } = require('express');
+const car = require('./car.router');
+const people = require('./people.router');
+const authenticate = require('./authenticate.router');
+const apidocs = require('./api-docs.router');
+const rental = require('./rental.router');
 
-module.exports = server => {
-    server.use((req, res, next) => {
-        apidocs(server, new Router())
-        car(server, new Router())
-        people(server, new Router())
-        authenticate(server, new Router())
-        rental(server, new Router())
-        next()
-    })
-}
+module.exports = (server) => {
+  server.use((req, res, next) => {
+    apidocs(server, new Router());
+    car(server, new Router());
+    people(server, new Router());
+    authenticate(server, new Router());
+    rental(server, new Router());
+    next();
+  });
+};

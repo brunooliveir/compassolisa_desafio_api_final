@@ -1,53 +1,53 @@
-const { serialize, paginateSerialize } = require('../serialize/peopleSerialize')
-const PeopleService = require('../service/PeopleService')
+const { serialize, paginateSerialize } = require('../serialize/peopleSerialize');
+const PeopleService = require('../service/PeopleService');
 
 class PeopleController {
-    async create(req, res, next) {
-        try {
-            await PeopleService.checkIdade(req.body)
-            const result = await PeopleService.create(req.body)
-            return res.status(201).json(serialize(result))
-        } catch (error) {
-            return next(error)
-        }
+  async create(req, res, next) {
+    try {
+      await PeopleService.checkIdade(req.body);
+      const result = await PeopleService.create(req.body);
+      return res.status(201).json(serialize(result));
+    } catch (error) {
+      return next(error);
     }
+  }
 
-    async findOneById(req, res, next) {
-        try {
-            const result = await PeopleService.checkPessoaId(req.params.id)
-            return res.status(200).json(serialize(result))
-        } catch (error) {
-            return next(error)
-        }
+  async findOneById(req, res, next) {
+    try {
+      const result = await PeopleService.checkPessoaId(req.params.id);
+      return res.status(200).json(serialize(result));
+    } catch (error) {
+      return next(error);
     }
+  }
 
-    async listQuery(req, res, next) {
-        try {
-            const result = await PeopleService.checkQuery(req.query)
-            return res.status(200).json(paginateSerialize(result))
-        } catch (error) {
-            return next(error)
-        }
+  async listQuery(req, res, next) {
+    try {
+      const result = await PeopleService.checkQuery(req.query);
+      return res.status(200).json(paginateSerialize(result));
+    } catch (error) {
+      return next(error);
     }
+  }
 
-    async deleteOne(req, res, next) {
-        try {
-            const result = await PeopleService.checkPessoaDelete(req.params.id)
-            return res.status(204).json(result)
-        } catch (error) {
-            return next(error)
-        }
+  async deleteOne(req, res, next) {
+    try {
+      const result = await PeopleService.checkPessoaDelete(req.params.id);
+      return res.status(204).json(result);
+    } catch (error) {
+      return next(error);
     }
+  }
 
-    async updateById(req, res, next) {
-        try {
-            await PeopleService.checkIdade(req.body)
-            const result = await PeopleService.checkPessoaUpdate(req.params.id, req.body)
-            return res.status(200).json(serialize(result))
-        } catch (error) {
-            return next(error)
-        }
+  async updateById(req, res, next) {
+    try {
+      await PeopleService.checkIdade(req.body);
+      const result = await PeopleService.checkPessoaUpdate(req.params.id, req.body);
+      return res.status(200).json(serialize(result));
+    } catch (error) {
+      return next(error);
     }
+  }
 }
 
-module.exports = new PeopleController()
+module.exports = new PeopleController();

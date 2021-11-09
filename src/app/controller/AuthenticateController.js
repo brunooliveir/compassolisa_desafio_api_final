@@ -1,14 +1,14 @@
-const AuthenticateService = require('../service/AuthenticateService')
+const AuthenticateService = require('../service/AuthenticateService');
 
 class AuthenticateController {
-    async authenticate(req, res, next) {
-        try {
-            const result = await AuthenticateService.authenticate(req.body)
-            return res.status(201).json(result)
-        } catch (error) {
-            return next(error)
-        }
+  async authenticate(req, res, next) {
+    try {
+      const result = await AuthenticateService.authenticate(req.body);
+      return res.status(201).json(result);
+    } catch (error) {
+      return next(error);
     }
+  }
 }
 
-module.exports = new AuthenticateController()
+module.exports = new AuthenticateController();

@@ -1,90 +1,94 @@
-const RentalRepository = require('../repository/RentalRepository')
-const MatrizLargerThanOneError = require('../errors/rental/MatrizLargerThanOneError')
-const RentalParameterNotFound = require('../errors/rental/RentalParameterNotFound')
+const RentalRepository = require('../repository/RentalRepository');
+const MatrizLargerThanOneError = require('../errors/rental/MatrizLargerThanOneError');
+const RentalParameterNotFound = require('../errors/rental/RentalParameterNotFound');
 
 class RentalService {
-    async create(payload) {
-        let matrizDeclared = 0
-        payload.endereco.forEach(element => {
-            if (!element.isFilial) {
-                matrizDeclared += 1
-            }
-        })
-        if (matrizDeclared > 1) {
-            throw new MatrizLargerThanOneError(matrizDeclared)
-        }
-        const locadora = await RentalRepository.create(payload)
-        return locadora
+  async create(payload) {
+    let matrizDeclared = 0;
+    payload.endereco.forEach((element) => {
+      if (!element.isFilial) {
+        matrizDeclared += 1;
+      }
+    });
+    if (matrizDeclared > 1) {
+      throw new MatrizLargerThanOneError(matrizDeclared);
     }
+    const locadora = await RentalRepository.create(payload);
+    return locadora;
+  }
 
-    async checkLocadoraId(payload) {
-        const locadora = await RentalRepository.findOneById(payload)
-        return locadora
+  async checkLocadoraId(payload) {
+    const locadora = await RentalRepository.findOneById(payload);
+    return locadora;
+  }
+
+  async checkQuery(payload) {
+    Object.keys(payload).forEach((element) => {
+      if (
+        element === 'cep' ||
+        element === 'logradouro' ||
+        element === 'bairro' ||
+        element === 'number' ||
+        element === 'localidade' ||
+        element === 'uf' ||
+        element === 'isFilial'
+      ) {
+        const valueOfElement = payload[element];
+        delete payload[element];
+        const newElement = `endereco.${element}`;
+        const newKeyValue = {
+          [newElement]: valueOfElement
+        };
+        Object.assign(payload, newKeyValue);
+      }
+    });
+
+    if (payload.limit) {
+      payload.limit = parseInt(payload.limit, 10);
     }
-
-    async checkQuery(payload) {
-        Object.keys(payload).forEach(element => {
-            if (element == 'cep' ||
-                element == 'logradouro' ||
-                element == 'bairro' ||
-                element == 'number' ||
-                element == 'localidade' ||
-                element == 'uf' ||
-                element == 'isFilial') {
-                const valueOfElement = payload[element]
-                delete payload[element]
-                element = `endereco.${element}`
-                const newKeyValue = {
-                    [element]: valueOfElement
-                }
-                Object.assign(payload, newKeyValue)
-            }
-        })
-
-        if (!!payload.limit) {
-            payload.limit = parseInt(payload.limit)
-        }
-        if (!!payload.offset) {
-            payload.offset = parseInt(payload.offset)
-            payload.skip = payload.offset
-        }
-        if (!!payload.offsets) {
-            payload.offsets = parseInt(payload.offsets)
-            if (!!payload.skip) {
-                payload.skip += payload.offsets
-            } else {
-                payload.skip = payload.offsets
-            }
-        }
-        const locadoras = await RentalRepository.findByQuery(payload)
-        const { limit, offset, offsets, skip, ...locadorasWithOutPagination } = payload
-        const locadorasTotal = (await RentalRepository.findByQuery(locadorasWithOutPagination)).length
-        if (locadorasTotal == 0) {
-            throw new RentalParameterNotFound(payload)
-        }
-        return { locadoras: locadoras, total: locadorasTotal, limit: payload.limit, offset: payload.offset, offsets: payload.offsets }
+    if (payload.offset) {
+      payload.offset = parseInt(payload.offset, 10);
+      payload.skip = payload.offset;
     }
-
-    async checkLocadoraDelete(id) {
-        await RentalRepository.deleteOne(id)
-        return
+    if (payload.offsets) {
+      payload.offsets = parseInt(payload.offsets, 10);
+      if (payload.skip) {
+        payload.skip += payload.offsets;
+      } else {
+        payload.skip = payload.offsets;
+      }
     }
-
-    async checkLocadoraUpdate(id, payload) {
-        let matrizDeclared = 0
-        payload.endereco.forEach(element => {
-            if (!element.isFilial) {
-                matrizDeclared += 1
-            }
-        })
-        if (matrizDeclared > 1) {
-            throw new MatrizLargerThanOneError(matrizDeclared)
-        }
-        return await RentalRepository.UpdateOneById(id, payload)
+    const locadoras = await RentalRepository.findByQuery(payload);
+    const { limit, offset, offsets, skip, ...locadorasWithOutPagination } = payload;
+    const locadorasTotal = (await RentalRepository.findByQuery(locadorasWithOutPagination)).length;
+    if (locadorasTotal === 0) {
+      throw new RentalParameterNotFound(payload);
     }
+    return {
+      locadoras,
+      total: locadorasTotal,
+      limit: payload.limit,
+      offset: payload.offset,
+      offsets: payload.offsets
+    };
+  }
 
+  async checkLocadoraDelete(id) {
+    await RentalRepository.deleteOne(id);
+  }
 
-
+  async checkLocadoraUpdate(id, payload) {
+    let matrizDeclared = 0;
+    payload.endereco.forEach((element) => {
+      if (!element.isFilial) {
+        matrizDeclared += 1;
+      }
+    });
+    if (matrizDeclared > 1) {
+      throw new MatrizLargerThanOneError(matrizDeclared);
+    }
+    return RentalRepository.UpdateOneById(id, payload);
+  }
 }
 
-module.exports = new RentalService()
+module.exports = new RentalService();
