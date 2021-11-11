@@ -2,8 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const header = require('./header');
 const router = require('./routes');
-const PeopleErrors = require('./app/errors/people/index');
-const CarErrors = require('./app/errors/car/index');
+const errors = require('./app/middlewares/errors');
 require('./infra/database/mongo').connect();
 
 class App {
@@ -17,8 +16,7 @@ class App {
     this.server.use(header);
     this.server.use(cors());
     this.server.use(express.json());
-    this.server.use(PeopleErrors);
-    this.server.use(CarErrors);
+    this.server.use(errors);
   }
 
   routes() {

@@ -3,11 +3,11 @@ const Joi = require('joi');
 module.exports = async (req, res, next) => {
   try {
     const id = Joi.object({
-      id: Joi.string()
+      idVeiculo: Joi.string()
         .required()
         .id()
         .regex(/[0-9A-Fa-f]/),
-      id_acessorio: Joi.string()
+      idAcessorio: Joi.string()
         .required()
         .id()
         .regex(/[0-9A-Fa-f]/)

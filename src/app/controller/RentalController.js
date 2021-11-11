@@ -11,36 +11,36 @@ class RentalController {
     }
   }
 
-  async findOneById(req, res, next) {
+  async get(req, res, next) {
     try {
-      const result = await RentalService.checkLocadoraId(req.params.id);
+      const result = await RentalService.getById(req.params.id);
       return res.status(200).json(serialize(result));
     } catch (error) {
       return next(error);
     }
   }
 
-  async listQuery(req, res, next) {
+  async getAll(req, res, next) {
     try {
-      const result = await RentalService.checkQuery(req.query);
+      const result = await RentalService.getAll(req.query);
       return res.status(200).json(paginateSerialize(result));
     } catch (error) {
       return next(error);
     }
   }
 
-  async deleteOne(req, res, next) {
+  async delete(req, res, next) {
     try {
-      const result = await RentalService.checkLocadoraDelete(req.params.id);
+      const result = await RentalService.delete(req.params.id);
       return res.status(204).json(result);
     } catch (error) {
       return next(error);
     }
   }
 
-  async updateById(req, res, next) {
+  async update(req, res, next) {
     try {
-      const result = await RentalService.checkLocadoraUpdate(req.params.id, req.body);
+      const result = await RentalService.update(req.params.id, req.body);
       return res.status(200).json(serialize(result));
     } catch (error) {
       return next(error);

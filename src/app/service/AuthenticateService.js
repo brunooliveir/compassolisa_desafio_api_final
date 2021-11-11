@@ -1,16 +1,11 @@
 const PeopleRepository = require('../repository/PeopleRepository');
-const Jwt = require('../authentication/jwt');
-const NotAutenticate = require('../errors/people/NotAutenticate');
+const Jwt = require('../middlewares/jwt');
 
 class AuthenticateService {
   async authenticate(payload) {
-    const finded = await PeopleRepository.findByQuery(payload);
-    if (finded.length === 0) {
-      throw new NotAutenticate(payload.email);
-    }
-    const result = await PeopleRepository.create(finded[0]);
-    const token = await Jwt.sign({ email: result.email, habilitado: result.habilitado });
-    const pessoa = { token, email: result.email, habilitado: result.habilitado };
+    const finded = await PeopleRepository.getOne(payload);
+    const token = await Jwt.sign({ email: finded.email, habilitado: finded.habilitado });
+    const pessoa = { token, email: finded.email, habilitado: finded.habilitado };
     return pessoa;
   }
 }

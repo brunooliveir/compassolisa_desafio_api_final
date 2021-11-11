@@ -16,10 +16,8 @@ const RentalSchema = mongoose.Schema(
       type: String,
       required: true
     },
-    endereco: {
-      type: Array,
-      required: true,
-      of: {
+    endereco: [
+      {
         cep: {
           type: String,
           required: true
@@ -53,7 +51,7 @@ const RentalSchema = mongoose.Schema(
           required: true
         }
       }
-    }
+    ]
   },
   {
     timestamps: {

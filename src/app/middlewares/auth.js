@@ -1,32 +1,30 @@
 const jwt = require('jsonwebtoken');
 const authConfig = require('../../config/config');
-const NoTokenProvided = require('../errors/car/NoTokenProvided');
-const TokenError = require('../errors/car/TokenError');
-const TokenMalformatted = require('../errors/car/TokenMalformatted');
-const TokenInvalid = require('../errors/car/TokenInvalid');
+
+const Unauthorized = require('../errors/Unauthorized');
 
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
-    throw new NoTokenProvided();
+    throw new Unauthorized('No token provided');
   }
 
   const parts = authHeader.split(' ');
 
   if (!parts.lenght === 2) {
-    throw new TokenError(authHeader);
+    throw new Unauthorized('Token error');
   }
 
   const [scheme, token] = parts;
 
   if (!/^Bearer$/i.test(scheme)) {
-    throw new TokenMalformatted(authHeader);
+    throw new Unauthorized('Token mal formatted');
   }
 
   jwt.verify(token, authConfig.database.secret, (error, decoded) => {
     if (error) {
-      throw new TokenInvalid(authHeader);
+      throw new Unauthorized('Invalid token');
     }
 
     req.email = decoded.email;

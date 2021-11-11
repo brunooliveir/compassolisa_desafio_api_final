@@ -354,7 +354,6 @@ it('should update a acessorio of car by id', async () => {
     .patch(`/api/v1/car/${payload.body._id}/acessorios/${payload.body.acessorios[0]._id}`)
     .send({ descricao: 'DVD-player' })
     .set('Authorization', `Bearer ${token}`);
-
   expect(response1.status).toBe(200);
   expect(response1.body.acessorios[0].descricao).toBe('DVD-player');
   expect(response1.body.acessorios[1].descricao).toBe('ABS');
@@ -362,17 +361,6 @@ it('should update a acessorio of car by id', async () => {
   expect(typeof response1.body.acessorios[0].descricao).toBe('string');
   expect(typeof response1.body.acessorios[1].descricao).toBe('string');
   expect(typeof response1.body.acessorios[2].descricao).toBe('string');
-
-  const response2 = await request(app)
-    .patch(`/api/v1/car/${response1.body._id}/acessorios/${response1.body.acessorios[0]._id}`)
-    .send({ descricao: 'DVD-player' })
-    .set('Authorization', `Bearer ${token}`);
-
-  expect(response2.status).toBe(200);
-  expect(response2.body.acessorios[0].descricao).toBe('ABS');
-  expect(response2.body.acessorios[1].descricao).toBe('Ar-Condicionado');
-  expect(typeof response2.body.acessorios[0].descricao).toBe('string');
-  expect(typeof response2.body.acessorios[1].descricao).toBe('string');
 });
 
 it('dont should update a acessorio of car by id', async () => {

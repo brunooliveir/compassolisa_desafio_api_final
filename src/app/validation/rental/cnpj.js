@@ -1,14 +1,9 @@
-const CnpjBadValue = require('../../errors/rental/CnpjBadValue');
+const BadRequest = require('../../errors/BadRequest');
 
 module.exports = async (strCnpjBrute) => {
   const cnpj = strCnpjBrute.replace(/[^\d]+/g, '');
-  if (cnpj === '') {
-    throw new CnpjBadValue(strCnpjBrute);
-  }
-  if (cnpj.length !== 14) {
-    throw new CnpjBadValue(strCnpjBrute);
-  }
-
+  if (cnpj === '') throw new BadRequest(`cnpj ${strCnpjBrute}`);
+  if (cnpj.length !== 14) throw new BadRequest(`cnpj ${strCnpjBrute}`);
   if (
     cnpj === '00000000000000' ||
     cnpj === '11111111111111' ||
@@ -20,9 +15,8 @@ module.exports = async (strCnpjBrute) => {
     cnpj === '77777777777777' ||
     cnpj === '88888888888888' ||
     cnpj === '99999999999999'
-  ) {
-    throw new CnpjBadValue(strCnpjBrute);
-  }
+  )
+    throw new BadRequest(`cnpj ${strCnpjBrute}`);
 
   let length = cnpj.length - 2;
   let numbers = cnpj.substring(0, length);
@@ -32,14 +26,10 @@ module.exports = async (strCnpjBrute) => {
   for (let i = length; i >= 1; i--) {
     sum += numbers.charAt(length - i) * pos;
     pos -= 1;
-    if (pos < 2) {
-      pos = 9;
-    }
+    if (pos < 2) pos = 9;
   }
   let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
-  if (result !== parseInt(digits.charAt(0), 10)) {
-    throw new CnpjBadValue(strCnpjBrute);
-  }
+  if (result !== parseInt(digits.charAt(0), 10)) throw new BadRequest(`cnpj ${strCnpjBrute}`);
   length += 1;
   numbers = cnpj.substring(0, length);
   sum = 0;
@@ -47,14 +37,9 @@ module.exports = async (strCnpjBrute) => {
   for (let i = length; i >= 1; i--) {
     sum += numbers.charAt(length - i) * pos;
     pos -= 1;
-    if (pos < 2) {
-      pos = 9;
-    }
+    if (pos < 2) pos = 9;
   }
   result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
-  if (result !== parseInt(digits.charAt(1), 10)) {
-    throw new CnpjBadValue(strCnpjBrute);
-  }
-
+  if (result !== parseInt(digits.charAt(1), 10)) throw new BadRequest(`cnpj ${strCnpjBrute}`);
   return true;
 };
