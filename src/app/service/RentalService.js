@@ -22,22 +22,12 @@ class RentalService {
   }
 
   formatEndereco(payload) {
+    console.log(Object.keys(payload));
     Object.keys(payload).forEach((element) => {
-      if (
-        element === 'cep' ||
-        element === 'logradouro' ||
-        element === 'bairro' ||
-        element === 'number' ||
-        element === 'localidade' ||
-        element === 'uf' ||
-        element === 'isFilial'
-      ) {
+      if (['cep', 'logradouro', 'bairro', 'number', 'localidade', 'uf', 'isFilial'].includes(element)) {
         const valueOfElement = payload[element];
         delete payload[element];
-        const newElement = `endereco.${element}`;
-        const newKeyValue = {
-          [newElement]: valueOfElement
-        };
+        const newKeyValue = { [`endereco.${element}`]: valueOfElement };
         Object.assign(payload, newKeyValue);
       }
     });

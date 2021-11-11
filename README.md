@@ -16,7 +16,6 @@ O desafio consiste em criar uma API Rest Full da Locadora de veículos Compassol
 <ul>
 <li>joi/date v2.1.0</li>
 <li>axios v0.24.0</li>
-<li>cors v2.8.5,</li>
 <li>dotenv v10.0.0,</li>
 <li>express v4.17.1,</li>
 <li>joi v17.4.2,</li>
