@@ -22,7 +22,6 @@ class RentalService {
   }
 
   formatEndereco(payload) {
-    console.log(Object.keys(payload));
     Object.keys(payload).forEach((element) => {
       if (['cep', 'logradouro', 'bairro', 'number', 'localidade', 'uf', 'isFilial'].includes(element)) {
         const valueOfElement = payload[element];
