@@ -1,5 +1,7 @@
 const Joi = require('joi');
+const errorFormatted = require('../helpers/errorFormatter');
 const CnpjChecker = require('./cnpj');
+const { numberRegex } = require('../helpers/regex');
 
 const LIMIT_MINIMUM_STRING_LENGHT = 3;
 const LIMIT_MAXIMUM_STRING_LENGHT = 150;
@@ -29,7 +31,7 @@ module.exports = async (req, res, next) => {
               .min(LIMIT_MINIMUM_ENDERECO_NUMBER)
               .max(LIMIT_MAXIMUM_ENDERECO_NUMBER)
               .required()
-              .regex(/[0-9A-Za-z]/),
+              .regex(numberRegex),
             complemento: Joi.string().trim().max(LIMIT_MAXIMUM_CEP_LENGHT).lowercase(),
             isFilial: Joi.boolean().required()
           })
@@ -54,15 +56,6 @@ module.exports = async (req, res, next) => {
     if (error) throw error;
     return next();
   } catch (error) {
-    const reworkedError = [];
-    if (error.details.length > 1) {
-      error.details.forEach((element) => {
-        reworkedError[error.details.indexOf(element)] = { description: element.path[0], name: element.message };
-      });
-    } else {
-      return res.status(400).json({ description: error.details[0].path[0], name: error.details[0].message });
-    }
-
-    return res.status(400).json(reworkedError);
+    return res.status(400).json(errorFormatted(error));
   }
 };

@@ -13,7 +13,9 @@ const carSchema = mongoose.Schema(
     },
     ano: {
       type: Number,
-      required: true
+      required: true,
+      min: 1949,
+      max: 2023
     },
     acessorios: [
       {
@@ -25,7 +27,8 @@ const carSchema = mongoose.Schema(
     ],
     quantidadePassageiros: {
       type: Number,
-      required: true
+      required: true,
+      min: 0
     }
   },
   {

@@ -1,6 +1,6 @@
 const PeopleController = require('../app/controller/PeopleController');
 const createValidation = require('../app/validation/people/create');
-const idValidation = require('../app/validation/people/id');
+const idValidation = require('../app/validation/id');
 const errors = require('../app/middlewares/errors');
 
 module.exports = (server, routes, prefix = '/api/v1/people') => {

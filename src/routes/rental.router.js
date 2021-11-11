@@ -1,6 +1,6 @@
 const RentalController = require('../app/controller/RentalController');
 const createValidation = require('../app/validation/rental/create');
-const idValidation = require('../app/validation/rental/id');
+const idValidation = require('../app/validation/id');
 const errors = require('../app/middlewares/errors');
 
 module.exports = (server, routes, prefix = '/api/v1/rental') => {
