@@ -41,8 +41,13 @@ O desafio consiste em criar uma API Rest Full da Locadora de veículos Compassol
 
 **Cobertura de testes:**
 
-93.73% Statements 1346/1436, 74.52% Branches 196/263, 96% Functions 96/100, 93.73% Lines 1346/1436
-
+<ul>
+<li>93.73% Statements 1346/1436</li>
+<li>74.52% Branches 196/263</li>
+<li>96% Functions 96/100</li>
+<li>93.73% Lines 1346/1436</li>
+</ul>
+    
 ## Como rodar a API
 
 Requisitos: Node.js e MongoDB instalados, ou docker-compose instalado.
