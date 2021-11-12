@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "lint": "npx eslint . --fix",
-        "test": "jest",
+        "test": "jest --runInBand",
         "start": "node src/server.js",
         "dev": "nodemon src/server.js"
     },
