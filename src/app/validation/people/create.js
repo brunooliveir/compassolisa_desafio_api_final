@@ -30,11 +30,7 @@ module.exports = async (req, res, next) => {
 
     try {
       const strCpfBrute = await schema.validate(req.body).value.cpf;
-      if (strCpfBrute) {
-        if (strCpfBrute.length <= LIMIT_MAXIMUM_CPF_STRING_LENGHT) {
-          await CpfChecker(strCpfBrute);
-        }
-      }
+      if (strCpfBrute) await CpfChecker(strCpfBrute);
     } catch (error) {
       return next(error);
     }

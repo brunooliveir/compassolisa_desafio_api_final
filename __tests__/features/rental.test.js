@@ -35,22 +35,40 @@ it('should create a rental', async () => {
 
   const response = await request(app).post('/api/v1/rental/').send(locadoraTest);
   expect(response.status).toBe(201);
-  expect(response.body.nome).toBe(locadoraTest.nome);
-  expect(response.body.cnpj).toBe(locadoraTest.cnpj);
-  expect(response.body.atividades).toBe(locadoraTest.atividades);
-  expect(response.body.endereco.cep).toBe(locadoraTest.endereco.cep);
-  expect(response.body.endereco.number).toBe(locadoraTest.endereco.number);
-  expect(response.body.endereco.descricao).toBe(locadoraTest.endereco.descricao);
-  expect(response.body.endereco.complemento).toBe(locadoraTest.endereco.complemento);
-  expect(response.body.endereco.isFilial).toBe(locadoraTest.endereco.isFilial);
-  expect(typeof response.body.nome).toBe('string');
-  expect(typeof response.body.cnpj).toBe('string');
-  expect(typeof response.body.atividades).toBe('string');
-  expect(typeof response.body.endereco[0].cep).toBe('string');
-  expect(typeof response.body.endereco[0].number).toBe('string');
-  expect(typeof response.body.endereco[0].descricao).toBe('undefined');
-  expect(typeof response.body.endereco[0].complemento).toBe('string');
-  expect(typeof response.body.endereco[0].isFilial).toBe('undefined');
+  expect(response.body).toEqual({
+    _id: expect.any(String),
+    nome: locadoraTest.nome,
+    cnpj: locadoraTest.cnpj,
+    atividades: locadoraTest.atividades,
+    endereco: [
+      {
+        bairro: expect.any(String),
+        cep: locadoraTest.endereco[0].cep,
+        complemento: expect.any(String),
+        localidade: expect.any(String),
+        logradouro: expect.any(String),
+        number: locadoraTest.endereco[0].number,
+        uf: expect.any(String)
+      }
+    ]
+  });
+  expect(response.body).toEqual({
+    _id: expect.any(String),
+    nome: expect.any(String),
+    cnpj: expect.any(String),
+    atividades: expect.any(String),
+    endereco: [
+      {
+        bairro: expect.any(String),
+        cep: expect.any(String),
+        complemento: expect.any(String),
+        localidade: expect.any(String),
+        logradouro: expect.any(String),
+        number: expect.any(String),
+        uf: expect.any(String)
+      }
+    ]
+  });
 });
 
 it('dont should create a rental', async () => {
@@ -95,22 +113,40 @@ it('should get a rental by id', async () => {
   const response = await request(app).get(`/api/v1/rental/${payload.body._id}`).send();
 
   expect(response.status).toBe(200);
-  expect(response.body.nome).toBe(locadoraTest.nome);
-  expect(response.body.cnpj).toBe(locadoraTest.cnpj);
-  expect(response.body.atividades).toBe(locadoraTest.atividades);
-  expect(response.body.endereco.cep).toBe(locadoraTest.endereco.cep);
-  expect(response.body.endereco.number).toBe(locadoraTest.endereco.number);
-  expect(response.body.endereco.descricao).toBe(locadoraTest.endereco.descricao);
-  expect(response.body.endereco.complemento).toBe(locadoraTest.endereco.complemento);
-  expect(response.body.endereco.isFilial).toBe(locadoraTest.endereco.isFilial);
-  expect(typeof response.body.nome).toBe('string');
-  expect(typeof response.body.cnpj).toBe('string');
-  expect(typeof response.body.atividades).toBe('string');
-  expect(typeof response.body.endereco[0].cep).toBe('string');
-  expect(typeof response.body.endereco[0].number).toBe('string');
-  expect(typeof response.body.endereco[0].descricao).toBe('undefined');
-  expect(typeof response.body.endereco[0].complemento).toBe('string');
-  expect(typeof response.body.endereco[0].isFilial).toBe('undefined');
+  expect(response.body).toEqual({
+    _id: payload.body._id,
+    nome: locadoraTest.nome,
+    cnpj: locadoraTest.cnpj,
+    atividades: locadoraTest.atividades,
+    endereco: [
+      {
+        bairro: payload.body.endereco[0].bairro,
+        cep: locadoraTest.endereco[0].cep,
+        complemento: payload.body.endereco[0].complemento,
+        localidade: payload.body.endereco[0].localidade,
+        logradouro: payload.body.endereco[0].logradouro,
+        number: locadoraTest.endereco[0].number,
+        uf: payload.body.endereco[0].uf
+      }
+    ]
+  });
+  expect(response.body).toEqual({
+    _id: expect.any(String),
+    nome: expect.any(String),
+    cnpj: expect.any(String),
+    atividades: expect.any(String),
+    endereco: [
+      {
+        bairro: expect.any(String),
+        cep: expect.any(String),
+        complemento: expect.any(String),
+        localidade: expect.any(String),
+        logradouro: expect.any(String),
+        number: expect.any(String),
+        uf: expect.any(String)
+      }
+    ]
+  });
 });
 
 it('should reject id, bad argument', async () => {
@@ -152,148 +188,329 @@ it('should get a rental by params', async () => {
   const responseNome = await request(app).get(`${'/api/v1/rental/?nome='}${payload.body.nome}`).send();
 
   expect(responseNome.status).toBe(200);
-  expect(responseNome.body.locadoras[0].nome).toBe(locadoraTest.nome);
-  expect(responseNome.body.locadoras[0].cnpj).toBe(locadoraTest.cnpj);
-  expect(responseNome.body.locadoras[0].atividades).toBe(locadoraTest.atividades);
-  expect(responseNome.body.locadoras[0].endereco.cep).toBe(locadoraTest.endereco.cep);
-  expect(responseNome.body.locadoras[0].endereco.number).toBe(locadoraTest.endereco.number);
-  expect(responseNome.body.locadoras[0].endereco.descricao).toBe(locadoraTest.endereco.descricao);
-  expect(responseNome.body.locadoras[0].endereco.complemento).toBe(locadoraTest.endereco.complemento);
-  expect(responseNome.body.locadoras[0].endereco.isFilial).toBe(locadoraTest.endereco.isFilial);
-  expect(typeof responseNome.body.locadoras[0].nome).toBe('string');
-  expect(typeof responseNome.body.locadoras[0].cnpj).toBe('string');
-  expect(typeof responseNome.body.locadoras[0].atividades).toBe('string');
-  expect(typeof responseNome.body.locadoras[0].endereco[0].cep).toBe('string');
-  expect(typeof responseNome.body.locadoras[0].endereco[0].number).toBe('string');
-  expect(typeof responseNome.body.locadoras[0].endereco[0].descricao).toBe('undefined');
-  expect(typeof responseNome.body.locadoras[0].endereco[0].complemento).toBe('string');
-  expect(typeof responseNome.body.locadoras[0].endereco[0].isFilial).toBe('undefined');
+  expect(responseNome.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        nome: locadoraTest.nome,
+        cnpj: locadoraTest.cnpj,
+        atividades: locadoraTest.atividades,
+        endereco: [
+          {
+            bairro: payload.body.endereco[0].bairro,
+            cep: locadoraTest.endereco[0].cep,
+            complemento: payload.body.endereco[0].complemento,
+            localidade: payload.body.endereco[0].localidade,
+            logradouro: payload.body.endereco[0].logradouro,
+            number: locadoraTest.endereco[0].number,
+            uf: payload.body.endereco[0].uf
+          }
+        ]
+      }
+    ])
+  );
+  expect(responseNome.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        nome: expect.any(String),
+        cnpj: expect.any(String),
+        atividades: expect.any(String),
+        endereco: [
+          {
+            bairro: expect.any(String),
+            cep: expect.any(String),
+            complemento: expect.any(String),
+            localidade: expect.any(String),
+            logradouro: expect.any(String),
+            number: expect.any(String),
+            uf: expect.any(String)
+          }
+        ]
+      }
+    ])
+  );
 
   const responseCnpj = await request(app).get(`${'/api/v1/rental/?cnpj='}${payload.body.cnpj}`).send();
 
   expect(responseCnpj.status).toBe(200);
-  expect(responseCnpj.body.locadoras[0].nome).toBe(locadoraTest.nome);
-  expect(responseCnpj.body.locadoras[0].cnpj).toBe(locadoraTest.cnpj);
-  expect(responseCnpj.body.locadoras[0].atividades).toBe(locadoraTest.atividades);
-  expect(responseCnpj.body.locadoras[0].endereco.cep).toBe(locadoraTest.endereco.cep);
-  expect(responseCnpj.body.locadoras[0].endereco.number).toBe(locadoraTest.endereco.number);
-  expect(responseCnpj.body.locadoras[0].endereco.descricao).toBe(locadoraTest.endereco.descricao);
-  expect(responseCnpj.body.locadoras[0].endereco.complemento).toBe(locadoraTest.endereco.complemento);
-  expect(responseCnpj.body.locadoras[0].endereco.isFilial).toBe(locadoraTest.endereco.isFilial);
-  expect(typeof responseCnpj.body.locadoras[0].nome).toBe('string');
-  expect(typeof responseCnpj.body.locadoras[0].cnpj).toBe('string');
-  expect(typeof responseCnpj.body.locadoras[0].atividades).toBe('string');
-  expect(typeof responseCnpj.body.locadoras[0].endereco[0].cep).toBe('string');
-  expect(typeof responseCnpj.body.locadoras[0].endereco[0].number).toBe('string');
-  expect(typeof responseCnpj.body.locadoras[0].endereco[0].descricao).toBe('undefined');
-  expect(typeof responseCnpj.body.locadoras[0].endereco[0].complemento).toBe('string');
-  expect(typeof responseCnpj.body.locadoras[0].endereco[0].isFilial).toBe('undefined');
+  expect(responseCnpj.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        nome: locadoraTest.nome,
+        cnpj: locadoraTest.cnpj,
+        atividades: locadoraTest.atividades,
+        endereco: [
+          {
+            bairro: payload.body.endereco[0].bairro,
+            cep: locadoraTest.endereco[0].cep,
+            complemento: payload.body.endereco[0].complemento,
+            localidade: payload.body.endereco[0].localidade,
+            logradouro: payload.body.endereco[0].logradouro,
+            number: locadoraTest.endereco[0].number,
+            uf: payload.body.endereco[0].uf
+          }
+        ]
+      }
+    ])
+  );
+  expect(responseCnpj.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        nome: expect.any(String),
+        cnpj: expect.any(String),
+        atividades: expect.any(String),
+        endereco: [
+          {
+            bairro: expect.any(String),
+            cep: expect.any(String),
+            complemento: expect.any(String),
+            localidade: expect.any(String),
+            logradouro: expect.any(String),
+            number: expect.any(String),
+            uf: expect.any(String)
+          }
+        ]
+      }
+    ])
+  );
 
   const responseCep = await request(app).get(`${'/api/v1/rental/?cep='}${payload.body.endereco[0].cep}`).send();
 
   expect(responseCep.status).toBe(200);
-  expect(responseCep.body.locadoras[0].nome).toBe(locadoraTest.nome);
-  expect(responseCep.body.locadoras[0].cnpj).toBe(locadoraTest.cnpj);
-  expect(responseCep.body.locadoras[0].atividades).toBe(locadoraTest.atividades);
-  expect(responseCep.body.locadoras[0].endereco.cep).toBe(locadoraTest.endereco.cep);
-  expect(responseCep.body.locadoras[0].endereco.number).toBe(locadoraTest.endereco.number);
-  expect(responseCep.body.locadoras[0].endereco.descricao).toBe(locadoraTest.endereco.descricao);
-  expect(responseCep.body.locadoras[0].endereco.complemento).toBe(locadoraTest.endereco.complemento);
-  expect(responseCep.body.locadoras[0].endereco.isFilial).toBe(locadoraTest.endereco.isFilial);
-  expect(typeof responseCep.body.locadoras[0].nome).toBe('string');
-  expect(typeof responseCep.body.locadoras[0].cnpj).toBe('string');
-  expect(typeof responseCep.body.locadoras[0].atividades).toBe('string');
-  expect(typeof responseCep.body.locadoras[0].endereco[0].cep).toBe('string');
-  expect(typeof responseCep.body.locadoras[0].endereco[0].number).toBe('string');
-  expect(typeof responseCep.body.locadoras[0].endereco[0].descricao).toBe('undefined');
-  expect(typeof responseCep.body.locadoras[0].endereco[0].complemento).toBe('string');
-  expect(typeof responseCep.body.locadoras[0].endereco[0].isFilial).toBe('undefined');
+  expect(responseCep.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        nome: locadoraTest.nome,
+        cnpj: locadoraTest.cnpj,
+        atividades: locadoraTest.atividades,
+        endereco: [
+          {
+            bairro: payload.body.endereco[0].bairro,
+            cep: locadoraTest.endereco[0].cep,
+            complemento: payload.body.endereco[0].complemento,
+            localidade: payload.body.endereco[0].localidade,
+            logradouro: payload.body.endereco[0].logradouro,
+            number: locadoraTest.endereco[0].number,
+            uf: payload.body.endereco[0].uf
+          }
+        ]
+      }
+    ])
+  );
+  expect(responseCep.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        nome: expect.any(String),
+        cnpj: expect.any(String),
+        atividades: expect.any(String),
+        endereco: [
+          {
+            bairro: expect.any(String),
+            cep: expect.any(String),
+            complemento: expect.any(String),
+            localidade: expect.any(String),
+            logradouro: expect.any(String),
+            number: expect.any(String),
+            uf: expect.any(String)
+          }
+        ]
+      }
+    ])
+  );
 
   const responseNumber = await request(app)
     .get(`${'/api/v1/rental/?number='}${payload.body.endereco[0].number}`)
     .send();
 
   expect(responseNumber.status).toBe(200);
-  expect(responseNumber.body.locadoras[0].nome).toBe(locadoraTest.nome);
-  expect(responseNumber.body.locadoras[0].cnpj).toBe(locadoraTest.cnpj);
-  expect(responseNumber.body.locadoras[0].atividades).toBe(locadoraTest.atividades);
-  expect(responseNumber.body.locadoras[0].endereco.cep).toBe(locadoraTest.endereco.cep);
-  expect(responseNumber.body.locadoras[0].endereco.number).toBe(locadoraTest.endereco.number);
-  expect(responseNumber.body.locadoras[0].endereco.descricao).toBe(locadoraTest.endereco.descricao);
-  expect(responseNumber.body.locadoras[0].endereco.complemento).toBe(locadoraTest.endereco.complemento);
-  expect(responseNumber.body.locadoras[0].endereco.isFilial).toBe(locadoraTest.endereco.isFilial);
-  expect(typeof responseNumber.body.locadoras[0].nome).toBe('string');
-  expect(typeof responseNumber.body.locadoras[0].cnpj).toBe('string');
-  expect(typeof responseNumber.body.locadoras[0].atividades).toBe('string');
-  expect(typeof responseNumber.body.locadoras[0].endereco[0].cep).toBe('string');
-  expect(typeof responseNumber.body.locadoras[0].endereco[0].number).toBe('string');
-  expect(typeof responseNumber.body.locadoras[0].endereco[0].descricao).toBe('undefined');
-  expect(typeof responseNumber.body.locadoras[0].endereco[0].complemento).toBe('string');
-  expect(typeof responseNumber.body.locadoras[0].endereco[0].isFilial).toBe('undefined');
+  expect(responseNumber.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        nome: locadoraTest.nome,
+        cnpj: locadoraTest.cnpj,
+        atividades: locadoraTest.atividades,
+        endereco: [
+          {
+            bairro: payload.body.endereco[0].bairro,
+            cep: locadoraTest.endereco[0].cep,
+            complemento: payload.body.endereco[0].complemento,
+            localidade: payload.body.endereco[0].localidade,
+            logradouro: payload.body.endereco[0].logradouro,
+            number: locadoraTest.endereco[0].number,
+            uf: payload.body.endereco[0].uf
+          }
+        ]
+      }
+    ])
+  );
+  expect(responseNumber.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        nome: expect.any(String),
+        cnpj: expect.any(String),
+        atividades: expect.any(String),
+        endereco: [
+          {
+            bairro: expect.any(String),
+            cep: expect.any(String),
+            complemento: expect.any(String),
+            localidade: expect.any(String),
+            logradouro: expect.any(String),
+            number: expect.any(String),
+            uf: expect.any(String)
+          }
+        ]
+      }
+    ])
+  );
 
   const responseDescricao = await request(app)
     .get(`${'/api/v1/rental/?descricao='}${payload.body.endereco[0].descricao}`)
     .send();
 
   expect(responseDescricao.status).toBe(200);
-  expect(responseDescricao.body.locadoras[0].nome).toBe(locadoraTest.nome);
-  expect(responseDescricao.body.locadoras[0].cnpj).toBe(locadoraTest.cnpj);
-  expect(responseDescricao.body.locadoras[0].atividades).toBe(locadoraTest.atividades);
-  expect(responseDescricao.body.locadoras[0].endereco.cep).toBe(locadoraTest.endereco.cep);
-  expect(responseDescricao.body.locadoras[0].endereco.number).toBe(locadoraTest.endereco.number);
-  expect(responseDescricao.body.locadoras[0].endereco.descricao).toBe(locadoraTest.endereco.descricao);
-  expect(responseDescricao.body.locadoras[0].endereco.complemento).toBe(locadoraTest.endereco.complemento);
-  expect(responseDescricao.body.locadoras[0].endereco.isFilial).toBe(locadoraTest.endereco.isFilial);
-  expect(typeof responseDescricao.body.locadoras[0].nome).toBe('string');
-  expect(typeof responseDescricao.body.locadoras[0].cnpj).toBe('string');
-  expect(typeof responseDescricao.body.locadoras[0].atividades).toBe('string');
-  expect(typeof responseDescricao.body.locadoras[0].endereco[0].cep).toBe('string');
-  expect(typeof responseDescricao.body.locadoras[0].endereco[0].number).toBe('string');
-  expect(typeof responseDescricao.body.locadoras[0].endereco[0].descricao).toBe('undefined');
-  expect(typeof responseDescricao.body.locadoras[0].endereco[0].complemento).toBe('string');
-  expect(typeof responseDescricao.body.locadoras[0].endereco[0].isFilial).toBe('undefined');
+  expect(responseDescricao.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        nome: locadoraTest.nome,
+        cnpj: locadoraTest.cnpj,
+        atividades: locadoraTest.atividades,
+        endereco: [
+          {
+            bairro: payload.body.endereco[0].bairro,
+            cep: locadoraTest.endereco[0].cep,
+            complemento: payload.body.endereco[0].complemento,
+            localidade: payload.body.endereco[0].localidade,
+            logradouro: payload.body.endereco[0].logradouro,
+            number: locadoraTest.endereco[0].number,
+            uf: payload.body.endereco[0].uf
+          }
+        ]
+      }
+    ])
+  );
+  expect(responseDescricao.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        nome: expect.any(String),
+        cnpj: expect.any(String),
+        atividades: expect.any(String),
+        endereco: [
+          {
+            bairro: expect.any(String),
+            cep: expect.any(String),
+            complemento: expect.any(String),
+            localidade: expect.any(String),
+            logradouro: expect.any(String),
+            number: expect.any(String),
+            uf: expect.any(String)
+          }
+        ]
+      }
+    ])
+  );
 
   const responseComplemento = await request(app)
     .get(`${'/api/v1/rental/?complemento='}${payload.body.endereco[0].complemento}`)
     .send();
 
   expect(responseComplemento.status).toBe(200);
-  expect(responseComplemento.body.locadoras[0].nome).toBe(locadoraTest.nome);
-  expect(responseComplemento.body.locadoras[0].cnpj).toBe(locadoraTest.cnpj);
-  expect(responseComplemento.body.locadoras[0].atividades).toBe(locadoraTest.atividades);
-  expect(responseComplemento.body.locadoras[0].endereco.cep).toBe(locadoraTest.endereco.cep);
-  expect(responseComplemento.body.locadoras[0].endereco.number).toBe(locadoraTest.endereco.number);
-  expect(responseComplemento.body.locadoras[0].endereco.descricao).toBe(locadoraTest.endereco.descricao);
-  expect(responseComplemento.body.locadoras[0].endereco.complemento).toBe(locadoraTest.endereco.complemento);
-  expect(responseComplemento.body.locadoras[0].endereco.isFilial).toBe(locadoraTest.endereco.isFilial);
-  expect(typeof responseComplemento.body.locadoras[0].nome).toBe('string');
-  expect(typeof responseComplemento.body.locadoras[0].cnpj).toBe('string');
-  expect(typeof responseComplemento.body.locadoras[0].atividades).toBe('string');
-  expect(typeof responseComplemento.body.locadoras[0].endereco[0].cep).toBe('string');
-  expect(typeof responseComplemento.body.locadoras[0].endereco[0].number).toBe('string');
-  expect(typeof responseComplemento.body.locadoras[0].endereco[0].descricao).toBe('undefined');
-  expect(typeof responseComplemento.body.locadoras[0].endereco[0].complemento).toBe('string');
-  expect(typeof responseComplemento.body.locadoras[0].endereco[0].isFilial).toBe('undefined');
+  expect(responseComplemento.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        nome: locadoraTest.nome,
+        cnpj: locadoraTest.cnpj,
+        atividades: locadoraTest.atividades,
+        endereco: [
+          {
+            bairro: payload.body.endereco[0].bairro,
+            cep: locadoraTest.endereco[0].cep,
+            complemento: payload.body.endereco[0].complemento,
+            localidade: payload.body.endereco[0].localidade,
+            logradouro: payload.body.endereco[0].logradouro,
+            number: locadoraTest.endereco[0].number,
+            uf: payload.body.endereco[0].uf
+          }
+        ]
+      }
+    ])
+  );
+  expect(responseComplemento.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        nome: expect.any(String),
+        cnpj: expect.any(String),
+        atividades: expect.any(String),
+        endereco: [
+          {
+            bairro: expect.any(String),
+            cep: expect.any(String),
+            complemento: expect.any(String),
+            localidade: expect.any(String),
+            logradouro: expect.any(String),
+            number: expect.any(String),
+            uf: expect.any(String)
+          }
+        ]
+      }
+    ])
+  );
 
   const responseFlilial = await request(app).get('/api/v1/rental/?isFilial=true').send();
 
-  expect(responseFlilial.status).toBe(200);
-  expect(responseFlilial.body.locadoras[0].nome).toBe(locadoraTest.nome);
-  expect(responseFlilial.body.locadoras[0].cnpj).toBe(locadoraTest.cnpj);
-  expect(responseFlilial.body.locadoras[0].atividades).toBe(locadoraTest.atividades);
-  expect(responseFlilial.body.locadoras[0].endereco.cep).toBe(locadoraTest.endereco.cep);
-  expect(responseFlilial.body.locadoras[0].endereco.number).toBe(locadoraTest.endereco.number);
-  expect(responseFlilial.body.locadoras[0].endereco.descricao).toBe(locadoraTest.endereco.descricao);
-  expect(responseFlilial.body.locadoras[0].endereco.complemento).toBe(locadoraTest.endereco.complemento);
-  expect(responseFlilial.body.locadoras[0].endereco.isFilial).toBe(locadoraTest.endereco.isFilial);
-  expect(typeof responseFlilial.body.locadoras[0].nome).toBe('string');
-  expect(typeof responseFlilial.body.locadoras[0].cnpj).toBe('string');
-  expect(typeof responseFlilial.body.locadoras[0].atividades).toBe('string');
-  expect(typeof responseFlilial.body.locadoras[0].endereco[0].cep).toBe('string');
-  expect(typeof responseFlilial.body.locadoras[0].endereco[0].number).toBe('string');
-  expect(typeof responseFlilial.body.locadoras[0].endereco[0].descricao).toBe('undefined');
-  expect(typeof responseFlilial.body.locadoras[0].endereco[0].complemento).toBe('string');
-  expect(typeof responseFlilial.body.locadoras[0].endereco[0].isFilial).toBe('undefined');
+  expect(responseFlilial.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        nome: locadoraTest.nome,
+        cnpj: locadoraTest.cnpj,
+        atividades: locadoraTest.atividades,
+        endereco: [
+          {
+            bairro: payload.body.endereco[0].bairro,
+            cep: locadoraTest.endereco[0].cep,
+            complemento: payload.body.endereco[0].complemento,
+            localidade: payload.body.endereco[0].localidade,
+            logradouro: payload.body.endereco[0].logradouro,
+            number: locadoraTest.endereco[0].number,
+            uf: payload.body.endereco[0].uf
+          }
+        ]
+      }
+    ])
+  );
+  expect(responseFlilial.body.locadoras).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        nome: expect.any(String),
+        cnpj: expect.any(String),
+        atividades: expect.any(String),
+        endereco: [
+          {
+            bairro: expect.any(String),
+            cep: expect.any(String),
+            complemento: expect.any(String),
+            localidade: expect.any(String),
+            logradouro: expect.any(String),
+            number: expect.any(String),
+            uf: expect.any(String)
+          }
+        ]
+      }
+    ])
+  );
 });
 
 it('should delete a rental by id', async () => {
@@ -376,22 +593,40 @@ it('should update a rental by id', async () => {
   const response = await request(app).put(`/api/v1/rental/${payload.body._id}`).send(locadoraTestUpdate);
 
   expect(response.status).toBe(200);
-  expect(response.body.nome).toBe(locadoraTestUpdate.nome);
-  expect(response.body.cnpj).toBe(locadoraTestUpdate.cnpj);
-  expect(response.body.atividades).toBe(locadoraTestUpdate.atividades);
-  expect(response.body.atividades).toBe(locadoraTestUpdate.atividades);
-  expect(response.body.endereco.cep).toBe(locadoraTestUpdate.endereco.cep);
-  expect(response.body.endereco.number).toBe(locadoraTestUpdate.endereco.number);
-  expect(response.body.endereco.complemento).toBe(locadoraTestUpdate.endereco.complemento);
-  expect(response.body.endereco.isFilial).toBe(locadoraTestUpdate.endereco.isFilial);
-  expect(typeof response.body.nome).toBe('string');
-  expect(typeof response.body.cnpj).toBe('string');
-  expect(typeof response.body.atividades).toBe('string');
-  expect(typeof response.body.endereco[0].cep).toBe('string');
-  expect(typeof response.body.endereco[0].number).toBe('string');
-  expect(typeof response.body.endereco[0].descricao).toBe('undefined');
-  expect(typeof response.body.endereco[0].complemento).toBe('string');
-  expect(typeof response.body.endereco[0].isFilial).toBe('undefined');
+  expect(response.body).toEqual({
+    _id: payload.body._id,
+    nome: locadoraTestUpdate.nome,
+    cnpj: locadoraTestUpdate.cnpj,
+    atividades: locadoraTestUpdate.atividades,
+    endereco: [
+      {
+        bairro: response.body.endereco[0].bairro,
+        cep: locadoraTestUpdate.endereco[0].cep,
+        complemento: response.body.endereco[0].complemento,
+        localidade: response.body.endereco[0].localidade,
+        logradouro: response.body.endereco[0].logradouro,
+        number: locadoraTestUpdate.endereco[0].number,
+        uf: response.body.endereco[0].uf
+      }
+    ]
+  });
+  expect(response.body).toEqual({
+    _id: expect.any(String),
+    nome: expect.any(String),
+    cnpj: expect.any(String),
+    atividades: expect.any(String),
+    endereco: [
+      {
+        bairro: expect.any(String),
+        cep: expect.any(String),
+        complemento: expect.any(String),
+        localidade: expect.any(String),
+        logradouro: expect.any(String),
+        number: expect.any(String),
+        uf: expect.any(String)
+      }
+    ]
+  });
 });
 
 it('dont should update a rental by id', async () => {

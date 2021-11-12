@@ -43,11 +43,7 @@ module.exports = async (req, res, next) => {
 
     try {
       const strCnpjBrute = await schema.validate(req.body).value.cnpj;
-      if (strCnpjBrute) {
-        if (strCnpjBrute.length <= LIMIT_MAXIMUM_CNPJ_STRING_LENGHT) {
-          await CnpjChecker(strCnpjBrute);
-        }
-      }
+      if (strCnpjBrute) await CnpjChecker(strCnpjBrute);
     } catch (error) {
       return next(error);
     }

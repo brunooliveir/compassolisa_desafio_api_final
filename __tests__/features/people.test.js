@@ -29,19 +29,24 @@ it('should create a people', async () => {
   };
 
   const response = await request(app).post('/api/v1/people/').send(pessoaTest);
+
   expect(response.status).toBe(201);
-  expect(response.body.nome).toBe(pessoaTest.nome);
-  expect(response.body.cpf).toBe(pessoaTest.cpf);
-  expect(response.body.email).toBe(pessoaTest.email);
-  expect(response.body.data_nascimento.split('T')[0]).toBe('2001-05-15');
-  expect(response.body.senha).toBe(undefined);
-  expect(response.body.habilitado).toBe(pessoaTest.habilitado);
-  expect(typeof response.body.nome).toBe('string');
-  expect(typeof response.body.cpf).toBe('string');
-  expect(typeof response.body.email).toBe('string');
-  expect(typeof response.body.data_nascimento).toBe('string');
-  expect(typeof response.body.senha).toBe('undefined');
-  expect(typeof response.body.habilitado).toBe('string');
+  expect(response.body).toEqual({
+    _id: expect.any(String),
+    cpf: pessoaTest.cpf,
+    data_nascimento: '2001-05-15T03:00:00.000Z',
+    email: pessoaTest.email,
+    habilitado: pessoaTest.habilitado,
+    nome: pessoaTest.nome
+  });
+  expect(response.body).toEqual({
+    _id: expect.any(String),
+    cpf: expect.any(String),
+    data_nascimento: expect.any(String),
+    email: expect.any(String),
+    habilitado: expect.any(String),
+    nome: expect.any(String)
+  });
 });
 
 it('dont should create a people', async () => {
@@ -76,18 +81,22 @@ it('should get a people by id', async () => {
   const response = await request(app).get(`/api/v1/people/${payload.body._id}`).send();
 
   expect(response.status).toBe(200);
-  expect(response.body.nome).toBe(pessoaTest.nome);
-  expect(response.body.cpf).toBe(pessoaTest.cpf);
-  expect(response.body.email).toBe(pessoaTest.email);
-  expect(response.body.data_nascimento.split('T')[0]).toBe('2001-05-15');
-  expect(response.body.senha).toBe(undefined);
-  expect(response.body.habilitado).toBe(pessoaTest.habilitado);
-  expect(typeof response.body.nome).toBe('string');
-  expect(typeof response.body.cpf).toBe('string');
-  expect(typeof response.body.email).toBe('string');
-  expect(typeof response.body.data_nascimento).toBe('string');
-  expect(typeof response.body.senha).toBe('undefined');
-  expect(typeof response.body.habilitado).toBe('string');
+  expect(response.body).toEqual({
+    _id: payload.body._id,
+    cpf: pessoaTest.cpf,
+    data_nascimento: '2001-05-15T03:00:00.000Z',
+    email: pessoaTest.email,
+    habilitado: pessoaTest.habilitado,
+    nome: pessoaTest.nome
+  });
+  expect(response.body).toEqual({
+    _id: expect.any(String),
+    cpf: expect.any(String),
+    data_nascimento: expect.any(String),
+    email: expect.any(String),
+    habilitado: expect.any(String),
+    nome: expect.any(String)
+  });
 });
 
 it('should reject id, bad argument', async () => {
@@ -125,83 +134,162 @@ it('should get a people by params', async () => {
   const responseNome = await request(app).get(`${'/api/v1/people/?nome='}${payload.body.nome}`).send();
 
   expect(responseNome.status).toBe(200);
-  expect(responseNome.body.pessoas[0].nome).toBe(pessoaTest.nome);
-  expect(responseNome.body.pessoas[0].cpf).toBe(pessoaTest.cpf);
-  expect(responseNome.body.pessoas[0].data_nascimento.split('T')[0]).toBe('2001-05-15');
-  expect(responseNome.body.pessoas[0].email).toBe(pessoaTest.email);
-  expect(responseNome.body.pessoas[0].senha).toBe(undefined);
-  expect(responseNome.body.pessoas[0].habilitado).toBe(pessoaTest.habilitado);
-  expect(typeof responseNome.body.pessoas[0].nome).toBe('string');
-  expect(typeof responseNome.body.pessoas[0].cpf).toBe('string');
-  expect(typeof responseNome.body.pessoas[0].email).toBe('string');
-  expect(typeof responseNome.body.pessoas[0].data_nascimento).toBe('string');
-  expect(typeof responseNome.body.pessoas[0].senha).toBe('undefined');
-  expect(typeof responseNome.body.pessoas[0].habilitado).toBe('string');
+  expect(responseNome.body.pessoas).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        cpf: pessoaTest.cpf,
+        data_nascimento: '2001-05-15T03:00:00.000Z',
+        email: pessoaTest.email,
+        habilitado: pessoaTest.habilitado,
+        nome: pessoaTest.nome
+      }
+    ])
+  );
+  expect(responseNome.body.pessoas).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        cpf: expect.any(String),
+        data_nascimento: expect.any(String),
+        email: expect.any(String),
+        habilitado: expect.any(String),
+        nome: expect.any(String)
+      }
+    ])
+  );
 
   const responseCpf = await request(app).get(`${'/api/v1/people/?cpf='}${payload.body.cpf}`).send();
 
   expect(responseCpf.status).toBe(200);
-  expect(responseCpf.body.pessoas[0].nome).toBe(pessoaTest.nome);
-  expect(responseCpf.body.pessoas[0].cpf).toBe(pessoaTest.cpf);
-  expect(responseCpf.body.pessoas[0].data_nascimento.split('T')[0]).toBe('2001-05-15');
-  expect(responseCpf.body.pessoas[0].email).toBe(pessoaTest.email);
-  expect(responseCpf.body.pessoas[0].senha).toBe(undefined);
-  expect(responseCpf.body.pessoas[0].habilitado).toBe(pessoaTest.habilitado);
-  expect(typeof responseCpf.body.pessoas[0].nome).toBe('string');
-  expect(typeof responseCpf.body.pessoas[0].cpf).toBe('string');
-  expect(typeof responseCpf.body.pessoas[0].email).toBe('string');
-  expect(typeof responseCpf.body.pessoas[0].data_nascimento).toBe('string');
-  expect(typeof responseCpf.body.pessoas[0].senha).toBe('undefined');
-  expect(typeof responseCpf.body.pessoas[0].habilitado).toBe('string');
+  expect(responseCpf.body.pessoas).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        cpf: pessoaTest.cpf,
+        data_nascimento: '2001-05-15T03:00:00.000Z',
+        email: pessoaTest.email,
+        habilitado: pessoaTest.habilitado,
+        nome: pessoaTest.nome
+      }
+    ])
+  );
+  expect(responseCpf.body.pessoas).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        cpf: expect.any(String),
+        data_nascimento: expect.any(String),
+        email: expect.any(String),
+        habilitado: expect.any(String),
+        nome: expect.any(String)
+      }
+    ])
+  );
 
   const responseData_nascimento = await request(app).get('/api/v1/people/?data_nascimento=15/05/2001').send();
 
   expect(responseData_nascimento.status).toBe(200);
-  expect(responseData_nascimento.body.pessoas[0].nome).toBe(pessoaTest.nome);
-  expect(responseData_nascimento.body.pessoas[0].cpf).toBe(pessoaTest.cpf);
-  expect(responseData_nascimento.body.pessoas[0].data_nascimento.split('T')[0]).toBe('2001-05-15');
-  expect(responseData_nascimento.body.pessoas[0].email).toBe(pessoaTest.email);
-  expect(responseData_nascimento.body.pessoas[0].senha).toBe(undefined);
-  expect(responseData_nascimento.body.pessoas[0].habilitado).toBe(pessoaTest.habilitado);
-  expect(typeof responseData_nascimento.body.pessoas[0].nome).toBe('string');
-  expect(typeof responseData_nascimento.body.pessoas[0].cpf).toBe('string');
-  expect(typeof responseData_nascimento.body.pessoas[0].email).toBe('string');
-  expect(typeof responseData_nascimento.body.pessoas[0].data_nascimento).toBe('string');
-  expect(typeof responseData_nascimento.body.pessoas[0].senha).toBe('undefined');
-  expect(typeof responseData_nascimento.body.pessoas[0].habilitado).toBe('string');
+  expect(responseData_nascimento.body.pessoas).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        cpf: pessoaTest.cpf,
+        data_nascimento: '2001-05-15T03:00:00.000Z',
+        email: pessoaTest.email,
+        habilitado: pessoaTest.habilitado,
+        nome: pessoaTest.nome
+      }
+    ])
+  );
+  expect(responseData_nascimento.body.pessoas).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        cpf: expect.any(String),
+        data_nascimento: expect.any(String),
+        email: expect.any(String),
+        habilitado: expect.any(String),
+        nome: expect.any(String)
+      }
+    ])
+  );
 
   const responseEmail = await request(app).get(`${'/api/v1/people/?email='}${payload.body.email}`).send();
 
   expect(responseEmail.status).toBe(200);
-  expect(responseEmail.body.pessoas[0].nome).toBe(pessoaTest.nome);
-  expect(responseEmail.body.pessoas[0].cpf).toBe(pessoaTest.cpf);
-  expect(responseEmail.body.pessoas[0].data_nascimento.split('T')[0]).toBe('2001-05-15');
-  expect(responseEmail.body.pessoas[0].email).toBe(pessoaTest.email);
-  expect(responseEmail.body.pessoas[0].senha).toBe(undefined);
-  expect(responseEmail.body.pessoas[0].habilitado).toBe(pessoaTest.habilitado);
-  expect(typeof responseEmail.body.pessoas[0].nome).toBe('string');
-  expect(typeof responseEmail.body.pessoas[0].cpf).toBe('string');
-  expect(typeof responseEmail.body.pessoas[0].email).toBe('string');
-  expect(typeof responseEmail.body.pessoas[0].data_nascimento).toBe('string');
-  expect(typeof responseEmail.body.pessoas[0].senha).toBe('undefined');
-  expect(typeof responseEmail.body.pessoas[0].habilitado).toBe('string');
+  expect(responseEmail.body.pessoas).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        cpf: pessoaTest.cpf,
+        data_nascimento: '2001-05-15T03:00:00.000Z',
+        email: pessoaTest.email,
+        habilitado: pessoaTest.habilitado,
+        nome: pessoaTest.nome
+      }
+    ])
+  );
+  expect(responseEmail.body.pessoas).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        cpf: expect.any(String),
+        data_nascimento: expect.any(String),
+        email: expect.any(String),
+        habilitado: expect.any(String),
+        nome: expect.any(String)
+      }
+    ])
+  );
 
   const responseHabilitado = await request(app)
     .get(`${'/api/v1/people/?habilitado='}${payload.body.habilitado}`)
     .send();
   expect(responseHabilitado.status).toBe(200);
-  expect(responseHabilitado.body.pessoas[0].nome).toBe(pessoaTest.nome);
-  expect(responseHabilitado.body.pessoas[0].cpf).toBe(pessoaTest.cpf);
-  expect(responseHabilitado.body.pessoas[0].data_nascimento.split('T')[0]).toBe('2001-05-15');
-  expect(responseHabilitado.body.pessoas[0].email).toBe(pessoaTest.email);
-  expect(responseHabilitado.body.pessoas[0].senha).toBe(undefined);
-  expect(responseHabilitado.body.pessoas[0].habilitado).toBe(pessoaTest.habilitado);
-  expect(typeof responseHabilitado.body.pessoas[0].nome).toBe('string');
-  expect(typeof responseHabilitado.body.pessoas[0].cpf).toBe('string');
-  expect(typeof responseHabilitado.body.pessoas[0].email).toBe('string');
-  expect(typeof responseHabilitado.body.pessoas[0].data_nascimento).toBe('string');
-  expect(typeof responseHabilitado.body.pessoas[0].senha).toBe('undefined');
-  expect(typeof responseHabilitado.body.pessoas[0].habilitado).toBe('string');
+  expect(responseHabilitado.body.pessoas).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        cpf: pessoaTest.cpf,
+        data_nascimento: '2001-05-15T03:00:00.000Z',
+        email: pessoaTest.email,
+        habilitado: pessoaTest.habilitado,
+        nome: pessoaTest.nome
+      }
+    ])
+  );
+  expect(responseHabilitado.body.pessoas).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        cpf: expect.any(String),
+        data_nascimento: expect.any(String),
+        email: expect.any(String),
+        habilitado: expect.any(String),
+        nome: expect.any(String)
+      }
+    ])
+  );
+});
+
+it('dont should get a people by params', async () => {
+  const pessoaTest = {
+    nome: 'joao ciclano',
+    cpf: '286.162.557-02',
+    data_nascimento: '15/05/2001',
+    email: 'joaociclano@email.com',
+    senha: 'senhaforteConfia',
+    habilitado: 'sim'
+  };
+
+  const payload = await request(app).post('/api/v1/people/').send(pessoaTest);
+
+  const responseNome = await request(app).get(`${'/api/v1/people/?nome='}${payload.body.nome}aa`).send();
+
+  expect(responseNome.status).toBe(404);
+  expect(responseNome.body.description).toBe('Not Found');
+  expect(responseNome.body.name).toBe('Value of query not found');
 });
 
 it('should delete a people by id', async () => {
@@ -264,18 +352,22 @@ it('should update a people by id', async () => {
   const response = await request(app).put(`/api/v1/people/${payload.body._id}`).send(pessoaTestUpdate);
 
   expect(response.status).toBe(200);
-  expect(response.body.nome).toBe(pessoaTestUpdate.nome);
-  expect(response.body.cpf).toBe(pessoaTestUpdate.cpf);
-  expect(response.body.data_nascimento.split('T')[0]).toBe('2001-05-15');
-  expect(response.body.email).toBe(pessoaTestUpdate.email);
-  expect(response.body.senha).toBe(undefined);
-  expect(response.body.habilitado).toBe(pessoaTestUpdate.habilitado);
-  expect(typeof response.body.nome).toBe('string');
-  expect(typeof response.body.cpf).toBe('string');
-  expect(typeof response.body.email).toBe('string');
-  expect(typeof response.body.data_nascimento).toBe('string');
-  expect(typeof response.body.senha).toBe('undefined');
-  expect(typeof response.body.habilitado).toBe('string');
+  expect(response.body).toEqual({
+    _id: payload.body._id,
+    cpf: pessoaTestUpdate.cpf,
+    data_nascimento: '2001-05-15T03:00:00.000Z',
+    email: pessoaTestUpdate.email,
+    habilitado: pessoaTestUpdate.habilitado,
+    nome: pessoaTestUpdate.nome
+  });
+  expect(response.body).toEqual({
+    _id: expect.any(String),
+    cpf: expect.any(String),
+    data_nascimento: expect.any(String),
+    email: expect.any(String),
+    habilitado: expect.any(String),
+    nome: expect.any(String)
+  });
 });
 
 it('dont should update a people by id', async () => {
@@ -337,6 +429,10 @@ it('dont should update a people by id', async () => {
   const response2 = await request(app).put(`/api/v1/people/${payload.body._id}`).send(pessoaTestUpdate2);
 
   expect(response2.status).toBe(409);
+
+  const response3 = await request(app).put(`/api/v1/people/617fc14c0066e3a486717d55`).send(pessoaTestUpdate2);
+
+  expect(response3.status).toBe(404);
 });
 
 it('should authenticate a people', async () => {
@@ -360,17 +456,39 @@ it('should authenticate a people', async () => {
   const response = await request(app).post('/api/v1/authenticate/').send(dataPessoaTest);
 
   expect(response.status).toBe(201);
-  expect(response.body.email).toBe(pessoaTest.email);
-  expect(response.body.habilitado).toBe(pessoaTest.habilitado);
-  expect(response.body.nome).toBe(undefined);
-  expect(response.body.cpf).toBe(undefined);
-  expect(response.body.data_nascimento).toBe(undefined);
-  expect(response.body.senha).toBe(undefined);
-  expect(typeof response.body.nome).toBe('undefined');
-  expect(typeof response.body.cpf).toBe('undefined');
-  expect(typeof response.body.email).toBe('string');
-  expect(typeof response.body.data_nascimento).toBe('undefined');
-  expect(typeof response.body.senha).toBe('undefined');
-  expect(typeof response.body.habilitado).toBe('string');
-  expect(typeof response.body.token).toBe('string');
+  expect(response.body).toEqual({
+    email: pessoaTest.email,
+    habilitado: pessoaTest.habilitado,
+    token: expect.any(String)
+  });
+  expect(response.body).toEqual({
+    email: expect.any(String),
+    habilitado: expect.any(String),
+    token: expect.any(String)
+  });
+});
+
+it('dont should authenticate a people', async () => {
+  const pessoaTest = {
+    nome: 'Jorge ciclano',
+    cpf: '218.237.400-06',
+    data_nascimento: '15/05/2001',
+    email: 'jorgeciclano@email.com',
+    senha: 'senhaforteConfia',
+    habilitado: 'sim'
+  };
+
+  const dataPessoaTest = {
+    email: 'jorgeciclano@email.com',
+    senha: 'senhaErrada',
+    habilitado: 'sim'
+  };
+
+  await request(app).post('/api/v1/people/').send(pessoaTest);
+
+  const response = await request(app).post('/api/v1/authenticate/').send(dataPessoaTest);
+
+  expect(response.status).toBe(400);
+  expect(response.body.description).toBe('Bad Request');
+  expect(response.body.name).toBe('Invalid email or password');
 });

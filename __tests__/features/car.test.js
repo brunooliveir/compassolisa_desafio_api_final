@@ -36,14 +36,22 @@ it('should create a car', async () => {
   const response = await request(app).post('/api/v1/car/').send(veiculoTest).set('Authorization', `Bearer ${token}`);
 
   expect(response.status).toBe(201);
-  expect(response.body.modelo).toBe(veiculoTest.modelo);
-  expect(response.body.cor).toBe(veiculoTest.cor);
-  expect(response.body.acessorios[0].descricao).toBe(veiculoTest.acessorios[0].descricao);
-  expect(response.body.quantidadePassageiros).toBe(veiculoTest.quantidadePassageiros);
-  expect(typeof response.body.modelo).toBe('string');
-  expect(typeof response.body.cor).toBe('string');
-  expect(typeof response.body.acessorios[0].descricao).toBe('string');
-  expect(typeof response.body.quantidadePassageiros).toBe('number');
+  expect(response.body).toEqual({
+    _id: expect.any(String),
+    cor: veiculoTest.cor,
+    quantidadePassageiros: veiculoTest.quantidadePassageiros,
+    modelo: veiculoTest.modelo,
+    ano: veiculoTest.ano,
+    acessorios: [{ _id: expect.any(String), descricao: veiculoTest.acessorios[0].descricao }]
+  });
+  expect(response.body).toEqual({
+    _id: expect.any(String),
+    cor: expect.any(String),
+    quantidadePassageiros: expect.any(Number),
+    modelo: expect.any(String),
+    ano: expect.any(Number),
+    acessorios: [{ _id: expect.any(String), descricao: expect.any(String) }]
+  });
 });
 
 it('dont should create a car', async () => {
@@ -81,14 +89,22 @@ it('should get a car by id', async () => {
     .set('Authorization', `Bearer ${token}`);
 
   expect(response.status).toBe(200);
-  expect(response.body.modelo).toBe(veiculoTest.modelo);
-  expect(response.body.cor).toBe(veiculoTest.cor);
-  expect(response.body.acessorios[0].descricao).toBe(veiculoTest.acessorios[0].descricao);
-  expect(response.body.quantidadePassageiros).toBe(veiculoTest.quantidadePassageiros);
-  expect(typeof response.body.modelo).toBe('string');
-  expect(typeof response.body.cor).toBe('string');
-  expect(typeof response.body.acessorios[0].descricao).toBe('string');
-  expect(typeof response.body.quantidadePassageiros).toBe('number');
+  expect(response.body).toEqual({
+    _id: payload.body._id,
+    cor: veiculoTest.cor,
+    quantidadePassageiros: veiculoTest.quantidadePassageiros,
+    modelo: veiculoTest.modelo,
+    ano: veiculoTest.ano,
+    acessorios: [{ _id: expect.any(String), descricao: veiculoTest.acessorios[0].descricao }]
+  });
+  expect(response.body).toEqual({
+    _id: expect.any(String),
+    cor: expect.any(String),
+    quantidadePassageiros: expect.any(Number),
+    modelo: expect.any(String),
+    ano: expect.any(Number),
+    acessorios: [{ _id: expect.any(String), descricao: expect.any(String) }]
+  });
 });
 
 it('should reject id, bad argument', async () => {
@@ -137,15 +153,36 @@ it('should get a car by params', async () => {
     .set('Authorization', `Bearer ${token}`);
 
   expect(responseModelo.status).toBe(200);
-  expect(responseModelo.body.veiculos[0].modelo).toBe(veiculoTest.modelo);
-  expect(responseModelo.body.veiculos[0].cor).toBe(veiculoTest.cor);
-  expect(responseModelo.body.veiculos[0].acessorios.descricao).toBe(veiculoTest.acessorios.descricao);
-  expect(responseModelo.body.veiculos[0].quantidadePassageiros).toBe(veiculoTest.quantidadePassageiros);
-  expect(typeof responseModelo.body.veiculos[0].modelo).toBe('string');
-  expect(typeof responseModelo.body.veiculos[0].cor).toBe('string');
-  expect(typeof responseModelo.body.veiculos[0].acessorios[0].descricao).toBe('string');
-  expect(typeof responseModelo.body.veiculos[0].acessorios[1].descricao).toBe('string');
-  expect(typeof responseModelo.body.veiculos[0].quantidadePassageiros).toBe('number');
+  expect(responseModelo.body.veiculos).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        cor: veiculoTest.cor,
+        quantidadePassageiros: veiculoTest.quantidadePassageiros,
+        modelo: veiculoTest.modelo,
+        ano: veiculoTest.ano,
+        acessorios: [
+          { _id: expect.any(String), descricao: veiculoTest.acessorios[0].descricao },
+          { _id: expect.any(String), descricao: veiculoTest.acessorios[1].descricao }
+        ]
+      }
+    ])
+  );
+  expect(responseModelo.body.veiculos).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        cor: expect.any(String),
+        quantidadePassageiros: expect.any(Number),
+        modelo: expect.any(String),
+        ano: expect.any(Number),
+        acessorios: [
+          { _id: expect.any(String), descricao: expect.any(String) },
+          { _id: expect.any(String), descricao: expect.any(String) }
+        ]
+      }
+    ])
+  );
 
   const responseCor = await request(app)
     .get(`${'/api/v1/car/?cor='}${payload.body.cor}`)
@@ -153,15 +190,36 @@ it('should get a car by params', async () => {
     .set('Authorization', `Bearer ${token}`);
 
   expect(responseCor.status).toBe(200);
-  expect(responseCor.body.veiculos[0].modelo).toBe(veiculoTest.modelo);
-  expect(responseCor.body.veiculos[0].cor).toBe(veiculoTest.cor);
-  expect(responseCor.body.veiculos[0].acessorios.descricao).toBe(veiculoTest.acessorios.descricao);
-  expect(responseCor.body.veiculos[0].quantidadePassageiros).toBe(veiculoTest.quantidadePassageiros);
-  expect(typeof responseCor.body.veiculos[0].modelo).toBe('string');
-  expect(typeof responseCor.body.veiculos[0].cor).toBe('string');
-  expect(typeof responseCor.body.veiculos[0].acessorios[0].descricao).toBe('string');
-  expect(typeof responseCor.body.veiculos[0].acessorios[1].descricao).toBe('string');
-  expect(typeof responseCor.body.veiculos[0].quantidadePassageiros).toBe('number');
+  expect(responseCor.body.veiculos).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        cor: veiculoTest.cor,
+        quantidadePassageiros: veiculoTest.quantidadePassageiros,
+        modelo: veiculoTest.modelo,
+        ano: veiculoTest.ano,
+        acessorios: [
+          { _id: expect.any(String), descricao: veiculoTest.acessorios[0].descricao },
+          { _id: expect.any(String), descricao: veiculoTest.acessorios[1].descricao }
+        ]
+      }
+    ])
+  );
+  expect(responseCor.body.veiculos).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        cor: expect.any(String),
+        quantidadePassageiros: expect.any(Number),
+        modelo: expect.any(String),
+        ano: expect.any(Number),
+        acessorios: [
+          { _id: expect.any(String), descricao: expect.any(String) },
+          { _id: expect.any(String), descricao: expect.any(String) }
+        ]
+      }
+    ])
+  );
 
   const responseAno = await request(app)
     .get(`${'/api/v1/car/?ano='}${payload.body.ano}`)
@@ -169,15 +227,36 @@ it('should get a car by params', async () => {
     .set('Authorization', `Bearer ${token}`);
 
   expect(responseAno.status).toBe(200);
-  expect(responseAno.body.veiculos[0].modelo).toBe(veiculoTest.modelo);
-  expect(responseAno.body.veiculos[0].cor).toBe(veiculoTest.cor);
-  expect(responseAno.body.veiculos[0].acessorios.descricao).toBe(veiculoTest.acessorios.descricao);
-  expect(responseAno.body.veiculos[0].quantidadePassageiros).toBe(veiculoTest.quantidadePassageiros);
-  expect(typeof responseAno.body.veiculos[0].modelo).toBe('string');
-  expect(typeof responseAno.body.veiculos[0].cor).toBe('string');
-  expect(typeof responseAno.body.veiculos[0].acessorios[0].descricao).toBe('string');
-  expect(typeof responseAno.body.veiculos[0].acessorios[1].descricao).toBe('string');
-  expect(typeof responseAno.body.veiculos[0].quantidadePassageiros).toBe('number');
+  expect(responseAno.body.veiculos).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        cor: veiculoTest.cor,
+        quantidadePassageiros: veiculoTest.quantidadePassageiros,
+        modelo: veiculoTest.modelo,
+        ano: veiculoTest.ano,
+        acessorios: [
+          { _id: expect.any(String), descricao: veiculoTest.acessorios[0].descricao },
+          { _id: expect.any(String), descricao: veiculoTest.acessorios[1].descricao }
+        ]
+      }
+    ])
+  );
+  expect(responseAno.body.veiculos).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        cor: expect.any(String),
+        quantidadePassageiros: expect.any(Number),
+        modelo: expect.any(String),
+        ano: expect.any(Number),
+        acessorios: [
+          { _id: expect.any(String), descricao: expect.any(String) },
+          { _id: expect.any(String), descricao: expect.any(String) }
+        ]
+      }
+    ])
+  );
 
   const responseDescricaoPrimeira = await request(app)
     .get(`${'/api/v1/car/?descricao='}${payload.body.acessorios[0].descricao}`)
@@ -185,15 +264,36 @@ it('should get a car by params', async () => {
     .set('Authorization', `Bearer ${token}`);
 
   expect(responseDescricaoPrimeira.status).toBe(200);
-  expect(responseDescricaoPrimeira.body.veiculos[0].modelo).toBe(veiculoTest.modelo);
-  expect(responseDescricaoPrimeira.body.veiculos[0].cor).toBe(veiculoTest.cor);
-  expect(responseDescricaoPrimeira.body.veiculos[0].acessorios.descricao).toBe(veiculoTest.acessorios.descricao);
-  expect(responseDescricaoPrimeira.body.veiculos[0].quantidadePassageiros).toBe(veiculoTest.quantidadePassageiros);
-  expect(typeof responseDescricaoPrimeira.body.veiculos[0].modelo).toBe('string');
-  expect(typeof responseDescricaoPrimeira.body.veiculos[0].cor).toBe('string');
-  expect(typeof responseDescricaoPrimeira.body.veiculos[0].acessorios[0].descricao).toBe('string');
-  expect(typeof responseDescricaoPrimeira.body.veiculos[0].acessorios[1].descricao).toBe('string');
-  expect(typeof responseDescricaoPrimeira.body.veiculos[0].quantidadePassageiros).toBe('number');
+  expect(responseDescricaoPrimeira.body.veiculos).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        cor: veiculoTest.cor,
+        quantidadePassageiros: veiculoTest.quantidadePassageiros,
+        modelo: veiculoTest.modelo,
+        ano: veiculoTest.ano,
+        acessorios: [
+          { _id: expect.any(String), descricao: veiculoTest.acessorios[0].descricao },
+          { _id: expect.any(String), descricao: veiculoTest.acessorios[1].descricao }
+        ]
+      }
+    ])
+  );
+  expect(responseDescricaoPrimeira.body.veiculos).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        cor: expect.any(String),
+        quantidadePassageiros: expect.any(Number),
+        modelo: expect.any(String),
+        ano: expect.any(Number),
+        acessorios: [
+          { _id: expect.any(String), descricao: expect.any(String) },
+          { _id: expect.any(String), descricao: expect.any(String) }
+        ]
+      }
+    ])
+  );
 
   const responseDescricaoSegunda = await request(app)
     .get(`${'/api/v1/car/?descricao='}${payload.body.acessorios[1].descricao}`)
@@ -201,15 +301,36 @@ it('should get a car by params', async () => {
     .set('Authorization', `Bearer ${token}`);
 
   expect(responseDescricaoSegunda.status).toBe(200);
-  expect(responseDescricaoSegunda.body.veiculos[0].modelo).toBe(veiculoTest.modelo);
-  expect(responseDescricaoSegunda.body.veiculos[0].cor).toBe(veiculoTest.cor);
-  expect(responseDescricaoSegunda.body.veiculos[0].acessorios.descricao).toBe(veiculoTest.acessorios.descricao);
-  expect(responseDescricaoSegunda.body.veiculos[0].quantidadePassageiros).toBe(veiculoTest.quantidadePassageiros);
-  expect(typeof responseDescricaoSegunda.body.veiculos[0].modelo).toBe('string');
-  expect(typeof responseDescricaoSegunda.body.veiculos[0].cor).toBe('string');
-  expect(typeof responseDescricaoSegunda.body.veiculos[0].acessorios[0].descricao).toBe('string');
-  expect(typeof responseDescricaoSegunda.body.veiculos[0].acessorios[1].descricao).toBe('string');
-  expect(typeof responseDescricaoSegunda.body.veiculos[0].quantidadePassageiros).toBe('number');
+  expect(responseDescricaoSegunda.body.veiculos).toEqual(
+    expect.arrayContaining([
+      {
+        _id: payload.body._id,
+        cor: veiculoTest.cor,
+        quantidadePassageiros: veiculoTest.quantidadePassageiros,
+        modelo: veiculoTest.modelo,
+        ano: veiculoTest.ano,
+        acessorios: [
+          { _id: expect.any(String), descricao: veiculoTest.acessorios[0].descricao },
+          { _id: expect.any(String), descricao: veiculoTest.acessorios[1].descricao }
+        ]
+      }
+    ])
+  );
+  expect(responseDescricaoSegunda.body.veiculos).toEqual(
+    expect.arrayContaining([
+      {
+        _id: expect.any(String),
+        cor: expect.any(String),
+        quantidadePassageiros: expect.any(Number),
+        modelo: expect.any(String),
+        ano: expect.any(Number),
+        acessorios: [
+          { _id: expect.any(String), descricao: expect.any(String) },
+          { _id: expect.any(String), descricao: expect.any(String) }
+        ]
+      }
+    ])
+  );
 });
 
 it('should delete a car by id', async () => {
@@ -283,15 +404,28 @@ it('should update a car by id', async () => {
     .set('Authorization', `Bearer ${token}`);
 
   expect(response.status).toBe(200);
-  expect(response.body.modelo).toBe(veiculoTestUpdate.modelo);
-  expect(response.body.cor).toBe(veiculoTestUpdate.cor);
-  expect(response.body.acessorios.descricao).toBe(veiculoTestUpdate.acessorios.descricao);
-  expect(response.body.quantidadePassageiros).toBe(veiculoTestUpdate.quantidadePassageiros);
-  expect(typeof response.body.modelo).toBe('string');
-  expect(typeof response.body.cor).toBe('string');
-  expect(typeof response.body.acessorios[0].descricao).toBe('string');
-  expect(typeof response.body.acessorios[1].descricao).toBe('string');
-  expect(typeof response.body.quantidadePassageiros).toBe('number');
+  expect(response.body).toEqual({
+    _id: payload.body._id,
+    cor: veiculoTestUpdate.cor,
+    quantidadePassageiros: veiculoTestUpdate.quantidadePassageiros,
+    modelo: veiculoTestUpdate.modelo,
+    ano: veiculoTestUpdate.ano,
+    acessorios: [
+      { _id: expect.any(String), descricao: veiculoTestUpdate.acessorios[0].descricao },
+      { _id: expect.any(String), descricao: veiculoTestUpdate.acessorios[1].descricao }
+    ]
+  });
+  expect(response.body).toEqual({
+    _id: expect.any(String),
+    cor: expect.any(String),
+    quantidadePassageiros: expect.any(Number),
+    modelo: expect.any(String),
+    ano: expect.any(Number),
+    acessorios: [
+      { _id: expect.any(String), descricao: expect.any(String) },
+      { _id: expect.any(String), descricao: expect.any(String) }
+    ]
+  });
 });
 
 it('dont should update a car by id', async () => {
