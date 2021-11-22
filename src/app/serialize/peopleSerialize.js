@@ -7,12 +7,12 @@ const serialize = ({ _id, nome, cpf, data_nascimento, email, habilitado }) => ({
   habilitado
 });
 
-const paginateSerialize = ({ pessoas, limit, total, offset, offsets }) => ({
-  pessoas: pessoas.map(serialize),
+const paginateSerialize = ({ docs, limit, totalDocs, pagingCounter, totalPages }) => ({
+  pessoas: docs.map(serialize),
   limit,
-  total,
-  offset,
-  offsets
+  total: totalDocs,
+  offset: pagingCounter,
+  offsets: totalPages
 });
 
 module.exports = { serialize, paginateSerialize };

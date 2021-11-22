@@ -1,20 +1,22 @@
-const BadRequest = require('../../errors/BadRequest');
+const BadRequest = require('../errors/BadRequest');
 
 module.exports = async (strCnpjBrute) => {
   const cnpj = strCnpjBrute.replace(/[^\d]+/g, '');
   if (cnpj === '') throw new BadRequest(`cnpj ${strCnpjBrute}`);
   if (cnpj.length !== 14) throw new BadRequest(`cnpj ${strCnpjBrute}`);
   if (
-    cnpj === '00000000000000' ||
-    cnpj === '11111111111111' ||
-    cnpj === '22222222222222' ||
-    cnpj === '33333333333333' ||
-    cnpj === '44444444444444' ||
-    cnpj === '55555555555555' ||
-    cnpj === '66666666666666' ||
-    cnpj === '77777777777777' ||
-    cnpj === '88888888888888' ||
-    cnpj === '99999999999999'
+    [
+      '00000000000000',
+      '11111111111111',
+      '22222222222222',
+      '33333333333333',
+      '44444444444444',
+      '55555555555555',
+      '66666666666666',
+      '77777777777777',
+      '88888888888888',
+      '99999999999999'
+    ].includes(cnpj)
   )
     throw new BadRequest(`cnpj ${strCnpjBrute}`);
 

@@ -1,7 +1,6 @@
 const Joi = require('joi');
-const errorFormatted = require('../helpers/errorFormatter');
-const CnpjChecker = require('./cnpj');
-const { numberRegex } = require('../helpers/regex');
+const errorFormatted = require('../../utils/helpers/errorFormatter');
+const { numberRegex } = require('../../utils/helpers/regex');
 
 const LIMIT_MINIMUM_STRING_LENGHT = 3;
 const LIMIT_MAXIMUM_STRING_LENGHT = 150;
@@ -40,13 +39,6 @@ module.exports = async (req, res, next) => {
         .unique()
         .required()
     });
-
-    try {
-      const strCnpjBrute = await schema.validate(req.body).value.cnpj;
-      if (strCnpjBrute) await CnpjChecker(strCnpjBrute);
-    } catch (error) {
-      return next(error);
-    }
 
     const { error } = await schema.validate(req.body, { abortEarly: false });
     if (error) throw error;

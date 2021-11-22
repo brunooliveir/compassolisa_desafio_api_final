@@ -32,8 +32,8 @@ class PeopleController {
 
   async delete(req, res, next) {
     try {
-      const result = await PeopleService.delete(req.params.id);
-      return res.status(204).json(result);
+      await PeopleService.delete(req.params.id);
+      return res.status(204).json();
     } catch (error) {
       return next(error);
     }

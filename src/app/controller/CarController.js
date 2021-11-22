@@ -31,8 +31,8 @@ class CarController {
 
   async delete(req, res, next) {
     try {
-      const result = await CarService.delete(req.params.id);
-      return res.status(204).json(result);
+      await CarService.delete(req.params.id);
+      return res.status(204).json();
     } catch (error) {
       return next(error);
     }
@@ -49,8 +49,7 @@ class CarController {
 
   async updateAcessorio(req, res, next) {
     try {
-      const veiculo = await CarService.getByIds(req.params.idVeiculo, req.params.idAcessorio);
-      const result = await CarService.patchCar(veiculo, req.params.idVeiculo, req.params.idAcessorio, req.body);
+      const result = await CarService.patchCar(req.params.idVeiculo, req.params.idAcessorio, req.body);
       return res.status(200).json(serialize(result));
     } catch (error) {
       return next(error);

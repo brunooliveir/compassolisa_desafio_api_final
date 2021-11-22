@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const errorFormatted = require('../helpers/errorFormatter');
+const errorFormatted = require('../../utils/helpers/errorFormatter');
 
 const LIMIT_MINIMUM_CAR_YEAR = 1949;
 const LIMIT_MAXIMUM_CAR_YEAR = 2023;

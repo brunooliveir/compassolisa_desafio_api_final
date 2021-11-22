@@ -1,5 +1,6 @@
 const Joi = require('joi');
-const { idRegex } = require('./helpers/regex');
+const errorFormatted = require('../utils/helpers/errorFormatter');
+const { idRegex } = require('../utils/helpers/regex');
 
 module.exports = async (req, res, next) => {
   try {
@@ -10,6 +11,6 @@ module.exports = async (req, res, next) => {
     if (error) throw error;
     return next();
   } catch (error) {
-    return res.status(400).json(error);
+    return res.status(400).json(errorFormatted(error));
   }
 };

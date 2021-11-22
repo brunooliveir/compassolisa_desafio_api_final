@@ -1,11 +1,12 @@
 const moment = require('moment');
 const PeopleRepository = require('../repository/PeopleRepository');
 const IdadeError = require('../errors/BadRequest');
+const CpfChecker = require('../utils/cpf');
 
 class PeopleService {
   formatDataNascimento(payload) {
-    const data_nascimentoSplited = payload.data_nascimento.split('/');
-    return `${data_nascimentoSplited[1]}/${data_nascimentoSplited[0]}/${data_nascimentoSplited[2]}`;
+    payload.data_nascimento = moment(payload.data_nascimento, 'DD/MM/YYYY').format('MM/DD/YYYY');
+    return payload.data_nascimento;
   }
 
   async checkIdade(payload) {
@@ -20,6 +21,7 @@ class PeopleService {
 
   async create(payload) {
     payload.data_nascimento = this.formatDataNascimento(payload);
+    await CpfChecker(payload.cpf);
     const result = await PeopleRepository.create(payload);
     return result;
   }
@@ -41,6 +43,7 @@ class PeopleService {
 
   async update(id, payload) {
     payload.data_nascimento = this.formatDataNascimento(payload);
+    await CpfChecker(payload.cpf);
     return PeopleRepository.update(id, payload);
   }
 }

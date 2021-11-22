@@ -1,6 +1,5 @@
 const Joi = require('joi').extend(require('@joi/date'));
-const errorFormatted = require('../helpers/errorFormatter');
-const CpfChecker = require('./cpf');
+const errorFormatted = require('../../utils/helpers/errorFormatter');
 
 const LIMIT_MINIMUM_NOME_STRING_LENGHT = 5;
 const LIMIT_MAXIMUM_NOME_STRING_LENGHT = 50;
@@ -27,13 +26,6 @@ module.exports = async (req, res, next) => {
       senha: Joi.string().min(LIMIT_MINIMUM_SENHA_STRING_LENGHT).max(LIMIT_MAXIMUM_SENHA_STRING_LENGHT).required(),
       habilitado: Joi.string().valid('sim', 'não').required()
     });
-
-    try {
-      const strCpfBrute = await schema.validate(req.body).value.cpf;
-      if (strCpfBrute) await CpfChecker(strCpfBrute);
-    } catch (error) {
-      return next(error);
-    }
 
     const { error } = await schema.validate(req.body, { abortEarly: false });
     if (error) throw error;

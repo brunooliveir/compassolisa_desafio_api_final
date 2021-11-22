@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const { idRegex } = require('../helpers/regex');
+const { idRegex } = require('../../utils/helpers/regex');
 
 module.exports = async (req, res, next) => {
   try {

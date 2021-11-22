@@ -1,5 +1,6 @@
 const RentalRepository = require('../repository/RentalRepository');
 const BadRequest = require('../errors/BadRequest');
+const CnpjChecker = require('../utils/cnpj');
 
 class RentalService {
   checkIsFilial(payload) {
@@ -21,20 +22,10 @@ class RentalService {
     if (newPayload.length < addresses.length) throw new BadRequest('duplicate endereco');
   }
 
-  formatEndereco(payload) {
-    Object.keys(payload).forEach((element) => {
-      if (['cep', 'logradouro', 'bairro', 'number', 'localidade', 'uf', 'isFilial'].includes(element)) {
-        const valueOfElement = payload[element];
-        delete payload[element];
-        const newKeyValue = { [`endereco.${element}`]: valueOfElement };
-        Object.assign(payload, newKeyValue);
-      }
-    });
-  }
-
   async create(payload) {
     this.checkIsFilial(payload);
     this.checkEndereco(payload);
+    await CnpjChecker(payload.cnpj);
     const locadora = await RentalRepository.create(payload);
     return locadora;
   }
@@ -45,7 +36,6 @@ class RentalService {
   }
 
   async getAll(payload) {
-    this.formatEndereco(payload);
     const locadoras = await RentalRepository.getAll(payload);
     return locadoras;
   }
@@ -57,6 +47,7 @@ class RentalService {
   async update(id, payload) {
     this.checkIsFilial(payload);
     this.checkEndereco(payload);
+    await CnpjChecker(payload.cnpj);
     return RentalRepository.update(id, payload);
   }
 }

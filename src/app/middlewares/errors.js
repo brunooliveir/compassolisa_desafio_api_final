@@ -17,43 +17,24 @@ module.exports = async (error, req, res, next) => {
     description = error.description;
   }
 
-  if (parseInt(error.code, 10) === 11000 && Object.keys(error.keyValue).toString() === 'cpf') {
-    const cpfError = new Conflict(`cpf ${error.keyValue.cpf}`);
-    return res.status(409).json({
-      description: cpfError.name,
-      name: cpfError.message
+  if (parseInt(error.code, 10) === 2 && error.codeName.toString() === 'BadValue') {
+    const idsError = new NotFound(`id of acessorio in veiculo with this id`);
+    return res.status(404).json({
+      description: idsError.name,
+      name: idsError.message
     });
   }
 
-  if (parseInt(error.code, 10) === 11000 && Object.keys(error.keyValue).toString() === 'email') {
-    const emailError = new Conflict(`email ${error.keyValue.email}`);
+  if (
+    parseInt(error.code, 10) === 11000 &&
+    ['cpf', 'email', 'modelo', 'cnpj', 'nome'].includes(Object.keys(error.keyValue).toString())
+  ) {
+    const conflictError = new Conflict(
+      `${Object.keys(error.keyValue).toString()} ${error.keyValue[Object.keys(error.keyValue).toString()]}`
+    );
     return res.status(409).json({
-      description: emailError.name,
-      name: emailError.message
-    });
-  }
-
-  if (parseInt(error.code, 10) === 11000 && Object.keys(error.keyValue).toString() === 'modelo') {
-    const modeloError = new Conflict(`modelo ${error.keyValue.modelo}`);
-    return res.status(409).json({
-      description: modeloError.name,
-      name: modeloError.message
-    });
-  }
-
-  if (parseInt(error.code, 10) === 11000 && Object.keys(error.keyValue).toString() === 'cnpj') {
-    const cnpjError = new Conflict(`cnpj ${error.keyValue.cnpj}`);
-    return res.status(409).json({
-      description: cnpjError.name,
-      name: cnpjError.message
-    });
-  }
-
-  if (parseInt(error.code, 10) === 11000 && Object.keys(error.keyValue).toString() === 'nome') {
-    const nomeError = new Conflict(`nome ${error.keyValue.nome}`);
-    return res.status(409).json({
-      description: nomeError.name,
-      name: nomeError.message
+      description: conflictError.name,
+      name: conflictError.message
     });
   }
 

@@ -1,4 +1,4 @@
-const BadRequest = require('../../errors/BadRequest');
+const BadRequest = require('../errors/BadRequest');
 
 module.exports = async (strCpfBrute) => {
   const strCPF = strCpfBrute.replace('.', '').replace('.', '').replace('-', '');

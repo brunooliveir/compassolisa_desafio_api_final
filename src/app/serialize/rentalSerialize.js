@@ -16,12 +16,12 @@ const serialize = ({ _id, nome, cnpj, atividades, endereco }) => ({
   endereco: endereco.map(addressesSerialize)
 });
 
-const paginateSerialize = ({ locadoras, limit, total, offset, offsets }) => ({
-  locadoras: locadoras.map(serialize),
+const paginateSerialize = ({ docs, limit, totalDocs, pagingCounter, totalPages }) => ({
+  locadoras: docs.map(serialize),
   limit,
-  total,
-  offset,
-  offsets
+  total: totalDocs,
+  offset: pagingCounter,
+  offsets: totalPages
 });
 
 module.exports = { serialize, paginateSerialize };

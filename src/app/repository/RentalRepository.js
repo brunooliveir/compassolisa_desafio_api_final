@@ -1,9 +1,14 @@
 const axios = require('axios');
+const Repository = require('./Repository');
 const RentalSchema = require('../schema/RentalSchema');
 const BadRequest = require('../errors/BadRequest');
 const NotFound = require('../errors/NotFound');
 
-class RentalRepository {
+class RentalRepository extends Repository {
+  constructor() {
+    super(RentalSchema);
+  }
+
   async findCep(payload) {
     const address = [];
     payload.endereco.forEach((endereco) => {
@@ -38,42 +43,6 @@ class RentalRepository {
     const addresses = await this.findCep(payload);
     this.createFullEndereco(payload, addresses);
     return RentalSchema.create(payload);
-  }
-
-  async getAll(payload) {
-    if (payload.limit) payload.limit = parseInt(payload.limit, 10);
-    if (payload.offset) payload.skip = parseInt(payload.offset, 10);
-    if (payload.offsets && payload.offset) payload.skip += parseInt(payload.offsets, 10);
-    if (payload.offsets) payload.skip = parseInt(payload.offsets, 10);
-    const locadoras = await RentalSchema.find(payload)
-      .limit(payload.limit)
-      .sort({ created_at: 'asc' })
-      .skip(payload.skip);
-    const total = await RentalSchema.countDocuments(payload);
-    if (total === 0) throw new NotFound('of query');
-    return {
-      locadoras,
-      total,
-      limit: payload.limit,
-      offset: payload.offset,
-      offsets: payload.offsets
-    };
-  }
-
-  async getById(payload) {
-    const finded = await RentalSchema.findById({ _id: payload });
-    if (finded == null) {
-      throw new NotFound(`id ${payload}`);
-    }
-    return finded;
-  }
-
-  async delete(payload) {
-    const finded = await RentalSchema.findById({ _id: payload });
-    if (finded == null) {
-      throw new NotFound(`id ${payload}`);
-    }
-    return RentalSchema.deleteOne({ _id: payload });
   }
 
   async update(id, payload) {
