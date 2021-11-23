@@ -1,20 +1,10 @@
 const request = require('supertest');
-const RentalSchema = require('../../src/app/schema/RentalSchema');
 const app = require('../../src/app');
 const Database = require('../../src/infra/database/mongo/index');
 
 Database.connect();
 
-beforeAll(async () => {
-  await RentalSchema.deleteMany();
-});
-
-beforeEach(async () => {
-  await RentalSchema.deleteMany();
-});
-
 afterAll(async () => {
-  await RentalSchema.deleteMany();
   Database.disconnect();
 });
 
