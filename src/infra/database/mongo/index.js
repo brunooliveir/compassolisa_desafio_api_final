@@ -7,7 +7,7 @@ class Database {
   }
 
   connect() {
-    return mongoose.connect(`mongodb://${config.database.host}/${config.database.collection}`, {
+    return mongoose.connect(`${config.database.url}}`, {
       user: config.database.username,
       pass: config.database.password
     });

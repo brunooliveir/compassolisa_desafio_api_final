@@ -11,6 +11,7 @@ module.exports = {
     port: process.env.DB_PORT,
     username: process.env.DB_USER,
     password: process.env.DB_PASS,
-    collection: process.env.DB_COLLECTION
+    collection: process.env.DB_COLLECTION,
+    url: process.env.DB_URL
   }
 };
