@@ -47,7 +47,10 @@ O desafio consiste em criar uma API Rest Full da Locadora de veículos Compassol
 <li>96% Functions 96/100</li>
 <li>93.73% Lines 1346/1436</li>
 </ul>
-    
+
+## Deploy da aplicação ##
+link: https://compassolisa-backend.herokuapp.com
+
 ## Como rodar a API
 
 Requisitos: Node.js e MongoDB instalados, ou docker-compose instalado.
@@ -72,6 +75,8 @@ DB_PASS=
 DB_NAME= compassolisa
 DB_PORT= 3000
 DB_COLLECTION = compassolisa
+DB_URL = mongodb://localhost:27017/compassolisa
+APP_URL = http://127.0.0.1:3000/api/v1
 
 ```
 
@@ -87,6 +92,8 @@ DB_PASS=
 DB_NAME= compassolisatest
 DB_PORT= 3000
 DB_COLLECTION = compassolisatest
+DB_URL = mongodb://localhost:27017/compassolisatest
+APP_URL = http://127.0.0.1:3000/api/v1
 
 ```
 
