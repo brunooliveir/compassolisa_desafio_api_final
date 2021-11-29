@@ -11,11 +11,6 @@ class CarService {
     return veiculo;
   }
 
-  async getByIds(idVeiculo, idAcessorio) {
-    const veiculo = await CarRepository.getByIds(idVeiculo, idAcessorio);
-    return veiculo;
-  }
-
   async getAll(payload) {
     const veiculos = await CarRepository.getAll(payload);
     return veiculos;
