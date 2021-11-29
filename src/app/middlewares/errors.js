@@ -27,7 +27,7 @@ module.exports = async (error, req, res, next) => {
 
   if (
     parseInt(error.code, 10) === 11000 &&
-    ['cpf', 'email', 'modelo', 'cnpj', 'nome'].includes(Object.keys(error.keyValue).toString())
+    ['cpf', 'email', 'modelo', 'cnpj', 'nome', 'placa'].includes(Object.keys(error.keyValue).toString())
   ) {
     const conflictError = new Conflict(
       `${Object.keys(error.keyValue).toString()} ${error.keyValue[Object.keys(error.keyValue).toString()]}`
